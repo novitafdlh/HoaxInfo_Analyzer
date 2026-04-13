@@ -11,12 +11,22 @@ class RoleAdmin
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  string  $role  <-- Tambahkan dokumentasi ini
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle($request, Closure $next)
+    // --- UBAH BARIS INI: Tambahkan parameter $role ---
+    public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
+        // Pastikan user sudah login (auth()->user() tidak null)
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        // --- UBAH BARIS INI: Bandingkan dengan parameter $role, bukan hardcode 'admin' ---
+        if (auth()->user()->role !== $role) {
+            abort(403, 'Anda tidak memiliki akses sebagai ' . $role);
         }
 
         return $next($request);

@@ -1,174 +1,136 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ config('app.name', 'Laravel') }} - Dashboard</title>
-
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased bg-gradient-to-b from-slate-50 via-white to-cyan-50 text-slate-900 min-h-screen">
-        @php
-            $popupMessage = session('status') ?: ($errors->any() ? $errors->first() : null);
-            $popupType = session('notification_type', $errors->any() ? 'error' : 'info');
-            $showLoginLink = (bool) session('show_login_link', false);
-            $popupConfig = [
-                'success' => [
-                    'title' => 'Konten Tervalidasi',
-                    'badge' => 'VALID',
-                    'style' => 'border-emerald-200 bg-emerald-50 text-emerald-900',
-                    'badgeStyle' => 'bg-emerald-600 text-white',
-                ],
-                'warning' => [
-                    'title' => 'Menunggu Validasi Manual',
-                    'badge' => 'REVIEW',
-                    'style' => 'border-amber-200 bg-amber-50 text-amber-900',
-                    'badgeStyle' => 'bg-amber-600 text-white',
-                ],
-                'error' => [
-                    'title' => 'Konten Tidak Tervalidasi',
-                    'badge' => 'TIDAK VALID',
-                    'style' => 'border-rose-200 bg-rose-50 text-rose-900',
-                    'badgeStyle' => 'bg-rose-600 text-white',
-                ],
-                'info' => [
-                    'title' => 'Informasi',
-                    'badge' => 'INFO',
-                    'style' => 'border-slate-200 bg-white text-slate-900',
-                    'badgeStyle' => 'bg-slate-700 text-white',
-                ],
-            ];
-            $activePopup = $popupConfig[$popupType] ?? $popupConfig['info'];
-        @endphp
-
-        @if ($popupMessage)
-            <div x-data="{ open: true }" x-show="open" x-transition class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4" @click.self="open = false" @keydown.escape.window="open = false">
-                <div class="w-full max-w-lg rounded-2xl border shadow-2xl {{ $activePopup['style'] }}">
-                    <div class="flex items-center justify-between border-b border-current/20 px-5 py-4">
-                        <div>
-                            <p class="text-sm font-semibold uppercase tracking-wide opacity-80">{{ $activePopup['title'] }}</p>
-                        </div>
-                        <span class="rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wide {{ $activePopup['badgeStyle'] }}">
-                            {{ $activePopup['badge'] }}
-                        </span>
-                    </div>
-                    <div class="space-y-4 px-5 py-4">
-                        <p class="text-sm font-medium leading-relaxed">{{ $popupMessage }}</p>
-
-                        @if ($showLoginLink && Route::has('login'))
-                            <a href="{{ route('login') }}" class="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-700">
-                                Login untuk menerima hasil validasi
-                            </a>
-                        @endif
-
-                        <div class="flex justify-end">
-                            <button type="button" @click="open = false" class="rounded-md border border-current/30 px-3 py-1.5 text-xs font-semibold hover:bg-white/40">
-                                Tutup
-                            </button>
-                        </div>
-                    </div>
-                </div>
+<x-app-layout>
+    {{-- Header Halaman: Nuansa Biru Lembut --}}
+    <x-slot name="header">
+        <div class="flex items-center gap-4 pb-3 border-b border-blue-100">
+            {{-- Ikon Identitas Dashboard: Latar Biru muda --}}
+            <div class="p-2.5 bg-blue-50 rounded-xl text-blue-600 shadow-inner border border-blue-100">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
             </div>
-        @endif
+            <div>
+                <h2 class="font-extrabold text-2xl text-slate-900 tracking-tight leading-tight">
+                    {{ __('Dashboard Pengguna') }}
+                </h2>
+                <p class="text-xs font-medium text-blue-700 uppercase tracking-widest mt-0.5">Pusat Validasi Informasi Visual Anda</p>
+            </div>
+        </div>
+    </x-slot>
 
-        <nav class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
-            <div class="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                <a href="{{ route('dashboard') }}" class="text-sm font-semibold tracking-wide text-slate-900">
-                    Public Info Verification
-                </a>
+    {{-- Background Utama: Gradien Biru Sangat Muda ke Putih --}}
+    <div class="py-10 bg-gradient-to-b from-blue-50 via-white to-white min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid gap-8 lg:grid-cols-12">
+                
+                {{-- Kotak Kiri: Panduan & Status --}}
+                <aside class="lg:col-span-4 space-y-6">
+                    {{-- Card dengan Border Biru Tipis dan Shadow Biru Halus --}}
+                    <div class="rounded-3xl border border-blue-100 bg-white p-8 shadow-lg shadow-blue-50/50 transition-all duration-300 hover:shadow-blue-100/50 hover:-translate-y-1">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="p-2.5 bg-blue-50 rounded-xl text-blue-600 shadow-inner border border-blue-100">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-950 tracking-tight">Panduan Cepat</h3>
+                        </div>
+                        
+                        <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                            Unggah gambar atau tempelkan URL untuk mengecek kebenaran informasi berdasarkan basis data konten resmi.
+                        </p>
+                        
+                        <ul class="space-y-4 text-xs text-slate-600">
+                            <li class="flex items-start gap-3">
+                                {{-- Badge Angka Biru --}}
+                                <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700 font-bold shadow-inner border border-blue-200">1</span>
+                                <div class="flex-1"><b class="text-slate-700">100% Cocok:</b> Tervalidasi otomatis oleh sistem.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-amber-700 font-bold shadow-inner border border-amber-100">2</span>
+                                <div class="flex-1"><b>50% - 99% Mirip:</b> Perlu validasi manual Admin.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-rose-50 text-rose-700 font-bold shadow-inner border border-rose-100">3</span>
+                                <div class="flex-1"><b>< 50%:</b> Tidak tervalidasi (Potensi Hoax).</div>
+                            </li>
+                        </ul>
 
-                <div class="flex items-center gap-2">
-                    @auth
-                        @if (Auth::user()->role === 'user')
-                            <a href="{{ route('user.validation-results') }}" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">
-                                Hasil Validasi
-                            </a>
+                        {{-- Status Akun: Hijau dipertahankan karena arti UX 'Sukses/Aktif' --}}
+                        <div class="mt-8 pt-6 border-t border-blue-100">
+                            <div class="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800 shadow-inner shadow-emerald-100/50">
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                Akun aktif: Upload tanpa batas.
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                {{-- Kotak Kanan: Form Upload --}}
+                <main class="lg:col-span-8">
+                    {{-- Card dengan Shadow Biru --}}
+                    <div class="rounded-3xl border border-blue-100 bg-white p-8 shadow-xl shadow-blue-100/30 transition-all duration-300 hover:shadow-blue-100/50">
+                        <div class="flex items-center justify-between mb-8 pb-4 border-b border-blue-100">
+                            <h2 class="text-xl font-bold text-slate-900 tracking-tight">Mulai Validasi Gambar</h2>
+                            <p class="text-xs text-blue-400 font-mono tracking-tighter">Max: 100MB</p>
+                        </div>
+
+                        {{-- Menampilkan Error Global: Merah dipertahankan (UX Standar) --}}
+                        @if ($errors->any())
+                            <div class="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 shadow-sm shadow-rose-100/50">
+                                <ul class="list-disc list-inside space-y-1">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         @endif
-                        <span class="hidden text-sm text-slate-600 sm:inline">{{ Auth::user()->name }}</span>
-                        <form method="POST" action="{{ route('logout') }}">
+
+                        {{-- Route Tetap Aman --}}
+                        <form method="POST" action="{{ route('dashboard.upload') }}" enctype="multipart/form-data" class="space-y-6">
                             @csrf
-                            <button type="submit" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">
-                                Logout
-                            </button>
+
+                            {{-- Area File Upload (Dropzone Style): Nuansa Biru --}}
+                            <div class="group relative">
+                                <label for="image_file" class="flex flex-col items-center justify-center w-full h-56 border-2 border-dashed border-blue-200 rounded-3xl cursor-pointer bg-blue-50/50 hover:bg-blue-50 hover:border-blue-400 transition duration-150 shadow-inner group-hover:shadow-md">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                                        {{-- Ikon warna Biru --}}
+                                        <div class="mb-4 p-3 bg-white rounded-full shadow border border-blue-100 text-blue-400 group-hover:text-blue-600 group-hover:scale-110 transition duration-300">
+                                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                        </div>
+                                        <p class="mb-2 text-sm text-slate-700 font-semibold group-hover:text-blue-900 transition">Klik untuk unggah gambar</p>
+                                        <p class="text-xs text-slate-500 italic">atau seret dan lepas file di sini</p>
+                                    </div>
+                                    {{-- Menampilkan Nama File: Warna Biru --}}
+                                    <p id="file-name-display" class="absolute bottom-3 text-xs text-blue-700 font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%]"></p>
+                                    </label>
+                                {{-- Input ID dan Name Aman --}}
+                                <input id="image_file" name="image_file" type="file" accept="image/*" class="hidden" onchange="document.getElementById('file-name-display').innerText = this.files[0].name" />
+                                <x-input-error :messages="$errors->get('image_file')" class="mt-2" />
+                            </div>
+
+                            {{-- Separator: Garis Biru Tipis --}}
+                            <div class="relative py-4">
+                                <div class="absolute inset-0 flex items-center"><span class="w-full border-t border-blue-100"></span></div>
+                                <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-3 text-blue-500 font-bold tracking-widest">Atau via URL</span></div>
+                            </div>
+
+                            {{-- Form URL Gambar: Input dengan Focus Biru --}}
+                            <div>
+                                <x-input-label for="image_url" :value="__('Tempel URL Gambar di Sini')" class="font-semibold text-slate-700 ml-1" />
+                                {{-- Override warna border default ke Biru tipis --}}
+                                <x-text-input id="image_url" name="image_url" type="url" :value="old('image_url')" placeholder="https://domain.com/gambar-hoax.jpg" class="mt-2 block w-full rounded-xl border-blue-200 bg-white py-3 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition duration-150" />
+                                <x-input-error :messages="$errors->get('image_url')" class="mt-2 ml-1" />
+                            </div>
+
+                            {{-- Tombol Action: Menjadi Biru (bg-blue-600) --}}
+                            <div class="pt-5 flex justify-end">
+                                <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center rounded-2xl bg-blue-600 px-8 py-4 text-sm font-extrabold text-white shadow-lg shadow-blue-200 hover:bg-blue-700 transition active:scale-[0.98]">
+                                    <svg class="w-5 h-5 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Upload & Mulai Validasi
+                                </button>
+                            </div>
                         </form>
-                    @else
-                        <a href="{{ route('login') }}" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">
-                            Login
-                        </a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-700">
-                                Register
-                            </a>
-                        @endif
-                    @endauth
-                </div>
-            </div>
-        </nav>
-
-        <main class="mx-auto w-full max-w-6xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
-            <div class="grid gap-6 lg:grid-cols-3">
-                <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-1">
-                    <h1 class="text-xl font-semibold">Dashboard Validasi Gambar</h1>
-                    <p class="mt-2 text-sm text-slate-600">
-                        Unggah file gambar atau URL gambar untuk pengecekan kebenaran informasi.
-                    </p>
-                    <ul class="mt-4 space-y-1 text-xs text-slate-500">
-                        <li>100% cocok dengan konten resmi: tervalidasi otomatis.</li>
-                        <li>50% - 99% mirip: wajib login untuk proses validasi manual admin.</li>
-                        <li>Di bawah 50%: tidak tervalidasi dari Kominfo.</li>
-                    </ul>
-
-                    <div class="mt-6">
-                        @if ($isAuthenticated)
-                            <p class="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">
-                                Akun login aktif: upload tanpa batas.
-                            </p>
-                        @else
-                            <p class="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-700">
-                                Sisa upload guest: {{ $guestUploadsRemaining }} / 3.
-                            </p>
-                        @endif
                     </div>
-                </section>
-
-                <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg shadow-cyan-100/60 lg:col-span-2">
-                    <h2 class="text-lg font-semibold">Upload Gambar</h2>
-                    <p class="mt-1 text-sm text-slate-500">Maksimum ukuran file 100MB.</p>
-
-                    @if ($errors->any())
-                        <div class="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-                            <ul class="list-disc list-inside space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('dashboard.upload') }}" enctype="multipart/form-data" class="mt-6 space-y-5">
-                        @csrf
-
-                        <div class="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4">
-                            <label for="image_file" class="block text-sm font-medium text-slate-700">File Gambar</label>
-                            <input id="image_file" name="image_file" type="file" accept="image/*" class="mt-2 block w-full rounded-lg border-slate-300 bg-white text-sm focus:border-cyan-500 focus:ring-cyan-500">
-                        </div>
-
-                        <div>
-                            <label for="image_url" class="block text-sm font-medium text-slate-700">Atau URL Gambar</label>
-                            <input id="image_url" name="image_url" type="url" value="{{ old('image_url') }}" placeholder="https://contoh.com/gambar.jpg" class="mt-2 block w-full rounded-lg border-slate-300 text-sm focus:border-cyan-500 focus:ring-cyan-500">
-                        </div>
-
-                        <button type="submit" class="inline-flex items-center rounded-lg bg-cyan-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-500">
-                            Upload untuk Validasi
-                        </button>
-                    </form>
-                </section>
+                </main>
             </div>
-        </main>
-    </body>
-</html>
+        </div>
+    </div>
+</x-app-layout>

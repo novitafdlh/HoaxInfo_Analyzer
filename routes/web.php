@@ -8,12 +8,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OfficialContentController;
 use Illuminate\Support\Facades\Route;
 
+// Landing / Dashboard untuk semua (guest + auth)
 Route::redirect('/', '/dashboard');
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::post('/dashboard/upload', [DashboardController::class, 'store'])->name('dashboard.upload');
 
+// ADMIN
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
     Route::get('/admin/submissions', [AdminSubmissionController::class, 'index'])->name('admin.submissions.index');
     Route::get('/admin/submissions/{submission}', [AdminSubmissionController::class, 'show'])->name('admin.submissions.show');
     Route::patch('/admin/submissions/{submission}/final-status', [AdminSubmissionController::class, 'updateFinalStatus'])
@@ -25,11 +29,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::delete('/official/{officialContent}', [OfficialContentController::class, 'destroy'])->name('official.destroy');
 });
 
+// USER
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::view('/user/dashboard', 'user.dashboard')->name('user.dashboard');
     Route::get('/user/validation-results', [UserValidationController::class, 'index'])->name('user.validation-results');
 });
 
+// PROFILE (semua user login)
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
