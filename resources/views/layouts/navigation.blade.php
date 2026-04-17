@@ -11,7 +11,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center group">
                         <span class="text-xl font-bold tracking-tight text-slate-700 group-hover:text-indigo-700 transition">
-                            Sulteng <span class="text-indigo-500">Hoax Analyzer</span>
+                            Sulteng <span class="text-indigo-500">Info Clarifier</span>
                         </span>
                     </a>
                 </div>
@@ -39,7 +39,8 @@
                     <div class="me-4 flex items-center gap-2">
                         @if($user->role === 'user')
                             <x-nav-link :href="route('user.dashboard')">Dashboard</x-nav-link>
-                            <x-nav-link :href="route('user.validation-results')">Hasil Validasi</x-nav-link>
+                            <x-nav-link :href="route('user.official.index')">Konten Resmi</x-nav-link>
+                            <x-nav-link :href="route('user.validation-results')">Hasil Analisis</x-nav-link>
                         @endif
                     </div>
 

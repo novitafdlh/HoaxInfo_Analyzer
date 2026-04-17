@@ -13,15 +13,38 @@ use Illuminate\Support\Facades\Storage;
 
 class OfficialContentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $officialContentsByCategory = OfficialContent::query()
+        $categories = OfficialContent::query()
+            ->select('category')
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        $selectedCategory = trim((string) $request->query('category', ''));
+        $search = trim((string) $request->query('search', ''));
+
+        $officialContents = OfficialContent::query()
+            ->when($selectedCategory !== '', function ($query) use ($selectedCategory) {
+                $query->where('category', $selectedCategory);
+            })
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery
+                        ->where('title', 'like', '%'.$search.'%')
+                        ->orWhere('category', 'like', '%'.$search.'%');
+                });
+            })
             ->latest()
-            ->get()
-            ->groupBy(fn (OfficialContent $content) => $content->category ?: 'Umum');
+            ->get();
 
         return view('official.index', [
-            'officialContentsByCategory' => $officialContentsByCategory,
+            'officialContents' => $officialContents,
+            'categories' => $categories,
+            'selectedCategory' => $selectedCategory,
+            'search' => $search,
         ]);
     }
 

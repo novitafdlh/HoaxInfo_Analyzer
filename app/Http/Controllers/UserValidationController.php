@@ -10,6 +10,7 @@ class UserValidationController extends Controller
     public function index(): View
     {
         $submissions = Submission::query()
+            ->with('matchedOfficialContent')
             ->where('user_id', auth()->id())
             ->latest()
             ->paginate(10);

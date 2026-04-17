@@ -8,8 +8,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04a11.357 11.357 0 00-1.573 11.37c1.29 3.56 4.308 6.399 8.01 7.326a11.75 11.75 0 003.364 0c3.701-.927 6.72-3.766 8.01-7.326a11.357 11.357 0 00-1.573-11.37z"></path>
                 </svg>
             </div>
-            <h1 class="text-2xl font-bold text-slate-900">Sulteng Hoax Analyzer</h1>
-            <p class="text-sm text-slate-500 mt-1">Silakan masuk untuk mengakses panel administrasi</p>
+            <h1 class="text-2xl font-bold text-slate-900">Sulteng Info Clarifier</h1>
+            <p class="text-sm text-slate-500 mt-1">Silakan masuk untuk mengakses panel klarifikasi informasi publik</p>
         </div>
 
         {{-- Card Login --}}

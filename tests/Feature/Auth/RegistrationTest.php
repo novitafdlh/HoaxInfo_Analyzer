@@ -26,7 +26,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('user.dashboard', absolute: false));
         $this->assertEquals('user', auth()->user()->role);
     }
 }

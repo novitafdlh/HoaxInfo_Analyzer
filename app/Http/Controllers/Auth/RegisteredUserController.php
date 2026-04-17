@@ -31,6 +31,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $guestSessionId = $request->session()->getId();
+        $normalizedEmail = strtolower(trim((string) $request->input('email')));
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -40,7 +41,7 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $normalizedEmail,
             'password' => Hash::make($request->password),
             'role' => 'user',
         ]);

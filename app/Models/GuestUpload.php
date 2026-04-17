@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GuestUpload extends Model
 {
-    //
+    protected $fillable = [
+        'ip_address',
+    ];
 }

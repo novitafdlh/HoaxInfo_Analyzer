@@ -31,7 +31,7 @@
                         <div class="relative z-10">
                             <h3 class="text-xl font-bold text-slate-900 mb-2">Selamat Datang Kembali, Admin</h3>
                             <p class="text-slate-600 leading-relaxed max-w-2xl text-sm">
-                                Pantau dan kelola integritas informasi publik dalam satu panel terpadu. Verifikasi kontribusi masyarakat dan pastikan basis data konten resmi tetap akurat.
+                                Pantau dan kelola integritas informasi publik dalam satu panel terpadu. Sistem membantu lewat similarity dan confidence terhadap konten resmi, sementara keputusan final tetap berada pada admin.
                             </p>
                         </div>
                         {{-- Background Decoration --}}
