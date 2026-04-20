@@ -22,7 +22,7 @@
                 <aside class="lg:col-span-1">
                     <div class="sticky top-24 rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm">
                         @include('admin.partials.sidebar')
-                    </div>
+                    </div> 
                 </aside>
 
                 <main class="space-y-8 lg:col-span-3">
