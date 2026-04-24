@@ -3,8 +3,10 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminSubmissionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserOfficialContentController;
 use App\Http\Controllers\UserValidationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicMediaController;
 use App\Http\Controllers\OfficialContentController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +15,9 @@ Route::redirect('/', '/dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::post('/dashboard/upload', [DashboardController::class, 'store'])->name('dashboard.upload');
+Route::get('/media/public/{path}', [PublicMediaController::class, 'show'])
+    ->where('path', '.*')
+    ->name('media.public');
 
 // ADMIN
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
@@ -33,6 +38,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::view('/user/dashboard', 'user.dashboard')->name('user.dashboard');
     Route::get('/user/validation-results', [UserValidationController::class, 'index'])->name('user.validation-results');
+    Route::get('/user/official-contents', [UserOfficialContentController::class, 'index'])->name('user.official.index');
+    Route::get('/user/official-contents/{officialContent}', [UserOfficialContentController::class, 'show'])->name('user.official.show');
 });
 
 // PROFILE (semua user login)

@@ -100,6 +100,37 @@ class OcrService
         return round($similarity, 2);
     }
 
+    public function cosineSimilarityPercent(?string $firstText, ?string $secondText): float
+    {
+        $firstVector = $this->wordFrequencyVector($this->normalizedText($firstText));
+        $secondVector = $this->wordFrequencyVector($this->normalizedText($secondText));
+
+        if ($firstVector === [] || $secondVector === []) {
+            return 0.0;
+        }
+
+        $dotProduct = 0.0;
+
+        foreach ($firstVector as $term => $weight) {
+            $dotProduct += $weight * ($secondVector[$term] ?? 0);
+        }
+
+        $firstMagnitude = sqrt(array_sum(array_map(
+            static fn (int $weight): int => $weight * $weight,
+            $firstVector
+        )));
+        $secondMagnitude = sqrt(array_sum(array_map(
+            static fn (int $weight): int => $weight * $weight,
+            $secondVector
+        )));
+
+        if ($firstMagnitude == 0.0 || $secondMagnitude == 0.0) {
+            return 0.0;
+        }
+
+        return round(($dotProduct / ($firstMagnitude * $secondMagnitude)) * 100, 2);
+    }
+
     private function getPsmModes(): array
     {
         $rawModes = (string) env('OCR_PSM_LIST', '6,11,12');
@@ -148,6 +179,22 @@ class OcrService
         }
 
         return $text;
+    }
+
+    private function wordFrequencyVector(string $normalizedText): array
+    {
+        if ($normalizedText === '') {
+            return [];
+        }
+
+        $terms = preg_split('/\s+/u', $normalizedText, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $vector = [];
+
+        foreach ($terms as $term) {
+            $vector[$term] = ($vector[$term] ?? 0) + 1;
+        }
+
+        return $vector;
     }
 
     private function scoreTextQuality(string $text): int

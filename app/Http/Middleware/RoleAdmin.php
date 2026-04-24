@@ -16,7 +16,7 @@ class RoleAdmin
      * @param  string  $role  <-- Tambahkan dokumentasi ini
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    // --- UBAH BARIS INI: Tambahkan parameter $role ---
+    
     public function handle(Request $request, Closure $next, string $role): Response
     {
         // Pastikan user sudah login (auth()->user() tidak null)

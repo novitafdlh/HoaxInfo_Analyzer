@@ -31,11 +31,11 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
         Submission::claimGuestSubmissionsToUser($guestSessionId, (int) $request->user()->id);
 
-        if ($request->user()?->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+        if (! $request->user()?->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
         }
 
-        return redirect()->intended(route('user.dashboard', absolute: false));
+        return redirect()->intended($this->dashboardRouteFor($request));
     }
 
     /**
@@ -50,5 +50,12 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    private function dashboardRouteFor(Request $request): string
+    {
+        return $request->user()?->role === 'admin'
+            ? route('admin.dashboard', absolute: false)
+            : route('user.dashboard', absolute: false);
     }
 }

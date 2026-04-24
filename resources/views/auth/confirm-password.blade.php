@@ -1,42 +1,39 @@
-<x-guest-layout>
-    <div class="flex flex-col items-center justify-center">
-        
-        <div class="w-full sm:max-w-md px-6">
-            
-            <div class="mb-8 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-red-50 rounded-full mb-4">
-                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
+<x-auth-shell
+    title="Konfirmasi Kata Sandi"
+    heading="Konfirmasi Kata Sandi"
+    description="Langkah ini diperlukan sebelum Anda melanjutkan ke area yang lebih sensitif di dalam sistem."
+    icon="lock_person"
+    containerWidth="max-w-5xl"
+>
+    <div class="space-y-6">
+        @if ($errors->any())
+            <div class="rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-semibold text-rose-800">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('password.confirm') }}" class="space-y-6">
+            @csrf
+
+            <div class="space-y-2">
+                <x-input-label for="password" :value="__('Kata Sandi')" class="ml-1" />
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">key</span>
+                    <x-text-input id="password" class="pl-14" type="password" name="password" required autocomplete="current-password" placeholder="Masukkan kata sandi Anda" />
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900">Konfirmasi Sandi</h2>
-                <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-                    {{ __('Ini adalah area aman. Harap konfirmasi kata sandi Anda sebelum melanjutkan ke halaman berikutnya.') }}
-                </p>
             </div>
 
-            <form method="POST" action="{{ route('password.confirm') }}">
-                @csrf
+            <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700 active:scale-[0.98]">
+                <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                Konfirmasi Sekarang
+            </button>
+        </form>
 
-                <div>
-                    <x-input-label for="password" :value="__('Kata Sandi')" class="font-medium text-gray-700" />
-                    <x-text-input id="password" 
-                        class="block mt-1.5 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm py-3"
-                        type="password"
-                        name="password"
-                        required 
-                        placeholder="Masukkan sandi Anda"
-                        autocomplete="current-password" />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <div class="mt-8">
-                    <x-primary-button class="w-full justify-center py-3.5 bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-lg transition-all duration-200">
-                        {{ __('Konfirmasi Sekarang') }}
-                    </x-primary-button>
-                </div>
-            </form>
-        </div>
-
+        @if (Route::has('password.request'))
+            <a href="{{ route('password.request') }}" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 transition hover:text-blue-700">
+                <span class="material-symbols-outlined text-[18px]">help</span>
+                Lupa kata sandi?
+            </a>
+        @endif
     </div>
-</x-guest-layout>
+</x-auth-shell>

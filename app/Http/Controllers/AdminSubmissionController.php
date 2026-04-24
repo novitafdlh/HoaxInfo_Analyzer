@@ -11,7 +11,7 @@ class AdminSubmissionController extends Controller
 {
     public function index(): View
     {
-        $submissions = Submission::latest()->paginate(10);
+        $submissions = Submission::with('matchedOfficialContent')->latest()->paginate(10);
 
         return view('admin.submissions.index', [
             'submissions' => $submissions,
@@ -20,6 +20,8 @@ class AdminSubmissionController extends Controller
 
     public function show(Submission $submission): View
     {
+        $submission->load('matchedOfficialContent');
+
         return view('admin.submissions.show', [
             'submission' => $submission,
         ]);
@@ -28,7 +30,7 @@ class AdminSubmissionController extends Controller
     public function updateFinalStatus(Request $request, Submission $submission): RedirectResponse
     {
         $validated = $request->validate([
-            'final_status' => ['required', 'in:terverifikasi,tidak_valid'],
+            'final_status' => ['required', 'in:terverifikasi,perlu_tindak_lanjut,menunggu_validasi'],
         ]);
 
         $submission->update([

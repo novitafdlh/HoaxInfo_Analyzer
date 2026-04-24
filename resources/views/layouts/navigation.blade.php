@@ -11,7 +11,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center group">
                         <span class="text-xl font-bold tracking-tight text-slate-700 group-hover:text-indigo-700 transition">
-                            Sulteng <span class="text-indigo-500">Hoax Analyzer</span>
+                            Sulteng <span class="text-indigo-500">Info Clarifier</span>
                         </span>
                     </a>
                 </div>
@@ -39,7 +39,8 @@
                     <div class="me-4 flex items-center gap-2">
                         @if($user->role === 'user')
                             <x-nav-link :href="route('user.dashboard')">Dashboard</x-nav-link>
-                            <x-nav-link :href="route('user.validation-results')">Hasil Validasi</x-nav-link>
+                            <x-nav-link :href="route('user.official.index')">Konten Resmi</x-nav-link>
+                            <x-nav-link :href="route('user.validation-results')">Hasil Analisis</x-nav-link>
                         @endif
                     </div>
 
@@ -55,12 +56,11 @@
                                 Profile
                             </x-dropdown-link>
 
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('logout') }}" data-logout-confirm data-confirm-title="Keluar dari akun {{ $user->name }}?" data-confirm-message="Anda akan mengakhiri sesi aktif untuk {{ $user->name }}. Apakah Anda yakin ingin keluar?">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                <button type="submit" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none">
                                     Logout
-                                </x-dropdown-link>
+                                </button>
                             </form>
                         </x-slot>
                     </x-dropdown>

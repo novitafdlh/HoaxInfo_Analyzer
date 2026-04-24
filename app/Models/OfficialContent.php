@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 
 class OfficialContent extends Model
 {
@@ -16,4 +17,15 @@ class OfficialContent extends Model
         'source_url',
         'created_by'
     ];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image_path) {
+            return null;
+        }
+
+        return Route::has('media.public')
+            ? route('media.public', ['path' => $this->image_path], false)
+            : null;
+    }
 }

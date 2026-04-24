@@ -1,84 +1,75 @@
-<x-guest-layout>
-        {{-- Logo & Judul Utama --}}
-        
-        {{-- Bagian Header (Logo & Judul) --}}
-        <div class="mb-1 text-center">
-            <div class="inline-flex p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-200 mb-2">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04a11.357 11.357 0 00-1.573 11.37c1.29 3.56 4.308 6.399 8.01 7.326a11.75 11.75 0 003.364 0c3.701-.927 6.72-3.766 8.01-7.326a11.357 11.357 0 00-1.573-11.37z"></path>
-                </svg>
+<x-auth-shell
+    title="Masuk"
+    heading="Masuk"
+    description="Gunakan akun Anda untuk mengakses portal validasi, riwayat hasil, dan fitur verifikasi lanjutan."
+    icon="login"
+>
+    <x-slot name="aside">
+        <div class="space-y-4">
+            <h1 class="text-5xl font-black tracking-tight text-slate-900">Akses cepat ke dashboard dengan tema yang sama.</h1>
+            <p class="max-w-xl text-base leading-relaxed text-slate-600">
+                Halaman masuk kini mengikuti identitas visual portal utama agar perpindahan dari halaman tamu ke dashboard terasa lebih mulus dan konsisten.
+            </p>
+        </div>
+
+        <div class="grid gap-4">
+            <div class="rounded-[2rem] border border-blue-100 bg-white/80 p-5">
+                <p class="text-xs font-black uppercase tracking-[0.2em] text-blue-700">Aksi Utama</p>
+                <p class="mt-2 text-sm leading-relaxed text-slate-600">Tombol primer menggunakan biru portal sebagai titik fokus utama.</p>
             </div>
-            <h1 class="text-2xl font-bold text-slate-900">Sulteng Hoax Analyzer</h1>
-            <p class="text-sm text-slate-500 mt-1">Silakan masuk untuk mengakses panel administrasi</p>
+            <div class="rounded-[2rem] border border-blue-100 bg-white/80 p-5">
+                <p class="text-xs font-black uppercase tracking-[0.2em] text-blue-700">Akses Aman</p>
+                <p class="mt-2 text-sm leading-relaxed text-slate-600">Masuk dengan akun resmi untuk membuka fitur lengkap dan pengelolaan hasil validasi.</p>
+            </div>
         </div>
+    </x-slot>
 
-        {{-- Card Login --}}
-        <div class="w-full sm:max-w-md px-8 py-10 bg-white shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100">
-            <x-auth-session-status class="mb-6" :status="session('status')" />
+    <div class="space-y-6">
+        <x-auth-session-status :status="session('status')" />
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
+        <form method="POST" action="{{ route('login') }}" class="space-y-6">
+            @csrf
 
-                {{-- Input Email --}}
-                <div class="space-y-1">
-                    <x-input-label for="email" :value="__('Email Resmi')" class="text-slate-700 font-medium" />
-                    <x-text-input id="email" 
-                        class="block mt-1 w-full border-slate-200 focus:border-blue-500 focus:ring-blue-500 rounded-xl shadow-sm transition-all" 
-                        type="email" 
-                        name="email" 
-                        :value="old('email')" 
-                        required 
-                        autofocus 
-                        placeholder="admin@instansi.go.id"
-                        autocomplete="username" />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2 text-xs" />
+            <div class="space-y-2">
+                <x-input-label for="email" :value="__('Email Resmi')" class="ml-1" />
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">mail</span>
+                    <x-text-input id="email" class="pl-14" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="admin@sultengprov.go.id" />
                 </div>
+                <x-input-error :messages="$errors->get('email')" class="ml-1" />
+            </div>
 
-                {{-- Input Password --}}
-                <div class="mt-6 space-y-1">
-                    <div class="flex items-center justify-between">
-                        <x-input-label for="password" :value="__('Kata Sandi')" class="text-slate-700 font-medium" />
-                    </div>
-                    <x-text-input id="password" 
-                        class="block mt-1 w-full border-slate-200 focus:border-blue-500 focus:ring-blue-500 rounded-xl shadow-sm transition-all"
-                        type="password"
-                        name="password"
-                        placeholder="••••••••"
-                        required 
-                        autocomplete="current-password" />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2 text-xs" />
+            <div class="space-y-2">
+                <x-input-label for="password" :value="__('Kata Sandi')" class="ml-1" />
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">lock</span>
+                    <x-text-input id="password" class="pl-14" type="password" name="password" required autocomplete="current-password" placeholder="Masukkan kata sandi Anda" />
                 </div>
+                <x-input-error :messages="$errors->get('password')" class="ml-1" />
+            </div>
 
-                {{-- Ingat Saya & Lupa Sandi --}}
-                <div class="flex items-center justify-between mt-6">
-                    <label for="remember_me" class="inline-flex items-center cursor-pointer">
-                        <input id="remember_me" type="checkbox" class="rounded-md border-slate-300 text-blue-600 shadow-sm focus:ring-blue-500 transition-colors" name="remember">
-                        <span class="ms-2 text-sm text-slate-600">{{ __('Ingat saya') }}</span>
-                    </label>
+            <div class="flex items-center justify-between">
+                <label class="inline-flex items-center gap-3 text-sm text-slate-600">
+                    <input type="checkbox" name="remember" class="rounded border-slate-300 text-blue-600 focus:ring-blue-300">
+                    <span>Ingat saya di perangkat ini</span>
+                </label>
 
-                    @if (Route::has('password.request'))
-                        <a class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors" href="{{ route('password.request') }}">
-                            {{ __('Lupa sandi?') }}
-                        </a>
-                    @endif
-                </div>
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-sm font-bold text-blue-700 transition hover:text-blue-800">
+                        Lupa kata sandi?
+                    </a>
+                @endif
+            </div>
 
-                {{-- Tombol Masuk --}}
-                <div class="mt-8">
-                    <x-primary-button class="w-full justify-center py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl font-bold tracking-wide shadow-lg shadow-blue-100 transition-all transform hover:-translate-y-0.5">
-                        {{ __('Login') }}
-                    </x-primary-button>
-                </div>
-            </form>
-            {{-- Link Registrasi --}}
-            <div class="mt-4 text-center">
-                <p class="text-sm text-slate-500">Belum punya akun? 
-                    <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-700 transition-colors">Daftar sekarang</a>
-                </p>
-        </div>
-                {{-- Teks Hak Cipta (Sekarang di Tengah-Tengah di Luar Card) --}}
-                <p class="mt-4 text-center text-xs text-slate-500 LEADING-RELAXED">
-                    &copy; {{ date('Y') }} Dinas Kominfo Santik Provinsi Sulawesi Tengah.<br>
-                </p>
+            <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700 active:scale-[0.98]">
+                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                Masuk
+            </button>
+             <p class="text-sm text-slate-600 text-center">
+                Belum punya akun?
+                <a href="{{ route('register') }}" class="font-bold text-blue-700 transition hover:text-blue-800">Daftar sekarang</a>
+            </p>
+        </form>
+           
     </div>
-</x-guest-layout>
+</x-auth-shell>
