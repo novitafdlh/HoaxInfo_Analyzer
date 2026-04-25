@@ -18,17 +18,45 @@
                         </div>
                     </div>
 
-                    <div class="overflow-hidden rounded-lg border border-blue-100 bg-gradient-to-r from-white via-blue-50 to-cyan-50 shadow-[0px_10px_24px_rgba(37,99,235,0.08)] transition-all duration-500">
+                    <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
                         <div class="p-3 md:p-4">
-                            <div class="flex items-start gap-3">
-                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-container">
-                                    <span class="material-symbols-outlined text-[20px] text-on-primary-container">info</span>
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="togglePanduan()">
+                                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                                        <span class="material-symbols-outlined text-[20px]">info</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-base font-bold text-blue-950">Detail Referensi Resmi</p>
+                                        <p class="text-xs text-blue-900/60">3 poin utama untuk memahami referensi yang dijadikan acuan sistem.</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-base font-bold text-blue-950">Detail Referensi Resmi</p>
-                                    <p class="text-sm leading-relaxed text-blue-900/70 mt-1">
-                                        Konten ini tersimpan dalam basis data referensi resmi dan dapat menjadi tujuan tautan saat sistem menemukan kemiripan pada hasil validasi Anda.
-                                    </p>
+                                <button
+                                    aria-label="Toggle panduan detail referensi"
+                                    class="flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white/90 text-blue-700 transition hover:bg-white"
+                                    type="button"
+                                    onclick="togglePanduan()"
+                                >
+                                    <span class="inline-block rotate-180 text-lg font-black leading-none transition-transform duration-200" id="panduan-icon">^</span>
+                                </button>
+                            </div>
+
+                            <div class="hidden pt-3" id="panduan-content">
+                                <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                                    <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Baca Metadata</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Perhatikan kategori, metode sumber, dan tanggal simpan untuk memahami konteks referensi.</p>
+                                    </div>
+                                    <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Cek Teks OCR</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Teks OCR membantu melihat isi referensi saat sistem melakukan pencocokan terhadap hasil unggahan.</p>
+                                    </div>
+                                    <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Buka Sumber Asli</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Jika tersedia, gunakan URL resmi untuk memastikan referensi yang tersimpan sesuai dengan sumber publik aslinya.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -82,4 +110,13 @@
                         </div>
                     </div>
                 </section>
+    <script>
+        function togglePanduan() {
+            const content = document.getElementById('panduan-content');
+            const icon = document.getElementById('panduan-icon');
+            const isHidden = content.classList.toggle('hidden');
+
+            icon.classList.toggle('rotate-180', isHidden);
+        }
+    </script>
 </x-portal-shell>

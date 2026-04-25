@@ -11,12 +11,12 @@
             </div>
         </div>
 
-        <div class="overflow-hidden rounded-lg border border-blue-100 bg-gradient-to-r from-white via-blue-50 to-cyan-50 shadow-[0px_10px_24px_rgba(37,99,235,0.08)] transition-all duration-500">
+        <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
             <div class="p-3 md:p-4">
                 <div class="flex items-center justify-between gap-4">
-                    <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onclick="togglePanduan()">
-                        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary-container">
-                            <span class="material-symbols-outlined text-[20px] text-on-primary-container" data-icon="lightbulb">lightbulb</span>
+                    <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="togglePanduan()">
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                            <span class="material-symbols-outlined text-[20px]" data-icon="lightbulb">lightbulb</span>
                         </div>
                         <div>
                             <p class="text-base font-bold text-blue-950">Panduan Cepat Validasi</p>
@@ -29,7 +29,7 @@
                         type="button"
                         onclick="togglePanduan()"
                     >
-                        <span class="material-symbols-outlined text-[18px] text-slate-400 transition-transform duration-200" id="panduan-icon">expand_more</span>
+                        <span class="inline-block rotate-180 text-lg font-black leading-none transition-transform duration-200" id="panduan-icon">^</span>
                     </button>
                 </div>
 

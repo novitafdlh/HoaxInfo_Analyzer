@@ -19,44 +19,44 @@
                         </div>
                     </div>
 
-                    <div class="overflow-hidden rounded-lg border border-blue-100 bg-gradient-to-r from-white via-blue-50 to-cyan-50 shadow-[0px_10px_24px_rgba(37,99,235,0.08)] transition-all duration-500">
+                    <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
                         <div class="p-3 md:p-4">
-                            <div class="flex items-center justify-between gap-3">
-                                <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onclick="togglePanduan()">
-                                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-container">
-                                    <span class="material-symbols-outlined text-[20px] text-on-primary-container">lightbulb</span>
-                                </div>
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="togglePanduan()">
+                                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                                        <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+                                    </div>
                                     <div>
                                         <p class="text-base font-bold text-blue-950">Panduan Cepat Validasi</p>
-                                        <p class="text-sm leading-relaxed text-blue-900/70 mt-1">3 poin singkat untuk membaca hasil analisis.</p>
+                                        <p class="text-xs text-blue-900/60">3 poin singkat untuk membaca hasil analisis.</p>
                                     </div>
                                 </div>
                                 <button
                                     aria-label="Toggle panduan cepat"
-                                    class="flex h-9 w-9 items-center justify-center rounded-full border border-blue-200/70 bg-blue-100/70 text-blue-700 transition hover:bg-blue-200/70"
+                                    class="flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white/90 text-blue-700 transition hover:bg-white"
                                     type="button"
                                     onclick="togglePanduan()"
                                 >
-                                    <span class="material-symbols-outlined text-[18px] text-blue-700 transition-transform duration-200" id="panduan-icon">expand_more</span>
+                                    <span class="inline-block rotate-180 text-lg font-black leading-none transition-transform duration-200" id="panduan-icon">^</span>
                                 </button>
                             </div>
 
                             <div class="hidden pt-3" id="panduan-content">
                                 <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
-                                    <div class="rounded-2xl border border-blue-200 bg-blue-50/90 p-3">
+                                    <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
-                                        <h3 class="text-sm font-bold text-blue-950">Hash SHA256</h3>
-                                        <p class="mt-1 text-xs leading-relaxed text-blue-800">Membuat sidik jari digital unik untuk memastikan integritas konten primer.</p>
+                                        <h3 class="text-sm font-bold text-slate-900">Hash SHA256</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Membuat sidik jari digital unik untuk memastikan integritas konten primer.</p>
                                     </div>
-                                    <div class="rounded-2xl border border-amber-200 bg-amber-50/90 p-3">
+                                    <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
-                                        <h3 class="text-sm font-bold text-amber-950">Similarity 60-84%</h3>
-                                        <p class="mt-1 text-xs leading-relaxed text-amber-800">Kemiripan tinggi, tetapi masih butuh pengecekan manual oleh validator.</p>
+                                        <h3 class="text-sm font-bold text-slate-900">Similarity 60-84%</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Kemiripan tinggi, tetapi masih butuh pengecekan manual oleh validator.</p>
                                     </div>
                                     <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
-                                        <h3 class="text-sm font-bold text-rose-950">Low Similarity</h3>
-                                        <p class="mt-1 text-xs leading-relaxed text-rose-800">Di bawah 60% biasanya menandakan konten baru atau belum terhubung ke referensi resmi.</p>
+                                        <h3 class="text-sm font-bold text-slate-900">Low Similarity</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Di bawah 60% biasanya menandakan konten baru atau belum terhubung ke referensi resmi.</p>
                                     </div>
                                 </div>
                             </div>

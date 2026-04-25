@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Submission;
+use App\Notifications\SubmissionStatusUpdatedNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class AdminSubmissionController extends Controller
@@ -33,9 +35,15 @@ class AdminSubmissionController extends Controller
             'final_status' => ['required', 'in:terverifikasi,perlu_tindak_lanjut,menunggu_validasi'],
         ]);
 
+        $wasChanged = $submission->final_status !== $validated['final_status'];
+
         $submission->update([
             'final_status' => $validated['final_status'],
         ]);
+
+        if ($wasChanged && $submission->user && Schema::hasTable('notifications')) {
+            $submission->user->notify(new SubmissionStatusUpdatedNotification($submission->fresh('matchedOfficialContent')));
+        }
 
         return back()->with('status', 'Status final submission berhasil diperbarui.');
     }

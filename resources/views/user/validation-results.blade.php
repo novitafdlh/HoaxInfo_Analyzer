@@ -18,17 +18,45 @@
                         </div>
                     </div>
 
-                    <div class="overflow-hidden rounded-lg border border-blue-100 bg-gradient-to-r from-white via-blue-50 to-cyan-50 shadow-[0px_10px_24px_rgba(37,99,235,0.08)] transition-all duration-500">
+                    <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
                         <div class="p-3 md:p-4">
-                            <div class="flex items-start gap-3">
-                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-container">
-                                    <span class="material-symbols-outlined text-[20px] text-on-primary-container">lightbulb</span>
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="togglePanduan()">
+                                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                                        <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-base font-bold text-blue-950">Ringkasan Hasil Validasi</p>
+                                        <p class="text-xs text-blue-900/60">3 fokus utama untuk membaca hasil, confidence, dan review admin.</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-base font-bold text-blue-950">Ringkasan Hasil Validasi</p>
-                                    <p class="text-sm leading-relaxed text-blue-900/70 mt-1">
-                                        Halaman ini menampilkan tingkat kemiripan, confidence system, metode analisis, dan status review admin untuk setiap konten yang Anda kirimkan.
-                                    </p>
+                                <button
+                                    aria-label="Toggle panduan hasil validasi"
+                                    class="flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white/90 text-blue-700 transition hover:bg-white"
+                                    type="button"
+                                    onclick="togglePanduan()"
+                                >
+                                    <span class="inline-block rotate-180 text-lg font-black leading-none transition-transform duration-200" id="panduan-icon">^</span>
+                                </button>
+                            </div>
+
+                            <div class="hidden pt-3" id="panduan-content">
+                                <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                                    <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Cek Similarity</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Persentase kemiripan membantu membaca seberapa dekat konten Anda dengan referensi resmi yang tersimpan.</p>
+                                    </div>
+                                    <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Baca Confidence</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Confidence menunjukkan tingkat keyakinan sistem sebelum hasil masuk ke proses review lebih lanjut.</p>
+                                    </div>
+                                    <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Pantau Status Final</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Status final admin menjadi penentu apakah hasil analisis dianggap valid, perlu tindak lanjut, atau tidak valid.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -153,4 +181,13 @@
                         </div>
                     @endif
                 </section>
+    <script>
+        function togglePanduan() {
+            const content = document.getElementById('panduan-content');
+            const icon = document.getElementById('panduan-icon');
+            const isHidden = content.classList.toggle('hidden');
+
+            icon.classList.toggle('rotate-180', isHidden);
+        }
+    </script>
 </x-portal-shell>

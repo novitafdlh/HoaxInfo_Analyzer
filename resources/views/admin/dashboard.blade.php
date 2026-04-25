@@ -66,12 +66,12 @@
                 </div>
             </div>
 
-            <div class="overflow-hidden rounded-lg border border-blue-100 bg-gradient-to-r from-white via-blue-50 to-cyan-50 shadow-[0px_10px_24px_rgba(37,99,235,0.08)] transition-all duration-500">
+            <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
                 <div class="p-3 md:p-4">
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="togglePanduan()">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary-container">
-                                <span class="material-symbols-outlined text-[20px] text-on-primary-container">lightbulb</span>
+                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                                <span class="material-symbols-outlined text-[20px]">lightbulb</span>
                             </div>
                             <div>
                                 <p class="text-base font-bold text-blue-950">Panduan Cepat Admin</p>
@@ -91,7 +91,7 @@
                     <div class="hidden pt-3" id="panduan-content">
                         <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
                             <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
-                                <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
+                                <div class="mb-2 inline-flex rounded-full bg-green-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
                                 <h3 class="text-sm font-bold text-slate-900">Pantau Submission Baru</h3>
                                 <p class="mt-1 text-xs leading-relaxed text-slate-600">Perhatikan antrian menunggu validasi agar laporan publik tidak terlalu lama tertunda.</p>
                             </div>
@@ -100,8 +100,8 @@
                                 <h3 class="text-sm font-bold text-slate-900">Kelola Referensi Resmi</h3>
                                 <p class="mt-1 text-xs leading-relaxed text-slate-600">Semakin rapi basis konten resmi, semakin akurat sistem mengenali konten yang beredar.</p>
                             </div>
-                            <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
-                                <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
+                            <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">03</div>
                                 <h3 class="text-sm font-bold text-slate-900">Tetapkan Status Final</h3>
                                 <p class="mt-1 text-xs leading-relaxed text-slate-600">Gunakan similarity, confidence, dan konteks sumber untuk menetapkan hasil akhir dengan hati-hati.</p>
                             </div>
@@ -115,7 +115,7 @@
     <div class=" p-6 md:overflow-hidden md:rounded-lg md:border bg-white/80 md:border-slate-200 md:shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
         <section>
             <div class="mb-8 flex items-center justify-between">
-                <h3 class="text-2xl font-bold text-slate-900">Ringkasan Operasional</h3>
+                <h3 class="text-2xl font-bold tracking-tight text-on-surface">Ringkasan Operasional</h3>
             </div>
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">

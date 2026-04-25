@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\GuestUpload;
 use App\Models\OfficialContent;
 use App\Models\Submission;
+use App\Models\User;
+use App\Notifications\AdminNewSubmissionNotification;
 use App\Services\ContentVerificationService;
 use App\Services\FileSecurityService;
 use App\Services\OcrService;
 use App\Services\RemoteImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -118,6 +121,13 @@ class DashboardController extends Controller
             GuestUpload::create([
                 'ip_address' => (string) $request->ip(),
             ]);
+        }
+
+        if (Schema::hasTable('notifications')) {
+            User::query()
+                ->where('role', 'admin')
+                ->get()
+                ->each(fn (User $admin) => $admin->notify(new AdminNewSubmissionNotification($submission)));
         }
 
         $matchedOfficialContent = $analysis['matched_official_content_id'] !== null

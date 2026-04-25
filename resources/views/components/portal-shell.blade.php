@@ -92,16 +92,33 @@
         </script>
 
         <style>
+            :root {
+                --portal-bg: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+                --portal-surface: rgba(255, 255, 255, 0.88);
+                --portal-surface-strong: #ffffff;
+                --portal-surface-soft: #f8fbff;
+                --portal-border: #dbeafe;
+                --portal-border-strong: #bfdbfe;
+                --portal-text-primary: #0f172a;
+                --portal-text-secondary: #475569;
+                --portal-text-muted: #64748b;
+                --portal-accent: #2563eb;
+                --portal-accent-hover: #1d4ed8;
+                --portal-accent-soft: rgba(37, 99, 235, 0.12);
+                --portal-shadow: 0px 20px 40px rgba(37, 99, 235, 0.08);
+                --portal-overlay: rgba(255, 255, 255, 0.8);
+                --portal-table-head: rgba(248, 250, 252, 0.92);
+                --portal-input-bg: rgba(248, 250, 252, 0.95);
+            }
+
             [x-cloak] {
                 display: none !important;
             }
 
             body {
                 font-family: 'Inter', sans-serif;
-            }
-
-            body.portal-theme {
-                background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+                background: var(--portal-bg);
+                color: var(--portal-text-primary);
             }
 
             .material-symbols-outlined {
@@ -109,76 +126,121 @@
             }
 
             .glass-panel {
-                background: rgba(255, 255, 255, 0.8);
+                background: var(--portal-overlay);
                 backdrop-filter: blur(20px);
                 -webkit-backdrop-filter: blur(20px);
             }
 
-            body.portal-theme [class*="bg-slate-900"] {
-                background-color: #2563eb !important;
+            body header,
+            body aside,
+            body nav,
+            body section,
+            body article,
+            body table,
+            body thead,
+            body tbody {
+                color: var(--portal-text-primary);
             }
 
-            body.portal-theme [class*="hover:bg-slate-800"]:hover {
-                background-color: #1d4ed8 !important;
+            body [class*="bg-white"],
+            body [class*="bg-surface-container-lowest"],
+            body [class*="bg-surface-container-low"],
+            body [class*="bg-surface-container-high"],
+            body [class*="bg-surface-container"],
+            body [class*="bg-slate-50"],
+            body [class*="bg-slate-100"] {
+                background-color: var(--portal-surface) !important;
+                border-color: var(--portal-border) !important;
+                box-shadow: var(--portal-shadow);
             }
 
-            body.portal-theme [class*="bg-slate-50"],
-            body.portal-theme [class*="bg-slate-100"],
-            body.portal-theme [class*="bg-surface-container-low"],
-            body.portal-theme [class*="bg-surface-container-high"],
-            body.portal-theme [class*="bg-surface-container"] {
-                background-color: #f8fbff !important;
+            body [class*="border-slate-100"],
+            body [class*="border-slate-200"],
+            body [class*="border-blue-100"],
+            body [class*="border-rose-200"],
+            body [class*="border-amber-200"],
+            body [class*="border-emerald-200"],
+            body [class*="border-cyan-100"],
+            body [class*="border-orange-200"],
+            body [class*="border-outline-variant"] {
+                border-color: var(--portal-border) !important;
             }
 
-            body.portal-theme [class*="bg-rose-50"],
-            body.portal-theme [class*="bg-amber-50"],
-            body.portal-theme [class*="bg-emerald-50"],
-            body.portal-theme [class*="bg-orange-50"],
-            body.portal-theme [class*="bg-cyan-50"] {
-                background-color: #eff6ff !important;
+            body [class*="text-slate-900"],
+            body [class*="text-blue-950"],
+            body [class*="text-on-surface"] {
+                color: var(--portal-text-primary) !important;
             }
 
-            body.portal-theme [class*="border-slate-100"],
-            body.portal-theme [class*="border-slate-200"],
-            body.portal-theme [class*="border-blue-100"],
-            body.portal-theme [class*="border-rose-200"],
-            body.portal-theme [class*="border-amber-200"],
-            body.portal-theme [class*="border-emerald-200"],
-            body.portal-theme [class*="border-cyan-100"],
-            body.portal-theme [class*="border-orange-200"] {
-                border-color: #dbeafe !important;
+            body [class*="text-slate-700"],
+            body [class*="text-slate-800"],
+            body [class*="text-emerald-800"],
+            body [class*="text-amber-800"],
+            body [class*="text-rose-800"],
+            body [class*="text-cyan-800"] {
+                color: var(--portal-text-secondary) !important;
             }
 
-            body.portal-theme [class*="text-slate-900"],
-            body.portal-theme [class*="text-blue-950"] {
-                color: #1e3a8a !important;
+            body [class*="text-slate-500"],
+            body [class*="text-slate-600"],
+            body [class*="text-on-surface-variant"],
+            body [class*="text-emerald-700"],
+            body [class*="text-amber-700"],
+            body [class*="text-rose-700"],
+            body [class*="text-cyan-700"] {
+                color: var(--portal-text-muted) !important;
             }
 
-            body.portal-theme [class*="text-slate-700"],
-            body.portal-theme [class*="text-slate-800"],
-            body.portal-theme [class*="text-emerald-800"],
-            body.portal-theme [class*="text-amber-800"],
-            body.portal-theme [class*="text-rose-800"],
-            body.portal-theme [class*="text-cyan-800"] {
-                color: #1d4ed8 !important;
+            body [class*="bg-blue-600"],
+            body [class*="bg-slate-900"] {
+                background-color: var(--portal-accent) !important;
             }
 
-            body.portal-theme [class*="text-slate-500"],
-            body.portal-theme [class*="text-slate-600"],
-            body.portal-theme [class*="text-on-surface-variant"],
-            body.portal-theme [class*="text-emerald-700"],
-            body.portal-theme [class*="text-amber-700"],
-            body.portal-theme [class*="text-rose-700"],
-            body.portal-theme [class*="text-cyan-700"] {
-                color: #4f7db8 !important;
+            body [class*="hover:bg-blue-700"]:hover,
+            body [class*="hover:bg-slate-800"]:hover {
+                background-color: var(--portal-accent-hover) !important;
             }
 
-            body.portal-theme [class*="from-slate-800"][class*="to-slate-600"] {
-                background-image: linear-gradient(to bottom right, #3b82f6, #1d4ed8) !important;
+            body [class*="from-slate-800"][class*="to-slate-600"] {
+                background-image: linear-gradient(to bottom right, var(--portal-accent), var(--portal-accent-hover)) !important;
+            }
+
+            body thead[class*="bg-slate-50"],
+            body [class*="bg-slate-50/80"],
+            body [class*="bg-slate-50/60"],
+            body [class*="bg-slate-50/50"],
+            body [class*="bg-slate-50/70"] {
+                background-color: var(--portal-table-head) !important;
+            }
+
+            body input,
+            body textarea,
+            body select {
+                color: var(--portal-text-primary);
+            }
+
+            body input[class*="bg-surface-container"],
+            body input[class*="bg-slate-50"],
+            body textarea[class*="bg-surface-container"],
+            body textarea[class*="bg-slate-50"],
+            body select[class*="bg-surface-container"],
+            body select[class*="bg-slate-50"],
+            body div[class*="focus-within:bg-white"] {
+                background-color: var(--portal-input-bg) !important;
+                border-color: var(--portal-border) !important;
+            }
+
+            body input::placeholder,
+            body textarea::placeholder {
+                color: var(--portal-text-muted);
+            }
+
+            body img {
+                color: inherit;
             }
         </style>
     </head>
-    <body class="portal-theme overflow-x-hidden bg-surface font-body text-on-surface antialiased selection:bg-primary-fixed-dim">
+    <body class="overflow-x-hidden bg-surface font-body text-on-surface antialiased selection:bg-primary-fixed-dim">
         <div class="flex min-h-screen">
             <aside class="sticky left-0 top-0 z-40 hidden h-screen w-72 shrink-0 rounded-r-[3rem] bg-white/80 shadow-[0px_20px_40px_rgba(25,28,30,0.06)] backdrop-blur-xl md:flex">
                 @include('layouts.portal.sidebar', ['mode' => $mode])
@@ -202,5 +264,27 @@
         </nav>
 
         <x-logout-confirm-modal />
+
+        <script>
+            (() => {
+                const notificationToggle = document.getElementById('notification-toggle');
+                const notificationPanel = document.getElementById('notification-panel');
+
+                if (notificationToggle && notificationPanel) {
+                    notificationToggle.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        notificationPanel.classList.toggle('hidden');
+                    });
+
+                    notificationPanel.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                    });
+
+                    document.addEventListener('click', () => {
+                        notificationPanel.classList.add('hidden');
+                    });
+                }
+            })();
+        </script>
     </body>
 </html>

@@ -19,17 +19,45 @@
                         </div>
                     </div>
 
-                    <div class="overflow-hidden rounded-lg border border-blue-100 bg-gradient-to-r from-white via-blue-50 to-cyan-50 shadow-[0px_10px_24px_rgba(37,99,235,0.08)] transition-all duration-500">
+                    <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
                         <div class="p-3 md:p-4">
-                            <div class="flex items-start gap-3">
-                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-container">
-                                    <span class="material-symbols-outlined text-[20px] text-on-primary-container">lightbulb</span>
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="togglePanduan()">
+                                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                                        <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-base font-bold text-blue-950">Panduan Konten Resmi</p>
+                                        <p class="text-xs text-blue-900/60">3 arahan singkat untuk mencari dan membaca referensi resmi.</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-base font-bold text-blue-950">Panduan Konten Resmi</p>
-                                    <p class="text-sm leading-relaxed text-blue-900/70 mt-1">
-                                        Daftar ini menampilkan konten resmi terbaru lebih dulu. Gunakan pencarian pada galeri di bawah untuk menemukan referensi yang dibutuhkan.
-                                    </p>
+                                <button
+                                    aria-label="Toggle panduan konten resmi"
+                                    class="flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white/90 text-blue-700 transition hover:bg-white"
+                                    type="button"
+                                    onclick="togglePanduan()"
+                                >
+                                    <span class="inline-block rotate-180 text-lg font-black leading-none transition-transform duration-200" id="panduan-icon">^</span>
+                                </button>
+                            </div>
+
+                            <div class="hidden pt-3" id="panduan-content">
+                                <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                                    <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Cari Lebih Cepat</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Gunakan kolom pencarian untuk menyaring judul referensi resmi yang paling relevan.</p>
+                                    </div>
+                                    <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Gunakan Kategori</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Filter kategori membantu mempersempit hasil ketika jumlah referensi resmi sudah cukup banyak.</p>
+                                    </div>
+                                    <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
+                                        <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
+                                        <h3 class="text-sm font-bold text-slate-900">Buka Detail</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Masuk ke halaman detail untuk melihat metadata, sumber, dan konteks referensi yang dipakai sistem.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -209,4 +237,13 @@
                     </div>
                 </div>
             </div>
+    <script>
+        function togglePanduan() {
+            const content = document.getElementById('panduan-content');
+            const icon = document.getElementById('panduan-icon');
+            const isHidden = content.classList.toggle('hidden');
+
+            icon.classList.toggle('rotate-180', isHidden);
+        }
+    </script>
 </x-portal-shell>
