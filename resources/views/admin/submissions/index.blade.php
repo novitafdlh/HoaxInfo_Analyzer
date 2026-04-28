@@ -1,36 +1,77 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center gap-4 pb-2 border-b border-slate-100">
-            <div class="p-2.5 bg-indigo-100 rounded-xl text-indigo-700 shadow-inner border border-indigo-200">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0l-8 5-8-5"></path>
-                </svg>
-            </div>
-            <div>
-                <h2 class="font-extrabold text-2xl text-slate-900 tracking-tight leading-tight">
-                    {{ __('Antrean Analisis Masyarakat') }}
-                </h2>
-                <p class="text-xs font-medium text-slate-500 uppercase tracking-widest mt-0.5">Tinjau similarity, confidence, dan referensi resmi</p>
-            </div>
-        </div>
+@php
+    $submissionItems = method_exists($submissions, 'items') ? collect($submissions->items()) : collect($submissions);
+    $displayedSubmissions = $submissionItems->count();
+    $totalSubmissions = method_exists($submissions, 'total') ? $submissions->total() : $displayedSubmissions;
+    $pendingDisplayed = $submissionItems->where('final_status', 'menunggu_validasi')->count();
+    $verifiedDisplayed = $submissionItems->where('final_status', 'terverifikasi')->count();
+@endphp
+
+<x-admin-shell title="Submission Admin">
+    <x-slot name="pageHeader">
+        <section class="space-y-4">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h2 class="text-4xl font-bold tracking-tight text-on-surface">Submission Masyarakat</h2>
+                </div>
+                <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
+                    <span class="material-symbols-outlined text-[18px] text-blue-600">monitoring</span>
+                    {{ number_format($totalSubmissions) }} total submission
+                </div>
+            </div>  
+        </section>
     </x-slot>
 
-    <div class="py-10 bg-gradient-to-b from-slate-50 to-white min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid gap-8 lg:grid-cols-12">
-                <div class="lg:col-span-3">
-                    <div class="sticky top-24 rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-                        @include('admin.partials.sidebar')
+    <section class="space-y-4">
+        <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
+            <div class="p-3 md:p-4">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="togglePanduan()">
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                            <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+                        </div>
+                        <div>
+                            <p class="text-base font-bold text-blue-950">Panduan Singkat</p>
+                            <p class="text-xs text-blue-900/60">3 fokus utama untuk menjaga antrean review admin tetap terstruktur.</p>
+                        </div>
                     </div>
+                    <button
+                        aria-label="Toggle panduan review admin"
+                        class="flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white/90 text-blue-700 transition hover:bg-white"
+                        type="button"
+                        onclick="togglePanduan()"
+                    >
+                        <span class="inline-block rotate-180 text-lg font-black leading-none transition-transform duration-200" id="panduan-icon">^</span>
+                    </button>
                 </div>
 
-                <div class="space-y-8 lg:col-span-9">
-                    <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-xl shadow-slate-100/70 transition-all duration-300 hover:shadow-indigo-50">
-                        <p class="text-sm text-slate-600 leading-relaxed flex items-center gap-3">
-                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Halaman ini menampilkan antrean gambar masyarakat beserta tingkat similarity, confidence system, dan referensi resmi terdekat untuk membantu validasi manual admin.
-                        </p>
+                <div class="hidden pt-3" id="panduan-content">
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                        <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                            <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
+                            <h3 class="text-sm font-bold text-slate-900">Prioritaskan Similarity</h3>
+                            <p class="mt-1 text-xs leading-relaxed text-slate-600">Gunakan nilai similarity sebagai pintu masuk awal untuk menentukan tingkat kedekatan dengan referensi resmi.</p>
+                        </div>
+                        <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                            <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
+                            <h3 class="text-sm font-bold text-slate-900">Baca Confidence</h3>
+                            <p class="mt-1 text-xs leading-relaxed text-slate-600">Confidence membantu menilai seberapa kuat sistem mendukung rekomendasi yang ditampilkan pada submission.</p>
+                        </div>
+                        <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
+                            <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
+                            <h3 class="text-sm font-bold text-slate-900">Tentukan Status Final</h3>
+                            <p class="mt-1 text-xs leading-relaxed text-slate-600">Pastikan keputusan akhir selaras dengan referensi, similarity, dan konteks visual sebelum review disimpan.</p>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
+            <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+                <div>
+                    <h2 class="mt-1 text-xl font-black tracking-tight text-slate-950">Daftar review aktif</h2>
+                </div>
+            </div>
 
                     <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-100/70 transition-all duration-300 hover:shadow-indigo-50">
                         <div class="overflow-x-auto">
@@ -87,23 +128,7 @@
                                                 </div>
                                                 <div class="mt-2 text-xs text-slate-500">{{ $submission->analysisMethodLabel() }}</div>
                                                 @if ($submission->matchedOfficialContent)
-                                                    <div class="mt-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
-                                                        <div class="text-sm font-semibold text-slate-800">{{ $submission->matchedOfficialContent->title }}</div>
-                                                        <div class="mt-2 flex flex-wrap gap-2">
-                                                            <span class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-slate-600 shadow-sm">
-                                                                {{ $submission->matchedOfficialContent->category ?: 'Umum' }}
-                                                            </span>
-                                                            <span class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-[11px] font-mono text-slate-600 shadow-sm">
-                                                                {{ \Illuminate\Support\Str::limit($submission->matchedOfficialContent->image_hash ?: '-', 18, '...') }}
-                                                            </span>
-                                                        </div>
-                                                        <p class="mt-2 text-xs leading-relaxed text-slate-500">
-                                                            {{ $submission->matchedOfficialContent->extracted_text ? \Illuminate\Support\Str::limit($submission->matchedOfficialContent->extracted_text, 110) : 'Teks OCR official belum tersedia.' }}
-                                                        </p>
-                                                        <div class="mt-2 text-[11px] font-semibold text-indigo-600">
-                                                            Lihat detail untuk hash dan OCR lengkap
-                                                        </div>
-                                                    </div>
+                                                    <div class="mt-1 text-xs text-slate-500">{{ $submission->matchedOfficialContent->title }}</div>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-sm">
@@ -134,14 +159,20 @@
                             </table>
                         </div>
 
-                        @if ($submissions->hasPages())
-                            <div class="border-t border-slate-100 px-6 py-4 bg-slate-50/50">
-                                {{ $submissions->links() }}
-                            </div>
-                        @endif
-                    </div>
+            @if ($submissions->hasPages())
+                <div class="border-t border-slate-100 bg-slate-50/70 px-6 py-4">
+                    {{ $submissions->links() }}
                 </div>
-            </div>
+            @endif
         </div>
-    </div>
-</x-app-layout>
+    </section>
+    <script>
+        function togglePanduan() {
+            const content = document.getElementById('panduan-content');
+            const icon = document.getElementById('panduan-icon');
+            const isHidden = content.classList.toggle('hidden');
+
+            icon.classList.toggle('rotate-180', isHidden);
+        }
+    </script>
+</x-admin-shell>

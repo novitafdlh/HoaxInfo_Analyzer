@@ -52,6 +52,6 @@ class RegisteredUserController extends Controller
         $request->session()->regenerate();
         Submission::claimGuestSubmissionsToUser($guestSessionId, (int) $user->id);
 
-        return redirect(route('user.dashboard', absolute: false));
+        return redirect()->route('verification.notice');
     }
 }

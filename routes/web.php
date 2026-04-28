@@ -3,9 +3,11 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminSubmissionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserOfficialContentController;
 use App\Http\Controllers\UserValidationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicMediaController;
 use App\Http\Controllers\OfficialContentController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,9 @@ Route::redirect('/', '/dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::post('/dashboard/upload', [DashboardController::class, 'store'])->name('dashboard.upload');
+Route::get('/media/public/{path}', [PublicMediaController::class, 'show'])
+    ->where('path', '.*')
+    ->name('media.public');
 
 // ADMIN
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
@@ -40,6 +45,8 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
 
 // PROFILE (semua user login)
 Route::middleware('auth')->group(function () {
+    Route::get('/notifications/{notification}', [NotificationController::class, 'open'])->name('notifications.open');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.mark-all-read');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

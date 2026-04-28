@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Route;
 
 class Submission extends Model
 {
@@ -27,6 +28,17 @@ class Submission extends Model
     protected $casts = [
         'similarity_score' => 'decimal:2',
     ];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image_path) {
+            return null;
+        }
+
+        return Route::has('media.public')
+            ? route('media.public', ['path' => $this->image_path], false)
+            : null;
+    }
 
     public function user(): BelongsTo
     {

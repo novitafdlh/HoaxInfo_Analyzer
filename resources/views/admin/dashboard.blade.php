@@ -1,102 +1,155 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center gap-4">
-            <div class="p-2.5 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-100">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-                </svg>
+@php
+    $displayName = auth()->user()?->name ?: 'Admin';
+    $operationalSummaryCards = [
+        [
+            'label' => 'Konten Resmi',
+            'icon' => 'cloud_done',
+            'iconClass' => 'text-on-primary-container',
+            'borderClass' => 'border-on-primary-container',
+            'value' => number_format($totalOfficialContent),
+            'detailIcon' => 'trending_up',
+            'detailIconClass' => 'text-xs text-green-600',
+            'detailTextClass' => 'text-green-600 font-bold',
+            'detailValue' => sprintf('%+d%%', $officialContentGrowth),
+            'detailSuffix' => 'dari bulan lalu',
+            'accentClass' => 'bg-primary-fixed/30',
+        ],
+        [
+            'label' => 'Submission',
+            'icon' => 'send',
+            'iconClass' => 'text-on-secondary-fixed-variant',
+            'borderClass' => 'border-on-secondary-fixed-variant',
+            'value' => number_format($totalSubmissions),
+            'detailIcon' => 'trending_up',
+            'detailIconClass' => 'text-xs text-green-600',
+            'detailTextClass' => 'text-green-600 font-bold',
+            'detailValue' => sprintf('%+d%%', $submissionGrowth),
+            'detailSuffix' => 'antrian baru',
+            'accentClass' => 'bg-secondary-fixed/30',
+        ],
+        [
+            'label' => 'Menunggu',
+            'icon' => 'pending_actions',
+            'iconClass' => 'text-amber-500',
+            'borderClass' => 'border-amber-500',
+            'value' => number_format($pendingValidation),
+            'detailIcon' => $pendingValidation > 0 ? 'priority_high' : 'check_circle',
+            'detailIconClass' => $pendingValidation > 0 ? 'text-xs text-error' : 'text-xs text-emerald-600',
+            'detailTextClass' => $pendingValidation > 0 ? 'text-error font-bold' : 'text-emerald-600 font-bold',
+            'detailValue' => $pendingValidation > 0 ? 'Prioritas Tinggi' : 'Terkendali',
+            'detailSuffix' => '',
+            'accentClass' => 'bg-amber-100/50',
+        ],
+        [
+            'label' => 'Terverifikasi',
+            'icon' => 'verified',
+            'iconClass' => 'text-on-tertiary-container',
+            'borderClass' => 'border-on-tertiary-container',
+            'value' => number_format($verifiedContent),
+            'detailIcon' => 'check_circle',
+            'detailIconClass' => 'text-xs text-on-tertiary-container',
+            'detailTextClass' => 'text-on-tertiary-container font-bold',
+            'detailValue' => 'Akurasi '.number_format($verificationAccuracy, 1).'%',
+            'detailSuffix' => '',
+            'accentClass' => 'bg-tertiary-fixed/30',
+        ],
+    ];
+@endphp
+
+<x-admin-shell title="Dashboard Admin">
+    <x-slot name="pageHeader">
+        <section class="space-y-4">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h1 class="text-4xl font-bold tracking-tight text-on-surface">Selamat Datang, {{ $displayName }}</h1>
+                    <p class="mt-2 text-lg text-on-surface-variant">Pusat monitoring integritas informasi publik dan keputusan validasi akhir.</p>
+                </div>
             </div>
-            <div>
-                <h2 class="font-extrabold text-2xl text-slate-900 tracking-tight">
-                    Dashboard Admin
-                </h2>
-                <p class="text-xs font-medium text-slate-500 uppercase tracking-widest">Sistem Validasi Informasi Publik</p>
+
+            <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
+                <div class="p-3 md:p-4">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="togglePanduan()">
+                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                                <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+                            </div>
+                            <div>
+                                <p class="text-base font-bold text-blue-950">Panduan Cepat Admin</p>
+                                <p class="text-xs text-blue-900/60">3 fokus utama untuk menjaga alur validasi tetap rapi.</p>
+                            </div>
+                        </div>
+                        <button
+                            aria-label="Toggle panduan admin"
+                            class="flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white/90 text-blue-700 transition hover:bg-white"
+                            type="button"
+                            onclick="togglePanduan()"
+                        >
+                            <span class="inline-block rotate-180 text-lg font-black leading-none transition-transform duration-200" id="panduan-icon">^</span>
+                        </button>
+                    </div>
+
+                    <div class="hidden pt-3" id="panduan-content">
+                        <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                            <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                <div class="mb-2 inline-flex rounded-full bg-green-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
+                                <h3 class="text-sm font-bold text-slate-900">Pantau Submission Baru</h3>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-600">Perhatikan antrian menunggu validasi agar laporan publik tidak terlalu lama tertunda.</p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
+                                <h3 class="text-sm font-bold text-slate-900">Kelola Referensi Resmi</h3>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-600">Semakin rapi basis konten resmi, semakin akurat sistem mengenali konten yang beredar.</p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">03</div>
+                                <h3 class="text-sm font-bold text-slate-900">Tetapkan Status Final</h3>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-600">Gunakan similarity, confidence, dan konteks sumber untuk menetapkan hasil akhir dengan hati-hati.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     </x-slot>
 
-    <div class="py-10 bg-slate-50 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid gap-8 lg:grid-cols-4">
-                
-                <aside class="lg:col-span-1">
-                    <div class="sticky top-24 rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-                        @include('admin.partials.sidebar')
-                    </div>
-                </aside>
-
-                <main class="space-y-8 lg:col-span-3">
-                    
-                    <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-                        <div class="relative z-10">
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Selamat Datang Kembali, Admin</h3>
-                            <p class="text-slate-600 leading-relaxed max-w-2xl text-sm">
-                                Pantau dan kelola integritas informasi publik dalam satu panel terpadu. Sistem membantu lewat similarity dan confidence terhadap konten resmi, sementara keputusan final tetap berada pada admin.
-                            </p>
-                        </div>
-                        {{-- Background Decoration --}}
-                        <div class="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-indigo-50 opacity-60"></div>
-                        <div class="absolute right-10 bottom-0 h-24 w-24 rounded-full bg-blue-50 opacity-40"></div>
-                    </div>
-
-                    <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                        
-                        <div class="group rounded-3xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                            <div class="flex items-center justify-between mb-5">
-                                <div class="rounded-2xl bg-blue-50 p-3 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                                </div>
-                            </div>
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Konten Resmi</p>
-                            <div class="flex items-baseline gap-1 mt-1">
-                                <p class="text-3xl font-black text-slate-900">{{ number_format($totalOfficialContent) }}</p>
-                                <span class="text-xs font-bold text-slate-400">Unit</span>
-                            </div>
-                        </div>
-
-                        <div class="group rounded-3xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                            <div class="flex items-center justify-between mb-5">
-                                <div class="rounded-2xl bg-indigo-50 p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                </div>
-                            </div>
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Submission</p>
-                            <div class="flex items-baseline gap-1 mt-1">
-                                <p class="text-3xl font-black text-slate-900">{{ number_format($totalSubmissions) }}</p>
-                                <span class="text-xs font-bold text-slate-400">Berkas</span>
-                            </div>
-                        </div>
-
-                        <div class="group rounded-3xl border border-amber-200 bg-amber-50 p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                            <div class="flex items-center justify-between mb-5">
-                                <div class="rounded-2xl bg-white p-3 text-amber-600 shadow-sm group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                </div>
-                                <span class="animate-pulse flex h-2 w-2 rounded-full bg-amber-500"></span>
-                            </div>
-                            <p class="text-xs font-bold text-amber-700 uppercase tracking-wider">Menunggu</p>
-                            <div class="flex items-baseline gap-1 mt-1">
-                                <p class="text-3xl font-black text-amber-900">{{ number_format($pendingValidation) }}</p>
-                                <span class="text-xs font-bold text-amber-700/60">Perlu Review</span>
-                            </div>
-                        </div>
-
-                        <div class="group rounded-3xl border border-emerald-200 bg-emerald-50 p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                            <div class="flex items-center justify-between mb-5">
-                                <div class="rounded-2xl bg-white p-3 text-emerald-600 shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                </div>
-                            </div>
-                            <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Terverifikasi</p>
-                            <div class="flex items-baseline gap-1 mt-1">
-                                <p class="text-3xl font-black text-emerald-900">{{ number_format($verifiedContent) }}</p>
-                                <span class="text-xs font-bold text-emerald-700/60">Tervalidasi</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </main>
+    <div class=" p-6 md:overflow-hidden md:rounded-lg md:border bg-white/80 md:border-slate-200 md:shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
+        <section>
+            <div class="mb-8 flex items-center justify-between">
+                <h3 class="text-2xl font-bold tracking-tight text-on-surface">Ringkasan Operasional</h3>
             </div>
-        </div>
+
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                @foreach ($operationalSummaryCards as $card)
+                    <div class="relative overflow-hidden rounded-lg border-l-8 {{ $card['borderClass'] }} bg-white p-8 shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
+                        <div class="mb-4 flex items-start justify-between">
+                            <p class="text-sm font-bold uppercase tracking-wider text-on-secondary-container">{{ $card['label'] }}</p>
+                            <span class="material-symbols-outlined {{ $card['iconClass'] }}" data-icon="{{ $card['icon'] }}">{{ $card['icon'] }}</span>
+                        </div>
+
+                        <p class="mb-2 text-4xl font-black text-slate-950">{{ $card['value'] }}</p>
+
+                        <p class="flex items-center gap-1 text-xs font-medium text-on-surface-variant">
+                            <span class="material-symbols-outlined {{ $card['detailIconClass'] }}" data-icon="{{ $card['detailIcon'] }}">{{ $card['detailIcon'] }}</span>
+                            <span class="{{ $card['detailTextClass'] }}">{{ $card['detailValue'] }}</span>
+                            @if ($card['detailSuffix'] !== '')
+                                <span>{{ $card['detailSuffix'] }}</span>
+                            @endif
+                        </p>
+
+                        <div class="absolute -bottom-4 -right-4 h-24 w-24 rounded-full blur-3xl {{ $card['accentClass'] }}"></div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
     </div>
-</x-app-layout>
+
+    <script>
+        function togglePanduan() {
+            const content = document.getElementById('panduan-content');
+            const icon = document.getElementById('panduan-icon');
+            const isHidden = content.classList.toggle('hidden');
+
+            icon.classList.toggle('rotate-180', isHidden);
+        }
+    </script>
+</x-admin-shell>

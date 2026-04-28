@@ -32,5 +32,7 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <x-logout-confirm-modal />
     </body>
 </html>
