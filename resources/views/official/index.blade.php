@@ -22,7 +22,16 @@
         </div>
     </x-slot>
 
-    <div class="py-10 bg-gradient-to-b from-slate-50 to-white min-h-screen" x-data="{ activeContent: null, filterOpen: false }" @keydown.escape.window="activeContent = null; filterOpen = false">
+    <div
+        class="py-10 bg-gradient-to-b from-slate-50 to-white min-h-screen"
+        x-data="{
+            activeContent: null,
+            filterOpen: false,
+            showUploadResult: {{ session()->has('upload_result') ? 'true' : 'false' }},
+            uploadResult: {{ \Illuminate\Support\Js::from(session('upload_result')) }}
+        }"
+        @keydown.escape.window="activeContent = null; filterOpen = false; showUploadResult = false"
+    >
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid gap-8 lg:grid-cols-12">
                 <div class="lg:col-span-3">
@@ -134,6 +143,8 @@
                                             'title' => $content->title,
                                             'category' => $content->category ?: 'Umum',
                                             'image_url' => asset('storage/'.$content->image_path),
+                                            'image_hash' => $content->image_hash,
+                                            'extracted_text' => $content->extracted_text,
                                             'source_type_label' => $content->source_type === 'url' ? 'URL resmi' : 'Unggah manual',
                                             'source_url' => $content->source_url,
                                             'created_at_label' => $content->created_at?->format('d M Y, H:i'),
@@ -148,6 +159,9 @@
                                                 <div class="absolute inset-x-6 bottom-4 z-10 rounded-[1.5rem] border border-slate-200 bg-slate-900 px-4 py-3 text-white shadow-sm transition duration-300 group-hover:opacity-0 group-hover:scale-95">
                                                     <h3 class="text-base font-bold leading-tight">{{ $content->title }}</h3>
                                                     <p class="mt-1 text-sm text-indigo-300">{{ $content->category ?: 'Umum' }}</p>
+                                                    <p class="mt-2 text-[11px] leading-relaxed text-slate-300">
+                                                        {{ $content->extracted_text ? \Illuminate\Support\Str::limit($content->extracted_text, 70) : 'OCR belum tersedia' }}
+                                                    </p>
                                                 </div>
 
                                                 <div class="absolute inset-x-6 top-5 bottom-20 z-20 flex items-center justify-center transition duration-500 [transform:perspective(1200px)_translateZ(0)_scale(1)] group-hover:[transform:perspective(1200px)_translateZ(90px)_scale(1.08)]">
@@ -204,6 +218,14 @@
                                         <p class="mt-2 break-all text-sm text-slate-700" x-text="activeContent?.source_url"></p>
                                     </div>
                                 </template>
+                                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Hash Gambar</p>
+                                    <p class="mt-2 break-all rounded-xl border border-slate-100 bg-white px-3 py-3 font-mono text-sm text-slate-800" x-text="activeContent?.image_hash || '-'"></p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Teks OCR</p>
+                                    <p class="mt-2 rounded-xl border border-slate-100 bg-white px-3 py-3 text-sm leading-relaxed text-slate-700" x-text="activeContent?.extracted_text || 'Teks OCR belum tersedia untuk konten ini.'"></p>
+                                </div>
                             </div>
                         </div>
 
@@ -217,6 +239,71 @@
                                 </button>
                             </form>
                             <button type="button" @click="activeContent = null" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div x-cloak x-show="showUploadResult" x-transition.opacity class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/75 px-4 py-6">
+            <div x-show="showUploadResult" x-transition.scale @click.away="showUploadResult = false" class="w-full max-w-3xl overflow-hidden rounded-[2rem] border border-white/10 bg-white shadow-2xl shadow-slate-950/40">
+                <div class="grid gap-0 md:grid-cols-[minmax(0,1fr)_minmax(20rem,24rem)]">
+                    <div class="bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.30),_transparent_45%),linear-gradient(180deg,_#0f172a,_#111827)] p-5 sm:p-6">
+                        <div class="flex items-center justify-between gap-4">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-[0.24em] text-indigo-300">Upload Berhasil</p>
+                                <h3 class="mt-2 text-2xl font-black text-white">Hash dan OCR konten resmi selesai diproses</h3>
+                            </div>
+                            <button type="button" @click="showUploadResult = false" class="rounded-full border border-white/15 p-2 text-slate-200 transition hover:bg-white/10 hover:text-white">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+
+                        <div class="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-3">
+                            <img :src="uploadResult?.image_url" :alt="uploadResult?.title" class="h-64 w-full rounded-[1.4rem] object-cover">
+                        </div>
+                    </div>
+
+                    <div class="p-6 sm:p-7">
+                        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">
+                            Konten akan menampilkan hash dan hasil OCR ini juga di detail konten pada halaman Official Content.
+                        </div>
+
+                        <div class="mt-5">
+                            <p class="text-xs font-bold uppercase tracking-[0.24em] text-slate-400" x-text="uploadResult?.category"></p>
+                            <h4 class="mt-2 text-xl font-black text-slate-950" x-text="uploadResult?.title"></h4>
+                        </div>
+
+                        <div class="mt-5 space-y-4">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                                <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Hash Gambar</p>
+                                <p class="mt-2 break-all rounded-xl border border-slate-100 bg-white px-3 py-3 font-mono text-sm text-slate-800" x-text="uploadResult?.image_hash || '-'"></p>
+                            </div>
+
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                                <div class="flex items-center justify-between gap-3">
+                                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Hasil OCR</p>
+                                    <span
+                                        class="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold"
+                                        :class="uploadResult?.ocr_detected ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'"
+                                        x-text="uploadResult?.ocr_detected ? 'Teks terdeteksi' : 'Tidak ada teks terdeteksi'"
+                                    ></span>
+                                </div>
+                                <p class="mt-2 rounded-xl border border-slate-100 bg-white px-3 py-3 text-sm leading-relaxed text-slate-700" x-text="uploadResult?.ocr_preview || '-'"></p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            <button
+                                type="button"
+                                @click="activeContent = uploadResult; showUploadResult = false"
+                                class="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700"
+                            >
+                                Lihat di detail konten
+                            </button>
+                            <button type="button" @click="showUploadResult = false" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50">
                                 Tutup
                             </button>
                         </div>

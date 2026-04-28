@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ProcessOfficialContentOcrJob;
-use Illuminate\Http\Request;
-use App\Models\OfficialContent;
 use App\Models\AuditLog;
+use App\Models\OfficialContent;
 use App\Services\FileSecurityService;
 use App\Services\OcrService;
 use App\Services\RemoteImageService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class OfficialContentController extends Controller
 {
@@ -114,22 +114,22 @@ class OfficialContentController extends Controller
 
         $hash = hash_file('sha256', $fullPath);
 
+        $extractedText = $ocrService->extractText($fullPath);
+        $normalizedExtractedText = filled($extractedText)
+            ? $extractedText
+            : 'OCR tidak menemukan teks yang dapat dibaca pada gambar ini.';
+
         // === SAVE TO DB ===
-        $useAsyncOcr = filter_var((string) env('OFFICIAL_OCR_ASYNC', 'true'), FILTER_VALIDATE_BOOLEAN);
         $official = OfficialContent::create([
             'title' => $request->title,
             'category' => $request->string('category')->toString(),
             'image_path' => $path,
             'image_hash' => $hash,
-            'extracted_text' => $useAsyncOcr ? null : $ocrService->extractText($fullPath),
+            'extracted_text' => $normalizedExtractedText,
             'source_type' => $sourceType,
             'source_url' => $sourceUrl,
             'created_by' => auth()->id(),
         ]);
-
-        if ($useAsyncOcr) {
-            ProcessOfficialContentOcrJob::dispatch($official->id);
-        }
 
         // === AUDIT LOG ===
         AuditLog::create([
@@ -140,7 +140,22 @@ class OfficialContentController extends Controller
             'hash_snapshot' => $hash,
         ]);
 
-        return redirect()->route('official.index')->with('success', 'Official content berhasil ditambahkan');
+        return redirect()
+            ->route('official.index')
+            ->with('success', 'Official content berhasil ditambahkan. Hash gambar dan OCR sudah diproses.')
+            ->with('upload_result', [
+                'title' => $official->title,
+                'category' => $official->category ?: 'Umum',
+                'image_url' => asset('storage/'.$official->image_path),
+                'image_hash' => $official->image_hash,
+                'extracted_text' => $official->extracted_text,
+                'source_type_label' => $official->source_type === 'url' ? 'URL resmi' : 'Unggah manual',
+                'source_url' => $official->source_url,
+                'created_at_label' => $official->created_at?->format('d M Y, H:i'),
+                'delete_url' => route('official.destroy', $official),
+                'ocr_detected' => filled($extractedText),
+                'ocr_preview' => Str::limit($official->extracted_text, 280),
+            ]);
     }
 
     public function destroy(OfficialContent $officialContent)

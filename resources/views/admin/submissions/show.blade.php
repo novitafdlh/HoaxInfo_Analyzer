@@ -111,6 +111,20 @@
                                         <div class="rounded-lg bg-white px-4 py-3 border border-slate-100 text-sm text-slate-800 shadow-inner">
                                             <div class="font-semibold">{{ $submission->matchedOfficialContent->title }}</div>
                                             <div class="mt-1 text-slate-500">Kategori: {{ $submission->matchedOfficialContent->category ?: 'Umum' }}</div>
+
+                                            <div class="mt-4">
+                                                <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Hash Gambar Official</p>
+                                                <p class="mt-2 break-all rounded-lg border border-slate-100 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-800">
+                                                    {{ $submission->matchedOfficialContent->image_hash ?: '-' }}
+                                                </p>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Teks OCR Official</p>
+                                                <p class="mt-2 rounded-lg border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-medium leading-relaxed text-slate-800">
+                                                    {{ $submission->matchedOfficialContent->extracted_text ?: 'Teks OCR official belum tersedia.' }}
+                                                </p>
+                                            </div>
                                         </div>
                                     @else
                                         <div class="rounded-lg bg-white px-4 py-3 border border-slate-100 text-sm text-slate-500 shadow-inner">

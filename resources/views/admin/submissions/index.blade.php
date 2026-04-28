@@ -87,7 +87,23 @@
                                                 </div>
                                                 <div class="mt-2 text-xs text-slate-500">{{ $submission->analysisMethodLabel() }}</div>
                                                 @if ($submission->matchedOfficialContent)
-                                                    <div class="mt-1 text-xs text-slate-500">{{ $submission->matchedOfficialContent->title }}</div>
+                                                    <div class="mt-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
+                                                        <div class="text-sm font-semibold text-slate-800">{{ $submission->matchedOfficialContent->title }}</div>
+                                                        <div class="mt-2 flex flex-wrap gap-2">
+                                                            <span class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-slate-600 shadow-sm">
+                                                                {{ $submission->matchedOfficialContent->category ?: 'Umum' }}
+                                                            </span>
+                                                            <span class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-[11px] font-mono text-slate-600 shadow-sm">
+                                                                {{ \Illuminate\Support\Str::limit($submission->matchedOfficialContent->image_hash ?: '-', 18, '...') }}
+                                                            </span>
+                                                        </div>
+                                                        <p class="mt-2 text-xs leading-relaxed text-slate-500">
+                                                            {{ $submission->matchedOfficialContent->extracted_text ? \Illuminate\Support\Str::limit($submission->matchedOfficialContent->extracted_text, 110) : 'Teks OCR official belum tersedia.' }}
+                                                        </p>
+                                                        <div class="mt-2 text-[11px] font-semibold text-indigo-600">
+                                                            Lihat detail untuk hash dan OCR lengkap
+                                                        </div>
+                                                    </div>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-sm">

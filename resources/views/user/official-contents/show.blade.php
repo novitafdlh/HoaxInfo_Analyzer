@@ -44,6 +44,13 @@
                         </div>
 
                         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Hash gambar</p>
+                            <p class="mt-3 break-all rounded-xl border border-slate-100 bg-white px-4 py-3 font-mono text-sm text-slate-800">
+                                {{ $officialContent->image_hash ?: '-' }}
+                            </p>
+                        </div>
+
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                             <p class="text-xs font-bold uppercase tracking-widest text-slate-500">OCR / Teks Referensi</p>
                             <p class="mt-3 text-sm leading-relaxed text-slate-700">
                                 {{ $officialContent->extracted_text ?: 'Teks OCR belum tersedia untuk konten ini.' }}
