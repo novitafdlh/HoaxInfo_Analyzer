@@ -37,8 +37,8 @@
                     <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
                         <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
                             <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
-                            <h3 class="text-sm font-bold text-slate-900">Hash SHA256</h3>
-                            <p class="mt-1 text-xs leading-relaxed text-slate-600">Membuat sidik jari digital unik untuk memastikan integritas konten primer.</p>
+                            <h3 class="text-sm font-bold text-slate-900">Similarity 85-100%</h3>
+                            <p class="mt-1 text-xs leading-relaxed text-slate-600">Kemiripan sangat tinggi, menunjukkan kemungkinan konten yang valid dan terverifikasi.</p>
                         </div>
                         <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
                             <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>

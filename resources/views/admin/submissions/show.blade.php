@@ -31,7 +31,6 @@
     };
 
     $matchedOfficialContent = $submission->matchedOfficialContent;
-
     $summaryCards = [
         [
             'title' => $submissionCode,
@@ -64,24 +63,6 @@
                     <div>
                         <h1 class="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Validation Detail</h1>
                     </div>
-                    <div class="mb-2 flex gap-2">
-                        <form method="POST" action="{{ route('admin.submissions.update-status', $submission) }}" onsubmit="return confirm('Apakah Anda yakin konten ini perlu tindak lanjut atau verifikasi tambahan?');">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="final_status" value="perlu_tindak_lanjut">
-                            <button type="submit" class="rounded-full bg-rose-600 px-8 py-4 font-bold text-white shadow-[0px_10px_20px_rgba(225,29,72,0.2)] transition-all hover:bg-rose-700 hover:scale-[1.02] active:scale-95">
-                                Perlu Tindak Lanjut
-                            </button>
-                        </form>
-                        <form method="POST" action="{{ route('admin.submissions.update-status', $submission) }}" onsubmit="return confirm('Apakah Anda yakin ingin menandai konten ini sebagai terverifikasi admin?');">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="final_status" value="terverifikasi">
-                            <button type="submit" class="rounded-full bg-emerald-600 px-10 py-4 font-bold text-white shadow-[0px_10px_20px_rgba(16,185,129,0.2)] transition-all hover:bg-emerald-700 hover:scale-[1.02] active:scale-95">
-                                Terverifikasi
-                            </button>
-                        </form>
-                    </div>
                 </header>
 
                 @if (session('status'))
@@ -100,7 +81,7 @@
                     </div>
                 @endif
 
-                <div class="grid grid-cols-2 gap-8">
+                <div class="grid grid-cols-2 gap-12">
                         <section class="rounded-xl bg-surface-container-lowest p-8 shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
                             <div class="mb-8 flex justify-between items-center">
                                 <h2 class="text-headline-sm font-bold flex items-center gap-3">
@@ -122,7 +103,7 @@
                         <div class="grid grid-cols-2 gap-8">
                             <section class="bg-surface-container-low rounded-xl p-8">
                                 <h3 class="text-label-md font-bold text-on-surface-variant uppercase tracking-widest mb-6">OCR Extraction</h3>
-                                <div class="space-y-6">
+                                <div class="space-y-2">
                                     @foreach ($ocrItems as $item)
                                         <div class="space-y-1">
                                             <label class="text-xs text-on-surface-variant font-medium">{{ $item['label'] }}</label>
@@ -144,40 +125,25 @@
                                             <span class="material-symbols-outlined {{ $similarityTextClass }}" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                         </div>
                                     </div>
-                                    <div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                                        <div class="h-full rounded-full {{ $similarityBarClass }}" style="width: {{ $similarityPercent }}%;"></div>
-                                    </div>
+                                    
                                     <p class="text-sm text-on-surface-variant leading-relaxed">{{ $submission->systemStatusLabel() }}. {{ $submission->analysisMethodLabel() }}.</p>
                                 </div>
 
-                                <div class="p-4 rounded-xl border border-slate-100 bg-slate-50/50">
-                                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Referensi Resmi Terdekat</p>
-                                    @if ($submission->matchedOfficialContent)
-                                        <div class="rounded-lg bg-white px-4 py-3 border border-slate-100 text-sm text-slate-800 shadow-inner">
-                                            <div class="font-semibold">{{ $submission->matchedOfficialContent->title }}</div>
-                                            <div class="mt-1 text-slate-500">Kategori: {{ $submission->matchedOfficialContent->category ?: 'Umum' }}</div>
-                                        </div>
-                                    @else
-                                        <div class="rounded-lg bg-white px-4 py-3 border border-slate-100 text-sm text-slate-500 shadow-inner">
-                                            Belum ada referensi resmi yang cocok atau basis data referensi belum tersedia.
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="p-4 rounded-xl border border-slate-100 bg-slate-50/50">
-                                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Status Final (Review Admin)</p>
-                                    <span class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold shadow-sm {{ $finalTone }}">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        {{ $submission->finalStatusLabel() }}
-                                    </span>
-                                </div>
                             </div>
                         </div>
 
                         <div class="mt-10 pt-8 flex flex-wrap items-center gap-4 border-t border-slate-100">
                             <h4 class="text-base font-bold text-slate-900 tracking-tight mr-2">Keputusan Manual Admin:</h4>
 
-                            <form method="POST" action="{{ route('admin.submissions.update-status', $submission) }}" onsubmit="return confirm('Apakah Anda yakin ingin menandai konten ini sebagai terverifikasi admin?');">
+                            <form
+                                method="POST"
+                                action="{{ route('admin.submissions.update-status', $submission) }}"
+                                data-review-confirm
+                                data-confirm-tone="emerald"
+                                data-confirm-title="Tetapkan sebagai terverifikasi?"
+                                data-confirm-message="Keputusan ini akan menandai submission sebagai konten yang sudah terverifikasi oleh admin."
+                                data-confirm-button="Ya, Tetapkan"
+                            >
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="final_status" value="terverifikasi">
@@ -187,7 +153,15 @@
                                 </button>
                             </form>
 
-                            <form method="POST" action="{{ route('admin.submissions.update-status', $submission) }}" onsubmit="return confirm('Apakah Anda yakin konten ini perlu tindak lanjut atau verifikasi tambahan?');">
+                            <form
+                                method="POST"
+                                action="{{ route('admin.submissions.update-status', $submission) }}"
+                                data-review-confirm
+                                data-confirm-tone="rose"
+                                data-confirm-title="Tandai perlu tindak lanjut?"
+                                data-confirm-message="Submission ini akan masuk status perlu tindak lanjut agar dapat diverifikasi atau diperiksa kembali."
+                                data-confirm-button="Ya, Tandai"
+                            >
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="final_status" value="perlu_tindak_lanjut">
@@ -213,5 +187,116 @@
                 </div>
             </div>
         </section>
+
+        <div id="review-confirm-modal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4" aria-hidden="true">
+            <div class="absolute inset-0 bg-slate-950/45 backdrop-blur-sm" data-confirm-cancel></div>
+
+            <div class="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/70 bg-white p-6 shadow-[0px_30px_60px_rgba(15,23,42,0.22)] sm:p-7">
+                <div class="flex items-start gap-4">
+                    <div id="review-confirm-icon" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                        <span class="material-symbols-outlined" id="review-confirm-icon-symbol">verified</span>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Konfirmasi Review</p>
+                        <h3 id="review-confirm-title" class="mt-2 text-xl font-black tracking-tight text-slate-900">Tetapkan sebagai terverifikasi?</h3>
+                        <p id="review-confirm-message" class="mt-3 text-sm leading-relaxed text-slate-600"></p>
+                    </div>
+                </div>
+
+                <div class="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <button type="button" data-confirm-cancel class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">
+                        Batal
+                    </button>
+                    <button type="button" id="review-confirm-submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-100 transition hover:bg-emerald-700">
+                        <span class="material-symbols-outlined text-[18px]" id="review-confirm-submit-icon">check_circle</span>
+                        <span id="review-confirm-submit-label">Ya, Tetapkan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (() => {
+                const modal = document.getElementById('review-confirm-modal');
+                const title = document.getElementById('review-confirm-title');
+                const message = document.getElementById('review-confirm-message');
+                const icon = document.getElementById('review-confirm-icon');
+                const iconSymbol = document.getElementById('review-confirm-icon-symbol');
+                const submitButton = document.getElementById('review-confirm-submit');
+                const submitIcon = document.getElementById('review-confirm-submit-icon');
+                const submitLabel = document.getElementById('review-confirm-submit-label');
+                let activeForm = null;
+
+                const tones = {
+                    emerald: {
+                        iconClass: 'bg-emerald-100 text-emerald-700',
+                        buttonClass: 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-100',
+                        icon: 'verified',
+                        submitIcon: 'check_circle',
+                    },
+                    rose: {
+                        iconClass: 'bg-rose-100 text-rose-700',
+                        buttonClass: 'bg-rose-600 hover:bg-rose-700 shadow-rose-100',
+                        icon: 'priority_high',
+                        submitIcon: 'flag',
+                    },
+                };
+
+                const closeModal = () => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    modal.setAttribute('aria-hidden', 'true');
+                    activeForm = null;
+                };
+
+                const openModal = (form) => {
+                    const tone = tones[form.dataset.confirmTone] || tones.emerald;
+
+                    activeForm = form;
+                    title.textContent = form.dataset.confirmTitle || 'Konfirmasi review?';
+                    message.textContent = form.dataset.confirmMessage || 'Pastikan keputusan admin sudah sesuai dengan hasil pemeriksaan.';
+                    submitLabel.textContent = form.dataset.confirmButton || 'Ya, Lanjutkan';
+                    iconSymbol.textContent = tone.icon;
+                    submitIcon.textContent = tone.submitIcon;
+                    icon.className = `flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${tone.iconClass}`;
+                    submitButton.className = `inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold text-white shadow-lg transition ${tone.buttonClass}`;
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    modal.setAttribute('aria-hidden', 'false');
+                    submitButton.focus();
+                };
+
+                document.querySelectorAll('form[data-review-confirm]').forEach((form) => {
+                    form.addEventListener('submit', (event) => {
+                        if (form.dataset.confirmed === 'true') {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        openModal(form);
+                    });
+                });
+
+                submitButton.addEventListener('click', () => {
+                    if (!activeForm) {
+                        return;
+                    }
+
+                    activeForm.dataset.confirmed = 'true';
+                    activeForm.submit();
+                    closeModal();
+                });
+
+                document.querySelectorAll('[data-confirm-cancel]').forEach((button) => {
+                    button.addEventListener('click', closeModal);
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                        closeModal();
+                    }
+                });
+            })();
+        </script>
     </x-slot>
 </x-admin-shell>

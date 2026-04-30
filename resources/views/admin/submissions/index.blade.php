@@ -78,15 +78,15 @@
                             <table class="min-w-full divide-y divide-slate-100">
                                 <thead class="bg-white">
                                     <tr>
-                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500">Gambar</th>
-                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500">Similarity</th>
-                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500">Confidence</th>
-                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500">Rekomendasi Sistem</th>
-                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500">Status Final</th>
-                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500">Aksi</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Gambar</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Similarity</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Confidence</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Rekomendasi Sistem</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Status Final</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100 bg-white">
+                                <tbody class="divide-y divide-slate-100 bg-white text-center">
                                     @forelse ($submissions as $submission)
                                         @php
                                             $similarityTone = $submission->similarity_score >= 85 ? 'bg-emerald-500' : ($submission->similarity_score >= 60 ? 'bg-amber-500' : ($submission->similarity_score >= 30 ? 'bg-orange-500' : 'bg-rose-500'));
@@ -106,7 +106,13 @@
                                         @endphp
                                         <tr class="hover:bg-slate-50 transition duration-150 group">
                                             <td class="px-6 py-4">
-                                                <img src="{{ asset('storage/'.$submission->image_path) }}" alt="Submission" class="h-16 w-24 rounded-xl border border-slate-200 object-cover shadow-sm">
+                                                @if ($submission->image_url)
+                                                    <img src="{{ $submission->image_url }}" alt="Submission" class="h-16 w-24 rounded-xl border border-slate-200 object-cover shadow-sm">
+                                                @else
+                                                    <div class="mx-auto flex h-16 w-24 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-400 shadow-sm">
+                                                        <span class="material-symbols-outlined text-[22px]">image_not_supported</span>
+                                                    </div>
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4 text-sm font-semibold text-slate-800">
                                                 @if ($submission->similarity_score !== null)
@@ -138,9 +144,13 @@
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 text-sm">
-                                                <a href="{{ route('admin.submissions.show', $submission) }}" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-extrabold text-white shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition active:scale-[0.98]">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                                    Detail & Review
+                                                <a
+                                                    href="{{ route('admin.submissions.show', $submission) }}"
+                                                    aria-label="Detail dan review submission {{ $submission->id }}"
+                                                    title="Detail & Review"
+                                                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700 active:scale-[0.98]"
+                                                >
+                                                    <span class="material-symbols-outlined text-[20px]">fact_check</span>
                                                 </a>
                                             </td>
                                         </tr>
