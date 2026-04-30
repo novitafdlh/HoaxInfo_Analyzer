@@ -45,8 +45,8 @@
                                 <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
                                     <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
-                                        <h3 class="text-sm font-bold text-slate-900">Hash SHA256</h3>
-                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Membuat sidik jari digital unik untuk memastikan integritas konten primer.</p>
+                                        <h3 class="text-sm font-bold text-slate-900">Similarity 85-100%</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Kemiripan sangat tinggi, menunjukkan kemungkinan konten yang valid dan terverifikasi.</p>
                                     </div>
                                     <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
@@ -72,9 +72,6 @@
                                     <h2 class="text-3xl font-bold tracking-tight mb-2">Mulai Validasi Baru</h2>
                                     <p class="text-on-surface-variant">Unggah berkas atau masukkan tautan konten untuk dianalisis oleh Guardian AI.</p>
                                 </div>
-                                <a class="inline-flex items-center justify-center rounded-full bg-secondary-container px-5 py-3 text-sm font-bold text-on-secondary-container hover:opacity-90 transition" href="{{ route('user.official.index') }}">
-                                    Lihat Konten Resmi
-                                </a>
                             </div>
 
                             @if (session('status'))
