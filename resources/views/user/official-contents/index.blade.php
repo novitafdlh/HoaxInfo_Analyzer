@@ -71,7 +71,7 @@
                                     <h3 class="mt-2 text-xl font-black text-slate-950">Galeri Konten Resmi</h3>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-3 self-start lg:self-auto">
-                                    <p class="text-sm text-slate-500">{{ $officialContents->count() }} konten ditampilkan</p>
+                                    <p class="text-italic text-slate-500">{{ $officialContents->count() }} konten ditampilkan</p>
                                 </div>
                         </div>
 
@@ -147,11 +147,11 @@
                                     <div class="flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition-all duration-300 ease-out group-hover:-translate-y-2 group-hover:border-slate-300 group-hover:shadow-[0_24px_48px_rgba(15,23,42,0.14)]">
                                         <div class="relative bg-slate-100 p-3">
                                             <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_48%)] opacity-80 transition duration-300 group-hover:opacity-100"></div>
-                                            <div class="relative overflow-hidden rounded-[1.5rem]">
+                                            <div class="relative aspect-[16/10] overflow-hidden rounded-[1.5rem]">
                                                 <img
                                                     src="{{ $content->image_url }}"
                                                     alt="{{ $content->title }}"
-                                                    class="h-56 w-full object-cover transition duration-500 ease-out group-hover:scale-[1.04]"
+                                                    class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.04]"
                                                 >
                                             </div>
                                         </div>
@@ -200,7 +200,7 @@
                                             <p class="text-xs font-bold uppercase tracking-[0.24em] text-blue-600" x-text="activeContent?.category"></p>
                                             <h3 class="mt-3 text-2xl font-black leading-tight text-slate-950" x-text="activeContent?.title"></h3>
                                         </div>
-                                        <button type="button" @click="activeContent = null" class="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900">
+                                        <button type="button" @click="activeContent = null" class="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700">
                                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                         </button>
                                     </div>

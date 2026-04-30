@@ -72,7 +72,7 @@
                         <div class="space-y-6">
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-[0.24em] text-blue-700">{{ $officialContent->category ?: 'Umum' }}</p>
-                                <h3 class="mt-2 text-3xl font-black tracking-tight text-slate-950">{{ $officialContent->title }}</h3>
+                                <h3 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{{ $officialContent->title }}</h3>
                                 <p class="mt-3 text-sm leading-relaxed text-slate-600">
                                     Konten ini tersimpan dalam basis data referensi resmi dan dapat menjadi tujuan tautan saat sistem menemukan kemiripan pada hasil validasi Anda.
                                 </p>
@@ -81,11 +81,11 @@
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                                 <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Metode sumber</p>
-                                <p class="mt-2 text-lg font-bold text-slate-900">{{ $officialContent->source_type === 'url' ? 'URL resmi' : 'Unggah manual' }}</p>
+                                <p class="mt-2 text-sm font-bold text-slate-900">{{ $officialContent->source_type === 'url' ? 'URL resmi' : 'Unggah manual' }}</p>
                             </div>
                             <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                                 <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Tanggal simpan</p>
-                                <p class="mt-2 text-lg font-bold text-slate-900">{{ $officialContent->created_at?->format('d M Y, H:i') }}</p>
+                                <p class="mt-2 text-sm font-bold text-slate-900">{{ $officialContent->created_at?->format('d M Y, H:i') }}</p>
                             </div>
                         </div>
 

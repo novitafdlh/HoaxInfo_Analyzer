@@ -113,8 +113,8 @@
                             class="group text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
                             <article class="h-full rounded-[2rem] border border-slate-200 bg-[#f8fbff] p-4 shadow-[0px_14px_30px_rgba(25,28,30,0.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0px_24px_44px_rgba(25,28,30,0.08)]">
-                                <div class="overflow-hidden rounded-[1.5rem] border border-white bg-white shadow-sm">
-                                    <img src="{{ $content->image_url }}" alt="{{ $content->title }}" class="h-60 w-full object-cover transition duration-500 group-hover:scale-[1.03]">
+                                <div class="aspect-[16/10] overflow-hidden rounded-[1.5rem] border border-white bg-white shadow-sm">
+                                    <img src="{{ $content->image_url }}" alt="{{ $content->title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]">
                                 </div>
 
                                 <div class="mt-4 space-y-3">
@@ -151,7 +151,7 @@
                                     <p class="text-[11px] font-black uppercase tracking-[0.18em] text-blue-700" x-text="activeContent?.category"></p>
                                     <h3 class="mt-3 text-2xl font-black leading-tight text-slate-950" x-text="activeContent?.title"></h3>
                                 </div>
-                                <button type="button" @click="activeContent = null" class="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900">
+                                <button type="button" @click="activeContent = null" class="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700">
                                     <span class="material-symbols-outlined text-[20px]">close</span>
                                 </button>
                             </div>
