@@ -46,7 +46,9 @@ class RegisteredUserController extends Controller
             'role' => 'user',
         ]);
 
-        event(new Registered($user));
+        if (! User::usesFormalEmailVerification()) {
+            event(new Registered($user));
+        }
 
         Auth::login($user);
         $request->session()->regenerate();

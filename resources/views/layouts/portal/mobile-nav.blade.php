@@ -23,6 +23,11 @@
         <span class="material-symbols-outlined" @if (request()->routeIs('admin.submissions.*')) style="font-variation-settings: 'FILL' 1;" @endif>inbox</span>
         <span class="text-[10px] {{ request()->routeIs('admin.submissions.*') ? 'font-bold' : 'font-medium' }}">Submission</span>
     </a>
+
+    <a class="flex flex-col items-center gap-1 {{ request()->routeIs('admin.users.*') ? 'text-blue-700' : 'text-on-surface-variant' }}" href="{{ route('admin.users.index') }}">
+        <span class="material-symbols-outlined" @if (request()->routeIs('admin.users.*')) style="font-variation-settings: 'FILL' 1;" @endif>group</span>
+        <span class="text-[10px] {{ request()->routeIs('admin.users.*') ? 'font-bold' : 'font-medium' }}">User</span>
+    </a>
 @elseif ($resolvedMode === 'guest')
     <a class="flex flex-col items-center gap-1 {{ request()->routeIs('dashboard') ? 'text-blue-700' : 'text-on-surface-variant' }}" href="{{ route('dashboard') }}">
         <span class="material-symbols-outlined" @if (request()->routeIs('dashboard')) style="font-variation-settings: 'FILL' 1;" @endif>dashboard</span>

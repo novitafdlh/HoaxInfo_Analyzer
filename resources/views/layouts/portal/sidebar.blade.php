@@ -28,6 +28,7 @@
             ['label' => 'Dashboard', 'icon' => 'dashboard', 'route' => route('admin.dashboard'), 'active' => request()->routeIs('admin.dashboard')],
             ['label' => 'Konten Resmi', 'icon' => 'verified', 'route' => route('official.index'), 'active' => request()->routeIs('official.*')],
             ['label' => 'Submission', 'icon' => 'inbox', 'route' => route('admin.submissions.index'), 'active' => request()->routeIs('admin.submissions.*')],
+            ['label' => 'Manajemen User', 'icon' => 'group', 'route' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
         ],
         'guest' => [
             ['label' => 'Dashboard', 'icon' => 'dashboard', 'route' => route('dashboard'), 'active' => request()->routeIs('dashboard')],

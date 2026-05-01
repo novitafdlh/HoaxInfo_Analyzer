@@ -18,3 +18,8 @@
     <span class="material-symbols-outlined" @if (request()->routeIs('admin.submissions.*')) style="font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;" @endif>inbox</span>
     <span class="text-[10px] font-bold">Submission</span>
 </a>
+
+<a class="flex flex-col items-center gap-1 {{ request()->routeIs('admin.users.*') ? 'text-blue-700' : 'text-slate-500' }}" href="{{ route('admin.users.index') }}">
+    <span class="material-symbols-outlined" @if (request()->routeIs('admin.users.*')) style="font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;" @endif>group</span>
+    <span class="text-[10px] font-bold">User</span>
+</a>
