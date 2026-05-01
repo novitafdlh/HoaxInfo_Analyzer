@@ -26,7 +26,21 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('user.dashboard', absolute: false));
+        $response->assertRedirect(route('verification.notice', absolute: false));
+        $this->assertEquals('user', auth()->user()->role);
+    }
+
+    public function test_public_registration_can_not_create_admin_account(): void
+    {
+        $this->post('/register', [
+            'name' => 'Test Admin',
+            'email' => 'admin-request@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'role' => 'admin',
+        ]);
+
+        $this->assertAuthenticated();
         $this->assertEquals('user', auth()->user()->role);
     }
 }

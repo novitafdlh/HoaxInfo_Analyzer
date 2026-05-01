@@ -31,6 +31,24 @@ class PasswordUpdateTest extends TestCase
         $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
     }
 
+    public function test_admin_password_can_not_be_updated(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this
+            ->actingAs($admin)
+            ->from('/profile')
+            ->put('/password', [
+                'current_password' => 'password',
+                'password' => 'new-password',
+                'password_confirmation' => 'new-password',
+            ]);
+
+        $response->assertForbidden();
+
+        $this->assertTrue(Hash::check('password', $admin->refresh()->password));
+    }
+
     public function test_correct_password_must_be_provided_to_update_password(): void
     {
         $user = User::factory()->create();

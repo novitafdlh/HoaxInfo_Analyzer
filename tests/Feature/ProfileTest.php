@@ -43,6 +43,25 @@ class ProfileTest extends TestCase
         $this->assertNull($user->email_verified_at);
     }
 
+    public function test_admin_profile_information_can_not_be_updated(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this
+            ->actingAs($admin)
+            ->patch('/profile', [
+                'name' => 'Changed Admin',
+                'email' => 'changed-admin@example.com',
+            ]);
+
+        $response->assertForbidden();
+
+        $admin->refresh();
+
+        $this->assertNotSame('Changed Admin', $admin->name);
+        $this->assertNotSame('changed-admin@example.com', $admin->email);
+    }
+
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
         $user = User::factory()->create();
@@ -77,6 +96,22 @@ class ProfileTest extends TestCase
 
         $this->assertGuest();
         $this->assertNull($user->fresh());
+    }
+
+    public function test_admin_can_not_delete_their_account(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this
+            ->actingAs($admin)
+            ->delete('/profile', [
+                'password' => 'password',
+            ]);
+
+        $response->assertForbidden();
+
+        $this->assertAuthenticatedAs($admin);
+        $this->assertNotNull($admin->fresh());
     }
 
     public function test_correct_password_must_be_provided_to_delete_account(): void

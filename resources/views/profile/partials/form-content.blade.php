@@ -22,12 +22,33 @@
                 <div>
                     <h2 class="text-2xl font-bold tracking-tight text-slate-900">Informasi Profil</h2>
                     <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">
-                        Perbarui nama dan email yang digunakan untuk identitas akun.
+                        {{ $adminMode ? 'Informasi akun admin hanya dapat dilihat. Perubahan data admin dilakukan oleh developer.' : 'Perbarui nama dan email yang digunakan untuk identitas akun.' }}
                     </p>
                 </div>
                 <span class="material-symbols-outlined text-4xl text-slate-200">badge</span>
             </div>
 
+            @if ($adminMode)
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div class="space-y-2">
+                        <p class="ml-1 text-sm font-semibold text-slate-600">Nama Lengkap</p>
+                        <div class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-900">
+                            {{ $user->name }}
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="ml-1 text-sm font-semibold text-slate-600">Alamat Email</p>
+                        <div class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-900">
+                            {{ $user->email }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 rounded-2xl border border-blue-100 bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-800">
+                    Akun admin dibuat dan dikelola oleh developer. Anda dapat melihat informasi akun, tetapi tidak dapat mengubah profil, kata sandi, atau menghapus akun sendiri.
+                </div>
+            @else
             <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
                 @csrf
                 @method('patch')
@@ -93,14 +114,16 @@
                     </button>
                 </div>
             </form>
+            @endif
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
+            @if (! $adminMode && $user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail)
                 <form id="send-verification" method="post" action="{{ route('verification.send') }}" class="hidden">
                     @csrf
                 </form>
             @endif
         </div>
 
+        @if (! $adminMode)
         <div class="rounded-[2rem] bg-white p-6 shadow-[0px_20px_40px_rgba(25,28,30,0.06)] sm:p-8">
             <div class="mb-8 flex items-start justify-between gap-4">
                 <div>
@@ -165,6 +188,7 @@
                 </div>
             </form>
         </div>
+        @endif
     </div>
 
     <div class="space-y-8">
@@ -195,6 +219,7 @@
             </div>
         </div>
 
+        @if (! $adminMode)
         <div class="rounded-[2rem] border border-rose-200 bg-rose-50/80 p-2 shadow-[0px_20px_40px_rgba(25,28,30,0.05)] sm:p-8">
 
             <form method="post" action="{{ route('profile.destroy') }}" class="space-y-2">
@@ -225,5 +250,6 @@
                 </button>
             </form>
         </div>
+        @endif
     </div>
 </section>

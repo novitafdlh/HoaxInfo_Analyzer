@@ -26,6 +26,8 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        abort_if($request->user()->role === 'admin', 403, 'Akun admin hanya dapat dilihat dan tidak dapat diubah sendiri.');
+
         $validated = $request->validated();
         $validated['email'] = strtolower(trim((string) $validated['email']));
 
@@ -45,6 +47,8 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        abort_if($request->user()->role === 'admin', 403, 'Akun admin hanya dapat dihapus oleh developer.');
+
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
