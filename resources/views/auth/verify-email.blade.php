@@ -16,6 +16,12 @@
             Setelah email terverifikasi, Anda bisa melanjutkan penggunaan seluruh fitur akun dengan lebih aman.
         </div>
 
+        @if (\App\Models\User::usesFormalEmailVerification())
+            <div class="rounded-[1.5rem] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-relaxed text-amber-800">
+                Mode testing aktif. Verifikasi email di halaman ini hanya formalitas, jadi akun testing tetap bisa dipakai walau email tidak benar-benar menerima tautan verifikasi.
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
 
@@ -33,5 +39,15 @@
                 Logout
             </button>
         </form>
+
+        @if (\App\Models\User::usesFormalEmailVerification())
+            <a
+                href="{{ auth()->user()?->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}"
+                class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-[0.98]"
+            >
+                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                Lanjutkan Dalam Mode Testing
+            </a>
+        @endif
     </div>
 </x-auth-shell>

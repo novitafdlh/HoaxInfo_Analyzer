@@ -50,7 +50,17 @@ class OfficialContentController extends Controller
 
     public function create()
     {
-        return view('official.create');
+        $categories = OfficialContent::query()
+            ->select('category')
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        return view('official.create', [
+            'categories' => $categories,
+        ]);
     }
 
     public function store(
@@ -63,9 +73,20 @@ class OfficialContentController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:100',
+            'category_new' => 'required_if:category,__new__|nullable|string|max:100',
             'image' => 'nullable|image|max:102400|required_without:image_url',
             'image_url' => 'nullable|url|required_without:image',
         ]);
+
+        $category = $request->input('category') === '__new__'
+            ? trim((string) $request->input('category_new'))
+            : trim((string) $request->input('category'));
+
+        if ($category === '' || $category === '__new__') {
+            return back()
+                ->withInput()
+                ->withErrors(['category' => 'Kategori konten wajib dipilih atau ditambahkan.']);
+        }
 
         // === HANDLE FILE ===
         if ($request->hasFile('image')) {
@@ -122,7 +143,7 @@ class OfficialContentController extends Controller
         // === SAVE TO DB ===
         $official = OfficialContent::create([
             'title' => $request->title,
-            'category' => $request->string('category')->toString(),
+            'category' => $category,
             'image_path' => $path,
             'image_hash' => $hash,
             'extracted_text' => $normalizedExtractedText,

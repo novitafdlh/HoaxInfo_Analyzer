@@ -7,7 +7,7 @@
         <div class="flex justify-between items-end">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight text-on-surface">Selamat Datang, Tamu</h1>
-                <p class="mt-2 text-lg text-on-surface-variant">Analisis informasi visual publik tanpa perlu login.</p>
+                <p class="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">Analisis informasi visual publik tanpa perlu login.</p>
             </div>
         </div>
 

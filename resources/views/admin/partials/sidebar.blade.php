@@ -39,6 +39,11 @@
             <span class="material-symbols-outlined">inbox</span>
             <span>Submission</span>
         </a>
+
+        <a class="{{ request()->routeIs('admin.users.*') ? 'rounded-full bg-blue-50 text-blue-700 font-bold' : 'text-slate-500 hover:text-slate-900' }} ml-2 flex items-center gap-4 px-6 py-3 transition-all duration-200 hover:translate-x-1" href="{{ route('admin.users.index') }}">
+            <span class="material-symbols-outlined">group</span>
+            <span>Manajemen User</span>
+        </a>
     </nav>
 
     <div class="mx-6 rounded-[2rem] border border-blue-100 bg-gradient-to-br from-white via-blue-50 to-cyan-50 p-5 shadow-[0px_12px_28px_rgba(37,99,235,0.08)]">

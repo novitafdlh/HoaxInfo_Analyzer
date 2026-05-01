@@ -3,7 +3,7 @@
         <section class="space-y-4">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                    <h1 class="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">Tambah Konten Resmi</h1>
+                    <h1 class="text-3xl font-bold tracking-tight text-on-surface">Tambah Konten Resmi</h1>
                     <p class="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
                         Tambahkan referensi visual resmi baru ke basis data agar sistem memiliki acuan yang lebih kuat saat memverifikasi.
                     </p>
@@ -97,7 +97,31 @@
 
                     <div>
                         <x-input-label for="category" :value="__('Kategori Konten')" class="ml-1 font-bold text-slate-700" />
-                        <x-text-input id="category" name="category" type="text" class="mt-3 block w-full rounded-[1.25rem] border-slate-200 bg-slate-50/60 py-3.5 shadow-sm transition duration-150 focus:border-blue-500 focus:bg-white focus:ring-blue-500" :value="old('category')" required placeholder="Contoh: Bencana Alam" />
+
+                        @php
+                            $oldCategory = old('category', $categories->isNotEmpty() ? $categories->first() : '__new__');
+                            $showNewCategory = $oldCategory === '__new__';
+                        @endphp
+
+                        <div class="relative mt-3">
+                            <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">category</span>
+                            <select
+                                id="category"
+                                name="category"
+                                required
+                                class="block w-full appearance-none rounded-[1.25rem] border border-slate-200 bg-slate-50/60 py-3.5 pl-14 pr-12 text-sm text-slate-900 shadow-sm transition duration-150 focus:border-blue-500 focus:bg-white focus:ring-blue-500"
+                            >
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category }}" @selected($oldCategory === $category)>{{ $category }}</option>
+                                @endforeach
+                                <option value="__new__" @selected($showNewCategory)>+ Tambah kategori baru</option>
+                            </select>
+                        </div>
+
+                        <div id="new-category-wrapper" class="{{ $showNewCategory ? '' : 'hidden' }} mt-3">
+                            <x-text-input id="category_new" name="category_new" type="text" class="block w-full rounded-[1.25rem] border-slate-200 bg-slate-50/60 py-3.5 shadow-sm transition duration-150 focus:border-blue-500 focus:bg-white focus:ring-blue-500" :value="old('category_new')" placeholder="Contoh: Bencana Alam" />
+                            <p class="mt-2 ml-1 text-xs leading-relaxed text-slate-500">Kategori baru akan tersedia di pilihan berikutnya setelah konten resmi disimpan.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -179,6 +203,26 @@
         function updateOfficialFileName(input) {
             const display = document.getElementById('file-name-display');
             display.innerText = input.files.length ? `File dipilih: ${input.files[0].name}` : '';
+        }
+
+        const categorySelect = document.getElementById('category');
+        const newCategoryWrapper = document.getElementById('new-category-wrapper');
+        const newCategoryInput = document.getElementById('category_new');
+
+        if (categorySelect && newCategoryWrapper && newCategoryInput) {
+            const syncNewCategoryField = () => {
+                const shouldShow = categorySelect.value === '__new__';
+
+                newCategoryWrapper.classList.toggle('hidden', ! shouldShow);
+                newCategoryInput.required = shouldShow;
+
+                if (! shouldShow) {
+                    newCategoryInput.value = '';
+                }
+            };
+
+            categorySelect.addEventListener('change', syncNewCategoryField);
+            syncNewCategoryField();
         }
     </script>
 </x-admin-shell>

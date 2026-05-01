@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminSubmissionController;
+use App\Http\Controllers\AdminUserManagementController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserOfficialContentController;
@@ -28,6 +29,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/submissions/{submission}', [AdminSubmissionController::class, 'show'])->name('admin.submissions.show');
     Route::patch('/admin/submissions/{submission}/final-status', [AdminSubmissionController::class, 'updateFinalStatus'])
         ->name('admin.submissions.update-status');
+
+    Route::get('/admin/users', [AdminUserManagementController::class, 'index'])->name('admin.users.index');
+    Route::get('/admin/users/{user}', [AdminUserManagementController::class, 'show'])->name('admin.users.show');
+    Route::patch('/admin/users/{user}', [AdminUserManagementController::class, 'update'])->name('admin.users.update');
+    Route::delete('/admin/users/{user}', [AdminUserManagementController::class, 'destroy'])->name('admin.users.destroy');
 
     Route::get('/official', [OfficialContentController::class, 'index'])->name('official.index');
     Route::get('/official/create', [OfficialContentController::class, 'create'])->name('official.create');
