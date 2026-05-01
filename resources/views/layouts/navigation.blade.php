@@ -9,9 +9,10 @@
             {{-- LEFT --}}
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="flex items-center group">
-                        <span class="text-xl font-bold tracking-tight text-slate-700 group-hover:text-indigo-700 transition">
-                            Sulteng <span class="text-indigo-500">Info Clarifier</span>
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3 group">
+                        <img src="{{ asset('images/sulteng.png') }}" alt="Logo Sulawesi Tengah" class="h-10 w-10 shrink-0 object-contain">
+                        <span class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-xl font-bold tracking-tight text-transparent">
+                            Sulteng Hoax Analyzer
                         </span>
                     </a>
                 </div>

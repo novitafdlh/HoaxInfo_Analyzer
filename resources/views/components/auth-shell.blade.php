@@ -119,11 +119,11 @@
         <header class="sticky top-0 z-40 border-b border-white/40 bg-slate-50/60 backdrop-blur-md">
             <div class="mx-auto flex w-full {{ $containerWidth }} items-center justify-between px-6 py-4 lg:px-8">
                 <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-3">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-container text-on-primary shadow-lg shadow-blue-200/60">
-                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shield</span>
+                    <div class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-blue-200/60 ring-1 ring-slate-200">
+                        <img src="{{ asset('images/sulteng.png') }}" alt="Logo Sulawesi Tengah" class="h-10 w-10 object-contain">
                     </div>
                     <div>
-                        <p class="text-sm font-black tracking-tight text-slate-900">Sulteng Hoax Analyzer</p>
+                        <p class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-sm font-black tracking-tight text-transparent">Sulteng Hoax Analyzer</p>
                         <p class="text-xs text-slate-500">Portal verifikasi informasi publik</p>
                     </div>
                 </a>

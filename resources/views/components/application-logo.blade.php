@@ -1,5 +1,6 @@
 <div class="flex items-center gap-2">
-    <span class="text-lg font-bold text-slate-900 font-sans">
-        Sulteng <span class="text-indigo-600 font-semibold">Info Clarifier</span>
+    <img src="{{ asset('images/sulteng.png') }}" alt="Logo Sulawesi Tengah" class="h-9 w-9 shrink-0 object-contain">
+    <span class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-lg font-bold text-transparent font-sans">
+        Sulteng Hoax Analyzer
     </span>
 </div>
