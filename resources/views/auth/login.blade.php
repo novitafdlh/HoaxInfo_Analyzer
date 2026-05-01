@@ -43,7 +43,16 @@
                 <x-input-label for="password" :value="__('Kata Sandi')" class="ml-1" />
                 <div class="relative">
                     <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">lock</span>
-                    <x-text-input id="password" class="pl-14" type="password" name="password" required autocomplete="current-password" placeholder="Masukkan kata sandi Anda" />
+                    <x-text-input id="password" class="pl-14 pr-14" type="password" name="password" required autocomplete="current-password" placeholder="Masukkan kata sandi Anda" />
+                    <button
+                        type="button"
+                        class="absolute right-4 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                        data-password-toggle="password"
+                        aria-label="Lihat kata sandi"
+                        aria-pressed="false"
+                    >
+                        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">visibility</span>
+                    </button>
                 </div>
                 <x-input-error :messages="$errors->get('password')" class="ml-1" />
             </div>
@@ -72,4 +81,19 @@
         </form>
            
     </div>
+
+    <script>
+        document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const input = document.getElementById(button.dataset.passwordToggle);
+                const icon = button.querySelector('.material-symbols-outlined');
+                const isHidden = input.type === 'password';
+
+                input.type = isHidden ? 'text' : 'password';
+                button.setAttribute('aria-label', isHidden ? 'Sembunyikan kata sandi' : 'Lihat kata sandi');
+                button.setAttribute('aria-pressed', String(isHidden));
+                icon.textContent = isHidden ? 'visibility_off' : 'visibility';
+            });
+        });
+    </script>
 </x-auth-shell>
