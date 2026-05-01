@@ -8,7 +8,7 @@
         <section class="space-y-4">
             <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold tracking-tight text-on-surface">Konten Resmi</h1>
+                    <h1 class="text-3xl font-bold tracking-tight text-on-surface">Konten Resmi</h1>
                 </div>
 
                 <a href="{{ route('official.create') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-slate-300/50 transition hover:bg-slate-800">
@@ -92,7 +92,7 @@
                         <p class="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">
                             {{ $selectedCategory !== '' ? 'Filter aktif: '.$selectedCategory : 'Urutan terbaru' }}
                         </p>
-                        <h2 class="mt-1 text-2xl font-black tracking-tight text-slate-950">Galeri Konten Resmi</h2>
+                        <h2 class="mt-1 text-xl font-black tracking-tight text-slate-950">Galeri Konten Resmi</h2>
                     </div>
                     <p class="text-sm font-semibold text-slate-500">{{ $displayedContentCount }} konten ditampilkan</p>
                 </div>

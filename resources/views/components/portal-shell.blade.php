@@ -238,11 +238,18 @@
             body img {
                 color: inherit;
             }
+
+            .portal-sidebar {
+                background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 52%, #1e3a8a 100%) !important;
+                color: #ffffff;
+                box-shadow: 0px 24px 48px rgba(59, 130, 246, 0.18);
+            }
+
         </style>
     </head>
     <body class="overflow-x-hidden bg-surface font-body text-on-surface antialiased selection:bg-primary-fixed-dim">
         <div class="flex min-h-screen">
-            <aside class="sticky left-0 top-0 z-40 hidden h-screen w-72 shrink-0 rounded-r-[3rem] bg-white/80 shadow-[0px_20px_40px_rgba(25,28,30,0.06)] backdrop-blur-xl md:flex">
+            <aside class="portal-sidebar sticky left-0 top-0 z-40 hidden h-screen w-72 shrink-0 md:flex">
                 @include('layouts.portal.sidebar', ['mode' => $mode])
             </aside>
 

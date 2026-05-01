@@ -31,10 +31,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
         Submission::claimGuestSubmissionsToUser($guestSessionId, (int) $request->user()->id);
 
-        if (! $request->user()?->hasVerifiedEmail()) {
-            return redirect()->route('verification.notice');
-        }
-
         return redirect()->intended($this->dashboardRouteFor($request));
     }
 

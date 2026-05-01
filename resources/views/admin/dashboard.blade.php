@@ -61,7 +61,7 @@
         <section class="space-y-4">
             <div class="flex justify-between items-end">
                 <div>
-                    <h1 class="text-4xl font-bold tracking-tight text-on-surface">Selamat Datang, {{ $displayName }}</h1>
+                    <h1 class="text-3xl font-bold tracking-tight text-on-surface">Selamat Datang, {{ $displayName }}</h1>
                     <p class="mt-2 text-lg text-on-surface-variant">Pusat monitoring integritas informasi publik dan keputusan validasi akhir.</p>
                 </div>
             </div>
@@ -115,7 +115,7 @@
     <div class=" p-6 md:overflow-hidden md:rounded-lg md:border bg-white/80 md:border-slate-200 md:shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
         <section>
             <div class="mb-8 flex items-center justify-between">
-                <h3 class="text-2xl font-bold tracking-tight text-on-surface">Ringkasan Operasional</h3>
+                <h3 class="text-xl font-bold tracking-tight text-on-surface">Ringkasan Operasional</h3>
             </div>
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">

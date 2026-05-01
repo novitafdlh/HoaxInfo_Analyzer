@@ -20,7 +20,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-        @vite(['resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <script>
             tailwind.config = {
@@ -136,8 +136,8 @@
         </header>
 
         <main class="relative z-10 flex min-h-[calc(100vh-76px)] items-center px-6 py-10 lg:px-8">
-            <div class="mx-auto grid w-full {{ $containerWidth }} gap-8 lg:grid-cols-6">
-                <section class="lg:col-span-7">
+            <div class="mx-auto grid w-full {{ $containerWidth }} gap-8">
+                <section>
                     <div class="mx-auto w-full max-w-2xl rounded-[2.5rem] border border-white/70 bg-white/90 p-8 shadow-[0px_20px_40px_rgba(25,28,30,0.06)] backdrop-blur-xl sm:p-10 lg:p-12">
                         <div class="mb-8 space-y-4">
 

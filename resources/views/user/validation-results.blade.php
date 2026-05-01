@@ -13,7 +13,7 @@
                 <section class="space-y-4">
                     <div class="flex justify-between items-end">
                         <div>
-                            <h1 class="text-4xl font-bold tracking-tight text-on-surface">Hasil Analisis Saya</h1>
+                            <h1 class="text-3xl font-bold tracking-tight text-on-surface">Hasil Analisis Saya</h1>
                             <p class="text-lg text-on-surface-variant mt-2">Riwayat similarity, confidence, dan review admin untuk setiap konten yang Anda kirimkan.</p>
                         </div>
                     </div>

@@ -61,7 +61,7 @@
             <div class="max-w-6xl mx-auto space-y-12">
                 <header class="flex justify-between items-end">
                     <div>
-                        <h1 class="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Validation Detail</h1>
+                        <h1 class="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">Validation Detail</h1>
                     </div>
                 </header>
 

@@ -1,30 +1,59 @@
 <x-admin-shell title="Tambah Konten Resmi">
     <x-slot name="pageHeader">
         <section class="space-y-4">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                    <h1 class="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Tambah Konten Resmi</h1>
+                    <h1 class="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">Tambah Konten Resmi</h1>
                     <p class="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
-                        Tambahkan referensi visual resmi baru ke basis data agar sistem memiliki acuan yang lebih kuat saat memverifikasi informasi publik.
+                        Tambahkan referensi visual resmi baru ke basis data agar sistem memiliki acuan yang lebih kuat saat memverifikasi.
                     </p>
                 </div>
 
-                <a href="{{ route('official.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">
+                <a href="{{ route('official.index') }}" class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700" aria-label="Kembali ke galeri" title="Kembali ke galeri">
                     <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                    Kembali ke galeri
                 </a>
             </div>
 
-            <div class="overflow-hidden rounded-[2rem] border border-blue-100 bg-gradient-to-r from-white via-blue-50 to-cyan-50 shadow-[0px_12px_28px_rgba(37,99,235,0.08)]">
-                <div class="flex items-start gap-4 p-5">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white shadow-lg shadow-slate-300/40">
-                        <span class="material-symbols-outlined text-[22px]">add_photo_alternate</span>
+            <div class="rounded-[2rem] border border-slate-200 bg-white p-2">
+                <div class="p-3 md:p-4">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80" onclick="toggleOfficialGuide()">
+                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                                <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+                            </div>
+                            <div>
+                                <p class="text-base font-bold text-blue-950">Petunjuk Pengisian</p>
+                                <p class="text-xs text-blue-900/60">3 langkah singkat untuk menambahkan referensi resmi.</p>
+                            </div>
+                        </div>
+                        <button
+                            aria-label="Toggle petunjuk pengisian"
+                            class="flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white/90 text-blue-700 transition hover:bg-white"
+                            type="button"
+                            onclick="toggleOfficialGuide()"
+                        >
+                            <span class="inline-block rotate-180 text-lg font-black leading-none transition-transform duration-200" id="official-guide-icon">^</span>
+                        </button>
                     </div>
-                    <div>
-                        <p class="text-sm font-black uppercase tracking-[0.2em] text-blue-700">Form Referensi Resmi</p>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-600">
-                            Gunakan formulir ini untuk menambahkan infografis, surat edaran, atau visual resmi lain yang akan menjadi referensi utama sistem.
-                        </p>
+
+                    <div class="hidden pt-3" id="official-guide-content">
+                        <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                            <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                <div class="mb-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-blue-700">01</div>
+                                <h3 class="text-sm font-bold text-slate-900">Lengkapi Identitas</h3>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-600">Isi judul dan kategori agar konten mudah dicari di galeri referensi resmi.</p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
+                                <h3 class="text-sm font-bold text-slate-900">Pilih Sumber Gambar</h3>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-600">Unggah file dari perangkat atau gunakan URL gambar resmi yang dapat diakses.</p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
+                                <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
+                                <h3 class="text-sm font-bold text-slate-900">Simpan Referensi</h3>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-600">Konten tersimpan akan langsung menjadi basis pembanding pada proses validasi.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,31 +86,17 @@
         @endif
 
         <div class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0px_20px_40px_rgba(25,28,30,0.06)] sm:p-8">
-            <div class="mb-8 flex items-start gap-4 rounded-[1.75rem] border border-slate-200 bg-slate-50/70 p-5">
-                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
-                    <span class="material-symbols-outlined text-[20px]">info</span>
-                </div>
-                <div>
-                    <p class="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">Petunjuk Pengisian</p>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-600">
-                        Isi judul dan kategori dengan jelas. Pilih salah satu metode sumber gambar: unggah file langsung atau gunakan tautan resmi dari instansi terkait.
-                    </p>
-                </div>
-            </div>
-
             <form action="{{ route('official.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                 @csrf
 
                 <div class="grid gap-6 lg:grid-cols-2">
                     <div>
                         <x-input-label for="title" :value="__('Judul Konten Informasi Resmi')" class="ml-1 font-bold text-slate-700" />
-                        <p class="mt-1 ml-1 text-xs leading-relaxed text-slate-500">Masukkan judul yang jelas agar konten mudah dikenali di galeri referensi.</p>
                         <x-text-input id="title" name="title" type="text" class="mt-3 block w-full rounded-[1.25rem] border-slate-200 bg-slate-50/60 py-3.5 shadow-sm transition duration-150 focus:border-blue-500 focus:bg-white focus:ring-blue-500" :value="old('title')" required autofocus placeholder="Contoh: Infografis Status Gunung Awu April 2026" />
                     </div>
 
                     <div>
                         <x-input-label for="category" :value="__('Kategori Konten')" class="ml-1 font-bold text-slate-700" />
-                        <p class="mt-1 ml-1 text-xs leading-relaxed text-slate-500">Tulis kategori agar admin lain lebih mudah menemukan referensi saat dibutuhkan.</p>
                         <x-text-input id="category" name="category" type="text" class="mt-3 block w-full rounded-[1.25rem] border-slate-200 bg-slate-50/60 py-3.5 shadow-sm transition duration-150 focus:border-blue-500 focus:bg-white focus:ring-blue-500" :value="old('category')" required placeholder="Contoh: Bencana Alam" />
                     </div>
                 </div>
@@ -97,38 +112,46 @@
                     </div>
                 </div>
 
-                <div class="grid gap-6 xl:grid-cols-2">
-                    <div class="rounded-[1.75rem] border border-slate-200 bg-slate-50/70 p-5">
-                        <x-input-label for="image" :value="__('Unggah Gambar Resmi')" class="ml-1 font-bold text-slate-700" />
-                        <p class="mt-1 ml-1 text-xs leading-relaxed text-slate-500">Gunakan file visual resmi dari perangkat Anda. Maksimum 100MB.</p>
+                <div class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+                    <div class="space-y-8">
+                        <div>
+                            <x-input-label for="image" :value="__('Unggah Gambar Resmi')" class="ml-1 font-bold text-slate-700" />
+                            <p class="mt-1 ml-1 text-xs leading-relaxed text-slate-500">Gunakan file visual resmi dari perangkat Anda. Maksimum 100MB.</p>
+                        </div>
 
-                        <label for="image" class="group mt-4 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border-2 border-dashed border-slate-300 bg-white px-4 text-center transition hover:border-blue-400 hover:bg-blue-50/60">
-                            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition group-hover:bg-white group-hover:text-blue-600">
-                                <span class="material-symbols-outlined text-[34px]">upload</span>
+                        <input id="image" name="image" type="file" accept="image/*" class="hidden" onchange="updateOfficialFileName(this)" />
+                        <label for="image" class="group flex min-h-80 w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-4 border-dashed border-surface-container-highest bg-surface-container-low/30 p-12 text-center transition-colors hover:bg-surface-container-low">
+                            <div class="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-md transition-transform group-hover:scale-110">
+                                <span class="material-symbols-outlined text-4xl text-surface-tint">cloud_upload</span>
                             </div>
-                            <p class="mt-4 text-sm font-black text-slate-800">Klik untuk unggah file gambar resmi</p>
-                            <p class="mt-1 text-xs text-slate-500">atau seret dan lepas file dari perangkat Anda</p>
-                            <p id="file-name-display" class="mt-4 max-w-full overflow-hidden text-ellipsis whitespace-nowrap rounded-full bg-blue-50 px-4 py-2 text-xs font-bold text-blue-700"></p>
+                            <div>
+                                <p class="text-xl font-bold text-slate-950">Seret &amp; Lepas Gambar</p>
+                                <p class="text-sm text-on-surface-variant">Mendukung format JPG, PNG, atau WEBP</p>
+                            </div>
+                            <span class="mt-2 rounded-full bg-blue-600 px-8 py-3 text-sm font-bold text-white shadow-md transition hover:bg-blue-700">
+                                Pilih Berkas
+                            </span>
+                            <p id="file-name-display" class="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-surface-tint"></p>
                         </label>
-                        <input id="image" name="image" type="file" accept="image/*" class="hidden" onchange="document.getElementById('file-name-display').innerText = this.files.length ? this.files[0].name : ''" />
-                    </div>
 
-                    <div class="rounded-[1.75rem] border border-slate-200 bg-slate-50/70 p-5">
-                        <x-input-label for="image_url" :value="__('Atau Masukkan URL Gambar Resmi')" class="ml-1 font-bold text-slate-700" />
-                        <p class="mt-1 ml-1 text-xs leading-relaxed text-slate-500">Masukkan tautan langsung dari website pemerintah atau kanal resmi instansi.</p>
-
-                        <div class="mt-4 rounded-[1.5rem] border border-slate-200 bg-white p-5">
-                            <div class="flex items-center gap-3">
-                                <div class="flex h-11 w-11 items-center justify-center rounded-full bg-blue-50 text-blue-700">
-                                    <span class="material-symbols-outlined text-[20px]">link</span>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-black text-slate-900">Gunakan tautan resmi</p>
-                                    <p class="text-xs text-slate-500">Pastikan URL mengarah langsung ke gambar yang valid.</p>
-                                </div>
+                        <div class="flex flex-col gap-4">
+                            <div class="flex items-center gap-4 text-on-surface-variant">
+                                <div class="h-px flex-1 bg-outline-variant/30"></div>
+                                <span class="text-sm font-bold uppercase tracking-widest">Atau via URL</span>
+                                <div class="h-px flex-1 bg-outline-variant/30"></div>
                             </div>
 
-                            <x-text-input id="image_url" name="image_url" type="url" :value="old('image_url')" placeholder="https://kominfo.go.id/gambar-resmi.jpg" class="mt-5 block w-full rounded-[1.25rem] border-slate-200 bg-slate-50/60 py-3.5 shadow-sm transition duration-150 focus:border-blue-500 focus:bg-white focus:ring-blue-500" />
+                            <div class="flex items-center gap-3 rounded-full bg-surface-container-highest px-6 py-4 transition-all focus-within:bg-white focus-within:ring-2 focus-within:ring-surface-tint">
+                                <span class="material-symbols-outlined text-on-surface-variant">link</span>
+                                <input
+                                    id="image_url"
+                                    name="image_url"
+                                    type="url"
+                                    value="{{ old('image_url') }}"
+                                    placeholder="https://kominfo.go.id/gambar-resmi.jpg"
+                                    class="w-full border-none bg-transparent text-sm placeholder:text-on-surface-variant focus:ring-0"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -143,4 +166,19 @@
             </form>
         </div>
     </section>
+
+    <script>
+        function toggleOfficialGuide() {
+            const content = document.getElementById('official-guide-content');
+            const icon = document.getElementById('official-guide-icon');
+            const isHidden = content.classList.toggle('hidden');
+
+            icon.classList.toggle('rotate-180', isHidden);
+        }
+
+        function updateOfficialFileName(input) {
+            const display = document.getElementById('file-name-display');
+            display.innerText = input.files.length ? `File dipilih: ${input.files[0].name}` : '';
+        }
+    </script>
 </x-admin-shell>

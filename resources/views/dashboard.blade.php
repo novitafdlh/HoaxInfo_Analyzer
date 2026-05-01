@@ -6,7 +6,7 @@
     <section class="space-y-4">
         <div class="flex justify-between items-end">
             <div>
-                <h1 class="text-4xl font-bold tracking-tight text-on-surface">Selamat Datang, Tamu</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-on-surface">Selamat Datang, Tamu</h1>
                 <p class="mt-2 text-lg text-on-surface-variant">Analisis informasi visual publik tanpa perlu login.</p>
             </div>
         </div>
@@ -61,14 +61,14 @@
             <div class="relative z-10 space-y-8">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div>
-                        <h2 class="text-3xl font-bold tracking-tight mb-2">Mulai Validasi Baru</h2>
+                        <h2 class="text-2xl font-bold tracking-tight mb-2">Mulai Validasi Baru</h2>
                         <p class="text-on-surface-variant">Unggah berkas atau masukkan tautan konten untuk dianalisis oleh Guardian AI.</p>
                     </div>
                     <div class="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800 shadow-sm">
-                        <p class="text-xs font-bold uppercase tracking-[0.24em] text-amber-700">Akses Tamu</p>
-                        <p class="mt-2 text-2xl font-black text-amber-900">{{ $guestUploadLimitEnabled ? $guestUploadsRemaining : '∞' }}</p>
+                        <p class="text-xs font-bold uppercase tracking-[0.24em] text-amber-700">Token Gratis Harian</p>
+                        <p class="mt-2 text-2xl font-black text-amber-900">{{ $guestUploadLimitEnabled ? $guestUploadsRemaining : '' }}</p>
                         <p class="mt-1 text-xs text-amber-700">
-                            {{ $guestUploadLimitEnabled ? "sisa dari {$guestUploadLimit} upload hari ini" : 'Tanpa batas di mode testing lokal' }}
+                            {{ $guestUploadLimitEnabled ? "sisa dari {$guestUploadLimit} validasi gratis hari ini" : 'Tanpa batas di mode testing lokal' }}
                         </p>
                         <p class="mt-2 text-xs text-amber-700">{{ $guestUploadsUsed }} upload telah digunakan hari ini.</p>
                     </div>

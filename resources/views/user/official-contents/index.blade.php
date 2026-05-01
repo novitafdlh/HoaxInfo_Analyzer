@@ -14,7 +14,7 @@
                 <section class="space-y-4">
                     <div class="flex justify-between items-end">
                         <div>
-                            <h1 class="text-4xl font-bold tracking-tight text-on-surface">Konten Resmi</h1>
+                            <h1 class="text-3xl font-bold tracking-tight text-on-surface">Konten Resmi</h1>
                             <p class="text-lg text-on-surface-variant mt-2">Referensi yang dipakai sistem untuk analisis similarity dan pencocokan konten.</p>
                         </div>
                     </div>

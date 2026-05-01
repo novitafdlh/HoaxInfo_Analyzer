@@ -5,7 +5,7 @@
 <header class="sticky top-0 z-50 flex w-full max-w-full items-center justify-between gap-4 bg-slate-50/50 px-8 py-4 backdrop-blur-md">
     <div class="flex items-center gap-4">
         <img src="{{ asset('images/sulteng.png') }}" alt="Logo Sulawesi Tengah" class="h-10 w-10 shrink-0 object-contain">
-        <span class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-xl font-bold text-transparent">
+        <span class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-lg font-bold text-transparent">
             Sulteng Hoax Analyzer
         </span>
     </div>

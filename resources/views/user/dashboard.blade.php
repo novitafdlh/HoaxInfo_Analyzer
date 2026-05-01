@@ -14,7 +14,7 @@
                 <section class="space-y-4">
                     <div class="flex justify-between items-end">
                         <div>
-                            <h1 class="text-4xl font-bold tracking-tight text-on-surface">Selamat Datang, {{ $displayName }}</h1>
+                            <h1 class="text-3xl font-bold tracking-tight text-on-surface">Selamat Datang, {{ $displayName }}</h1>
                             <p class="text-lg text-on-surface-variant mt-2">Sistem validasi konten resmi pemerintah.</p>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                         <div class="relative z-10 space-y-8">
                             <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                                 <div>
-                                    <h2 class="text-3xl font-bold tracking-tight mb-2">Mulai Validasi Baru</h2>
+                                    <h2 class="text-2xl font-bold tracking-tight mb-2">Mulai Validasi Baru</h2>
                                     <p class="text-on-surface-variant">Unggah berkas atau masukkan tautan konten untuk dianalisis oleh Guardian AI.</p>
                                 </div>
                             </div>

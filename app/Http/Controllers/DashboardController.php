@@ -56,7 +56,7 @@ class DashboardController extends Controller
         // LIMIT GUEST
         if (!$isAuthenticated && $this->isGuestUploadLimitEnabled() && $guestUploadsUsed >= $guestUploadLimit) {
             return back()->withErrors([
-                'upload_limit' => "Token gratis guest untuk hari ini sudah habis. Batas harian saat ini {$guestUploadLimit} upload. Silakan login atau coba lagi besok.",
+                'upload_limit' => 'Token gratis guest untuk hari ini sudah habis. Silakan login atau coba lagi besok.',
             ]);
         }
 

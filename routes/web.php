@@ -21,7 +21,7 @@ Route::get('/media/public/{path}', [PublicMediaController::class, 'show'])
     ->name('media.public');
 
 // ADMIN
-Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::get('/admin/submissions', [AdminSubmissionController::class, 'index'])->name('admin.submissions.index');
@@ -36,7 +36,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 });
 
 // USER
-Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
+Route::middleware(['auth', 'role:user'])->group(function () {
     Route::view('/user/dashboard', 'user.dashboard')->name('user.dashboard');
     Route::get('/user/validation-results', [UserValidationController::class, 'index'])->name('user.validation-results');
     Route::get('/user/official-contents', [UserOfficialContentController::class, 'index'])->name('user.official.index');

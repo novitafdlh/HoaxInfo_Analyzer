@@ -11,7 +11,7 @@
         <section class="space-y-4">
             <div class="flex justify-between items-end">
                 <div>
-                    <h2 class="text-4xl font-bold tracking-tight text-on-surface">Submission Masyarakat</h2>
+                    <h2 class="text-3xl font-bold tracking-tight text-on-surface">Submission Masyarakat</h2>
                 </div>
                 <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
                     <span class="material-symbols-outlined text-[18px] text-blue-600">monitoring</span>
