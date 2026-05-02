@@ -1,12 +1,11 @@
 <x-auth-shell
     title="Masuk"
     heading="Masuk"
-    description="Gunakan akun Anda untuk mengakses portal validasi, riwayat hasil, dan fitur verifikasi lanjutan."
     icon="login"
 >
     <x-slot name="aside">
         <div class="space-y-4">
-            <h1 class="text-5xl font-black tracking-tight text-slate-900">Akses cepat ke dashboard dengan tema yang sama.</h1>
+            <h1 class="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Akses cepat ke dashboard dengan tema yang sama.</h1>
             <p class="max-w-xl text-base leading-relaxed text-slate-600">
                 Halaman masuk kini mengikuti identitas visual portal utama agar perpindahan dari halaman tamu ke dashboard terasa lebih mulus dan konsisten.
             </p>
@@ -71,7 +70,6 @@
             </div>
 
             <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700 active:scale-[0.98]">
-                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
                 Masuk
             </button>
              <p class="text-sm text-slate-600 text-center">

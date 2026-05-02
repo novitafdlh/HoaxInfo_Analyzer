@@ -135,14 +135,14 @@
             </div>
         </header>
 
-        <main class="relative z-10 flex min-h-[calc(100vh-76px)] items-center px-6 py-10 lg:px-8">
-            <div class="mx-auto grid w-full {{ $containerWidth }} gap-8">
+        <main class="relative z-10\ flex min-h-[calc(100vh-76px)] items-center px-6 py-10 lg:px-8">
+            <div class="mx-auto grid w-1/3 {{ $containerWidth }} gap-8">
                 <section>
                     <div class="mx-auto w-full max-w-2xl rounded-[2.5rem] border border-white/70 bg-white/90 p-8 shadow-[0px_20px_40px_rgba(25,28,30,0.06)] backdrop-blur-xl sm:p-10 lg:p-12">
                         <div class="mb-8 space-y-4">
 
                             <div class="space-y-2">
-                                <h1 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl text-center">{{ $heading }}</h1>
+                                <h1 class="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl text-center">{{ $heading }}</h1>
                                 @if ($description)
                                     <p class="text-base leading-relaxed text-slate-600 text-center">{{ $description }}</p>
                                 @endif

@@ -1,7 +1,6 @@
 <x-auth-shell
     title="Lupa Kata Sandi"
     heading="Lupa Kata Sandi?"
-    description="Masukkan email akun Anda untuk menerima tautan pengaturan ulang kata sandi."
     icon="lock_reset"
     containerWidth="max-w-5xl"
 >
@@ -28,7 +27,7 @@
 
         <a href="{{ route('login') }}" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 transition hover:text-blue-700">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-            Kembali ke login
+            Kembali
         </a>
     </div>
 </x-auth-shell>

@@ -1,7 +1,6 @@
 <x-auth-shell
     title="Atur Ulang Kata Sandi"
     heading="Atur Ulang Kata Sandi"
-    description="Masukkan email dan kata sandi baru Anda untuk menyelesaikan proses pemulihan akun."
     icon="password"
     containerWidth="max-w-5xl"
 >

@@ -1,11 +1,11 @@
 <x-auth-shell
     title="Daftar"
-    heading="Daftarkan akun anda"
+    heading="Daftarkan akun"
     icon="person_add"
 >
     <x-slot name="aside">
         <div class="space-y-4">
-            <h1 class="text-5xl font-black tracking-tight text-slate-900">Mulai dari halaman daftar yang terasa satu tema dengan portal.</h1>
+            <h1 class="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Mulai dari halaman daftar yang terasa satu tema dengan portal.</h1>
             <p class="max-w-xl text-base leading-relaxed text-slate-600">
                 Halaman pendaftaran memakai bahasa visual yang sama dengan dashboard agar alur dari tamu menjadi pengguna terdaftar terasa lebih jelas dan profesional.
             </p>
@@ -83,8 +83,7 @@
             </div>
 
             <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700 active:scale-[0.98]">
-                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-                Daftar Sekarang
+                Daftar
             </button>
         </form>
 
