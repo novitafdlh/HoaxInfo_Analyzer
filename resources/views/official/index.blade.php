@@ -9,6 +9,7 @@
             <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
                 <div>
                     <h1 class="text-3xl font-bold tracking-tight text-on-surface">Konten Resmi</h1>
+                    <p class="mt-2 text-lg text-on-surface-variant">Kelola referensi visual resmi sebagai acuan sistem saat memverifikasi laporan masyarakat.</p>
                 </div>
 
                 <a href="{{ route('official.create') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-slate-300/50 transition hover:bg-slate-800">

@@ -1,9 +1,9 @@
 @php
     $statusCards = [
-        ['label' => 'Total User', 'value' => number_format($userSummary['total']), 'icon' => 'groups'],
-        ['label' => 'Email Terverifikasi', 'value' => number_format($userSummary['verified']), 'icon' => 'verified'],
-        ['label' => 'Belum Verifikasi', 'value' => number_format($userSummary['unverified']), 'icon' => 'mark_email_unread'],
-        ['label' => 'Pernah Submit', 'value' => number_format($userSummary['with_submissions']), 'icon' => 'fact_check'],
+        ['label' => 'Total User', 'value' => number_format($userSummary['total']), 'icon' => 'groups', 'tone' => 'border-blue-100 bg-blue-50/70 text-blue-700 shadow-blue-100/60'],
+        ['label' => 'Email Terverifikasi', 'value' => number_format($userSummary['verified']), 'icon' => 'verified', 'tone' => 'border-emerald-100 bg-emerald-50/70 text-emerald-700 shadow-emerald-100/60'],
+        ['label' => 'Belum Verifikasi', 'value' => number_format($userSummary['unverified']), 'icon' => 'mark_email_unread', 'tone' => 'border-amber-100 bg-amber-50/70 text-amber-700 shadow-amber-100/60'],
+        ['label' => 'Pernah Submit', 'value' => number_format($userSummary['with_submissions']), 'icon' => 'fact_check', 'tone' => 'border-violet-100 bg-violet-50/70 text-violet-700 shadow-violet-100/60'],
     ];
 @endphp
 
@@ -31,15 +31,13 @@
             @foreach ($statusCards as $card)
                 <div class="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-[0px_20px_40px_rgba(25,28,30,0.06)] transition hover:-translate-y-1 hover:shadow-[0px_24px_44px_rgba(37,99,235,0.10)]">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">{{ $card['label'] }}</p>
-                        <span class="material-symbols-outlined rounded-full bg-blue-50 p-2 text-blue-700">{{ $card['icon'] }}</span>
+                        <p class="text-sm font-bold text-slate-600">{{ $card['label'] }}</p>
+                        <span class="material-symbols-outlined rounded-full border p-2 shadow-sm {{ $card['tone'] }}">{{ $card['icon'] }}</span>
                     </div>
                     <p class="mt-4 text-2xl font-black tracking-tight text-slate-950">{{ $card['value'] }}</p>
                 </div>
             @endforeach
         </section>
-
-        <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
             <form method="GET" action="{{ route('admin.users.index') }}" class="flex flex-col gap-3 xl:flex-row xl:items-center">
                 <div class="relative flex-1">
                     <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
@@ -72,7 +70,6 @@
                     @endif
                 </div>
             </form>
-        </section>
 
         <section class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
             <div class="overflow-x-auto">

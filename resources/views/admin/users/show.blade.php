@@ -1,8 +1,8 @@
 @php
     $summaryCards = [
-        ['label' => 'Total Submission', 'value' => number_format($managedUser->submissions_count), 'icon' => 'inbox'],
-        ['label' => 'Terverifikasi', 'value' => number_format($managedUser->verified_submissions_count), 'icon' => 'verified'],
-        ['label' => 'Menunggu Review', 'value' => number_format($managedUser->pending_submissions_count), 'icon' => 'pending_actions'],
+        ['label' => 'Total Submission', 'value' => number_format($managedUser->submissions_count), 'icon' => 'inbox', 'tone' => 'border-blue-100 bg-blue-50/70 text-blue-700 shadow-blue-100/60'],
+        ['label' => 'Terverifikasi', 'value' => number_format($managedUser->verified_submissions_count), 'icon' => 'verified', 'tone' => 'border-emerald-100 bg-emerald-50/70 text-emerald-700 shadow-emerald-100/60'],
+        ['label' => 'Menunggu Review', 'value' => number_format($managedUser->pending_submissions_count), 'icon' => 'pending_actions', 'tone' => 'border-amber-100 bg-amber-50/70 text-amber-700 shadow-amber-100/60'],
     ];
 @endphp
 
@@ -43,8 +43,8 @@
             @foreach ($summaryCards as $card)
                 <div class="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-[0px_20px_40px_rgba(25,28,30,0.06)] transition hover:-translate-y-1 hover:shadow-[0px_24px_44px_rgba(37,99,235,0.10)]">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">{{ $card['label'] }}</p>
-                        <span class="material-symbols-outlined rounded-full bg-blue-50 p-2 text-blue-700">{{ $card['icon'] }}</span>
+                        <p class="text-sm font-bold text-slate-600">{{ $card['label'] }}</p>
+                        <span class="material-symbols-outlined rounded-full border p-2 shadow-sm {{ $card['tone'] }}">{{ $card['icon'] }}</span>
                     </div>
                     <p class="mt-4 text-2xl font-black tracking-tight text-slate-950">{{ $card['value'] }}</p>
                 </div>
@@ -54,14 +54,16 @@
         <div class="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
             <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-50 text-lg font-black text-blue-700">
-                            {{ strtoupper(substr($managedUser->name ?: $managedUser->email, 0, 1)) }}
-                        </div>
-                        <div>
-                            <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Profil User</p>
-                            <h2 class="mt-1 text-xl font-black tracking-tight text-slate-950">{{ $managedUser->name }}</h2>
-                            <p class="mt-1 text-sm text-slate-500">{{ $managedUser->email }}</p>
+                    <div>
+                        <p class="mb-3 text-sm font-bold text-slate-600">Profil User</p>
+                        <div class="flex items-end gap-4">
+                            <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-50 text-lg font-black text-blue-700">
+                                {{ strtoupper(substr($managedUser->name ?: $managedUser->email, 0, 1)) }}
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-black tracking-tight text-slate-950">{{ $managedUser->name }}</h2>
+                                <p class="mt-1 text-sm text-slate-500">{{ $managedUser->email }}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 sm:justify-end">
@@ -132,7 +134,7 @@
 
             <section class="space-y-6">
                 <div class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
-                    <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Info Akun</p>
+                    <p class="text-sm font-bold text-slate-600">Info Akun</p>
                     <div class="mt-5 space-y-3 text-sm">
                         <div class="flex items-start gap-3 rounded-[1.25rem] bg-slate-50/70 p-4">
                             <span class="material-symbols-outlined text-[20px] text-blue-700">event</span>
@@ -159,7 +161,7 @@
                 </div>
 
                 <div class="rounded-[2rem] border border-rose-200 bg-white p-6 shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
-                    <p class="text-xs font-black uppercase tracking-[0.18em] text-rose-500">Zona Hati-Hati</p>
+                    <p class="text-sm font-bold text-rose-500">Zona Hati-Hati</p>
                     <h3 class="mt-2 text-xl font-black tracking-tight text-slate-950">Hapus akun user</h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-600">
                         Penghapusan akun akan melepaskan relasi submission milik user ini dari akunnya, menghapus notifikasi user, dan menutup sesi login yang masih aktif.
@@ -177,63 +179,66 @@
             </section>
         </div>
 
-        <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
-            <div class="flex items-center justify-between gap-4">
+        <section class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
+            <div class="flex items-center justify-between gap-4 border-b border-slate-100 px-6 py-4">
                 <div>
-                    <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Aktivitas Terkini</p>
-                    <h2 class="mt-1 text-xl font-black tracking-tight text-slate-950">Submission terbaru dari user</h2>
+                    <h2 class="mt-1 font-black tracking-tight text-slate-950">Aktivitas terkini</h2>
                 </div>
             </div>
 
-            <div class="mt-6 overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-100">
-                    <thead class="bg-slate-50/80">
+            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-100/70 transition-all duration-300 hover:shadow-indigo-50">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-100">
+                    <thead class="bg-white">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-black uppercase tracking-[0.18em] text-slate-500">Gambar</th>
-                            <th class="px-4 py-3 text-left text-xs font-black uppercase tracking-[0.18em] text-slate-500">Similarity</th>
-                            <th class="px-4 py-3 text-left text-xs font-black uppercase tracking-[0.18em] text-slate-500">Status Final</th>
-                            <th class="px-4 py-3 text-left text-xs font-black uppercase tracking-[0.18em] text-slate-500">Tanggal</th>
-                            <th class="px-4 py-3 text-left text-xs font-black uppercase tracking-[0.18em] text-slate-500">Aksi</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold tracking-widest text-slate-500">Gambar</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold tracking-widest text-slate-500">Similarity</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold tracking-widest text-slate-500">Status Final</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold tracking-widest text-slate-500">Tanggal</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold tracking-widest text-slate-500">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100 bg-white text-center">
                         @forelse ($recentSubmissions as $submission)
-                            <tr class="hover:bg-slate-50/80">
-                                <td class="px-4 py-4">
+                            <tr class="transition duration-150 hover:bg-slate-50">
+                                <td class="px-6 py-4">
                                     @if ($submission->image_url)
-                                        <img src="{{ $submission->image_url }}" alt="Submission" class="h-14 w-20 rounded-xl border border-slate-200 object-cover shadow-sm">
+                                        <img src="{{ $submission->image_url }}" alt="Submission" class="mx-auto h-16 w-24 rounded-xl border border-slate-200 object-cover shadow-sm">
                                     @else
-                                        <div class="flex h-14 w-20 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-400 shadow-sm">
-                                            <span class="material-symbols-outlined text-[20px]">image_not_supported</span>
+                                        <div class="mx-auto flex h-16 w-24 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-400 shadow-sm">
+                                            <span class="material-symbols-outlined text-[22px]">image_not_supported</span>
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-4 py-4 text-sm font-bold text-slate-900">
+                                <td class="px-6 py-4 text-sm font-semibold text-slate-800">
                                     {{ $submission->similarity_score !== null ? $submission->similarity_score.'%' : '-' }}
                                 </td>
-                                <td class="px-4 py-4 text-sm text-slate-700">
-                                    <span class="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-black text-blue-700">
+                                <td class="px-6 py-4 text-sm text-slate-700">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 shadow-sm shadow-blue-100/50">
+                                        <span class="material-symbols-outlined text-[15px]">schedule</span>
                                         {{ $submission->finalStatusLabel() }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-4 text-sm text-slate-600">
+                                <td class="px-6 py-4 text-sm text-slate-600">
                                     {{ $submission->created_at?->format('d M Y, H:i') ?: '-' }}
                                 </td>
-                                <td class="px-4 py-4 text-sm">
-                                    <a href="{{ route('admin.submissions.show', $submission) }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-700 transition hover:bg-slate-50" aria-label="Buka submission" title="Buka submission">
+                                <td class="px-6 py-4 text-sm">
+                                    <a href="{{ route('admin.submissions.show', $submission) }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700 active:scale-[0.98]" aria-label="Buka submission" title="Buka submission">
                                         <span class="material-symbols-outlined text-[18px]">open_in_new</span>
                                     </a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-10 text-center text-sm text-slate-500">
-                                    User ini belum memiliki submission.
+                                <td colspan="5" class="px-6 py-12 text-center">
+                                    <p class="text-lg font-bold tracking-tight text-slate-900">Aktivitas masih kosong</p>
+                                    <p class="mx-auto mt-1.5 max-w-sm text-sm text-slate-500">User ini belum memiliki submission.</p>
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+                </div>
             </div>
         </section>
     </div>

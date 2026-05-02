@@ -11,7 +11,8 @@
         <section class="space-y-4">
             <div class="flex justify-between items-end">
                 <div>
-                    <h2 class="text-3xl font-bold tracking-tight text-on-surface">Submission Masyarakat</h2>
+                    <h1 class="text-3xl font-bold tracking-tight text-on-surface">Submission Masyarakat</h1>
+                    <p class="mt-2 text-lg text-on-surface-variant">Tinjau laporan masyarakat, bandingkan dengan referensi resmi, dan tetapkan status validasi akhir.</p>
                 </div>
                 <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
                     <span class="material-symbols-outlined text-[18px] text-blue-600">monitoring</span>
@@ -69,7 +70,7 @@
         <div class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0px_20px_40px_rgba(25,28,30,0.06)]">
             <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
                 <div>
-                    <h2 class="mt-1 text-xl font-black tracking-tight text-slate-950">Daftar review aktif</h2>
+                    <h2 class="mt-1 font-black tracking-tight text-slate-950">Daftar review aktif</h2>
                 </div>
             </div>
 
