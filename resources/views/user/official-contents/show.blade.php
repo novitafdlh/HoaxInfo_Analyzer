@@ -14,7 +14,7 @@
                     <div class="flex justify-between items-end">
                         <div>
                             <h1 class="text-3xl font-bold tracking-tight text-on-surface">{{ $officialContent->title }}</h1>
-                            <p class="text-lg text-on-surface-variant mt-2">Detail konten resmi referensi yang digunakan sistem sebagai acuan analisis.</p>
+                            <p class="text-x text-on-surface-variant mt-2">Detail konten resmi referensi yang digunakan sistem sebagai acuan analisis.</p>
                         </div>
                     </div>
 

@@ -15,7 +15,7 @@
                     <div class="flex justify-between items-end">
                         <div>
                             <h1 class="text-3xl font-bold tracking-tight text-on-surface">Konten Resmi</h1>
-                            <p class="text-lg text-on-surface-variant mt-2">Referensi yang dipakai sistem untuk analisis similarity dan pencocokan konten.</p>
+                            <p class="text-x text-on-surface-variant mt-2">Referensi yang dipakai sistem untuk analisis similarity dan pencocokan konten.</p>
                         </div>
                     </div>
 
@@ -53,7 +53,7 @@
                                         <h3 class="text-sm font-bold text-slate-900">Gunakan Kategori</h3>
                                         <p class="mt-1 text-xs leading-relaxed text-slate-600">Filter kategori membantu mempersempit hasil ketika jumlah referensi resmi sudah cukup banyak.</p>
                                     </div>
-                                    <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
+                                    <div class="rounded-2xl border border-rose-200 bg-white-50/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
                                         <h3 class="text-sm font-bold text-slate-900">Buka Detail</h3>
                                         <p class="mt-1 text-xs leading-relaxed text-slate-600">Masuk ke halaman detail untuk melihat metadata, sumber, dan konteks referensi yang dipakai sistem.</p>

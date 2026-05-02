@@ -15,7 +15,7 @@
                     <div class="flex justify-between items-end">
                         <div>
                             <h1 class="text-3xl font-bold tracking-tight text-on-surface">Selamat Datang, {{ $displayName }}</h1>
-                            <p class="text-lg text-on-surface-variant mt-2">Sistem validasi konten resmi pemerintah.</p>
+                            <p class="text-x text-on-surface-variant mt-2">Sistem validasi konten resmi pemerintah.</p>
                         </div>
                     </div>
 
@@ -53,7 +53,7 @@
                                         <h3 class="text-sm font-bold text-slate-900">Similarity 60-84%</h3>
                                         <p class="mt-1 text-xs leading-relaxed text-slate-600">Kemiripan tinggi, tetapi masih butuh pengecekan manual oleh validator.</p>
                                     </div>
-                                    <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
+                                    <div class="rounded-2xl border border-rose-200 bg-white-50/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
                                         <h3 class="text-sm font-bold text-slate-900">Low Similarity</h3>
                                         <p class="mt-1 text-xs leading-relaxed text-slate-600">Di bawah 60% biasanya menandakan konten baru atau belum terhubung ke referensi resmi.</p>

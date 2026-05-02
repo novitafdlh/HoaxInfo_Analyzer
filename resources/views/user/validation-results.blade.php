@@ -14,7 +14,7 @@
                     <div class="flex justify-between items-end">
                         <div>
                             <h1 class="text-3xl font-bold tracking-tight text-on-surface">Hasil Analisis Saya</h1>
-                            <p class="text-lg text-on-surface-variant mt-2">Riwayat similarity, confidence, dan review admin untuk setiap konten yang Anda kirimkan.</p>
+                            <p class="text-x text-on-surface-variant mt-2">Riwayat similarity, confidence, dan review admin untuk setiap konten yang Anda kirimkan.</p>
                         </div>
                     </div>
 
@@ -52,7 +52,7 @@
                                         <h3 class="text-sm font-bold text-slate-900">Baca Confidence</h3>
                                         <p class="mt-1 text-xs leading-relaxed text-slate-600">Confidence menunjukkan tingkat keyakinan sistem sebelum hasil masuk ke proses review lebih lanjut.</p>
                                     </div>
-                                    <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
+                                    <div class="rounded-2xl border border-rose-200 bg-white-50/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
                                         <h3 class="text-sm font-bold text-slate-900">Pantau Status Final</h3>
                                         <p class="mt-1 text-xs leading-relaxed text-slate-600">Status final admin menjadi penentu apakah hasil analisis dianggap valid, perlu tindak lanjut, atau tidak valid.</p>

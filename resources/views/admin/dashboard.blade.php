@@ -62,7 +62,7 @@
             <div class="flex justify-between items-end">
                 <div>
                     <h1 class="text-3xl font-bold tracking-tight text-on-surface">Selamat Datang, {{ $displayName }}</h1>
-                    <p class="mt-2 text-lg text-on-surface-variant">Pusat monitoring integritas informasi publik dan keputusan validasi akhir.</p>
+                    <p class="mt-2 text-x text-on-surface-variant">Pusat monitoring integritas informasi publik dan keputusan validasi akhir.</p>
                 </div>
             </div>
 
