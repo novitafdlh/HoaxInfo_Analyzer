@@ -44,17 +44,17 @@
 <div class="flex h-full flex-col gap-4 py-8">
     <div class="mb-4">
         <a
-            class="{{ request()->routeIs('profile.edit') ? 'bg-[rgba(255,255,255,0.18)] text-white ring-1 ring-white/25 shadow-lg shadow-blue-950/10' : 'text-white/85 hover:bg-[rgba(255,255,255,0.12)] hover:text-white' }} mx-2 flex items-center gap-4 rounded-full px-6 py-3 transition-all hover:translate-x-1"
+            class="{{ request()->routeIs('profile.edit') ? 'bg-[rgba(255,255,255,0.18)] text-white ring-1 ring-white/25 shadow-lg shadow-blue-950/10' : 'text-white/85 hover:bg-[rgba(255,255,255,0.12)] hover:text-white' }} mx-2 flex min-w-0 max-w-[calc(100%-1rem)] items-center gap-4 rounded-[1.75rem] px-6 py-3 transition-all hover:translate-x-1"
             href="{{ $resolvedMode === 'guest' ? route('login') : route('profile.edit') }}"
         >
             <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[rgb(255,255,255)] text-sm font-black tracking-tight text-blue-700 shadow-md shadow-blue-950/20">
                 {{ $profileInitials }}
             </div>
             <div class="min-w-0 flex-1">
-                <p class="truncate text-sm font-bold text-white">{{ $displayName }}</p>
-                <p class="text-xs font-medium text-blue-100">{{ $displayRole }}</p>
+                <p class="whitespace-normal break-words text-sm font-bold leading-snug text-white">{{ $displayName }}</p>
+                <p class="mt-0.5 whitespace-normal break-words text-xs font-medium leading-snug text-blue-100">{{ $displayRole }}</p>
             </div>
-            <span class="material-symbols-outlined text-[18px] text-blue-100">expand_more</span>
+            <span class="material-symbols-outlined shrink-0 text-[18px] text-blue-100">expand_more</span>
         </a>
     </div>
 

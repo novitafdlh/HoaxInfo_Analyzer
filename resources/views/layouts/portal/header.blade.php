@@ -2,7 +2,7 @@
     $resolvedMode = $mode ?? (auth()->user()?->role === 'admin' ? 'admin' : 'user');
 @endphp
 
-<header class="sticky top-0 z-50 flex w-full max-w-full items-center justify-between gap-4 bg-slate-50/50 px-8 py-4 backdrop-blur-md">
+<header class="sticky top-4 z-50 mx-4 mt-4 flex max-w-full items-center justify-between gap-4 rounded-[2rem] bg-slate-50/50 px-8 py-4 backdrop-blur-md">
     <div class="flex items-center gap-4">
         <img src="{{ asset('images/sulteng.png') }}" alt="Logo Sulawesi Tengah" class="h-10 w-10 shrink-0 object-contain">
         <span class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-lg font-bold text-transparent">
@@ -44,7 +44,7 @@
 
                 <div
                     id="notification-panel"
-                    class="absolute right-0 top-14 hidden w-[22rem] overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-[0px_24px_48px_rgba(15,23,42,0.14)]"
+                    class="absolute right-0 top-14 hidden w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-[0px_24px_48px_rgba(15,23,42,0.14)]"
                 >
                     <div class="border-b border-slate-100 px-5 py-4">
                         <div class="flex items-center justify-between gap-3">
