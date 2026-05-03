@@ -1,15 +1,16 @@
 @php
     $currentUser = auth()->user();
-    $displayName = $currentUser?->name ?: 'Pengguna';
+    $resolvedMode = $currentUser?->role === 'user' ? 'user' : 'guest';
+    $displayName = $currentUser?->name ?: 'Tamu';
     $nameParts = preg_split('/\s+/', trim($displayName)) ?: [];
     $profileInitials = collect($nameParts)
         ->filter()
         ->take(2)
         ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
         ->implode('');
-    $profileInitials = $profileInitials !== '' ? $profileInitials : 'P';
+    $profileInitials = $profileInitials !== '' ? $profileInitials : 'TM';
 @endphp
-<x-portal-shell title="Detail Konten Resmi" mode="user" container-class="max-w-6xl">
+<x-portal-shell title="Detail Konten Resmi" :mode="$resolvedMode" container-class="max-w-6xl">
                 <section class="space-y-4">
                     <div class="flex justify-between items-end">
                         <div>
@@ -49,8 +50,8 @@
                                     </div>
                                     <div class="rounded-2xl border border-slate-200 bg-white/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-amber-700">02</div>
-                                        <h3 class="text-sm font-bold text-slate-900">Cek Teks OCR</h3>
-                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Teks OCR membantu melihat isi referensi saat sistem melakukan pencocokan terhadap hasil unggahan.</p>
+                                        <h3 class="text-sm font-bold text-slate-900">Lihat Visual Referensi</h3>
+                                        <p class="mt-1 text-xs leading-relaxed text-slate-600">Gunakan gambar referensi untuk membandingkan konteks visual dan sumber informasi yang tersimpan.</p>
                                     </div>
                                     <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-3">
                                         <div class="mb-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-extrabold tracking-[0.18em] text-rose-700">03</div>
@@ -89,15 +90,8 @@
                             </div>
                         </div>
 
-                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                <p class="text-xs font-bold uppercase tracking-widest text-slate-500">OCR / Teks Referensi</p>
-                                <p class="mt-3 text-sm leading-relaxed text-slate-700">
-                                    {{ $officialContent->extracted_text ?: 'Teks OCR belum tersedia untuk konten ini.' }}
-                                </p>
-                            </div>
-
                             <div class="flex flex-wrap gap-3">
-                                <a href="{{ route('user.official.index') }}" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition">
+                                <a href="{{ $resolvedMode === 'user' ? route('user.official.index') : route('dashboard') }}" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition">
                                     Kembali ke Daftar
                                 </a>
                                 @if ($officialContent->source_url)

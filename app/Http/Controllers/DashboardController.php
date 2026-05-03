@@ -14,6 +14,7 @@ use App\Services\RemoteImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -76,14 +77,20 @@ class DashboardController extends Controller
         if ($request->hasFile('image_file')) {
             $path = $request->file('image_file')->store('validation-submissions', 'public');
         } else {
-            $path = $remoteImageService->fetchAndStore(
-                $request->image_url,
-                'validation-submissions',
-                100 * 1024 * 1024
-            );
+            try {
+                $path = $remoteImageService->fetchAndStore(
+                    $request->image_url,
+                    'validation-submissions',
+                    100 * 1024 * 1024
+                );
+            } catch (\RuntimeException $exception) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['image_url' => $exception->getMessage()]);
+            }
         }
 
-        $absolutePath = storage_path('app/public/'.$path);
+        $absolutePath = Storage::disk('public')->path($path);
 
         // SCAN
         $fileSecurityService->scanOrFail($absolutePath);
@@ -136,10 +143,26 @@ class DashboardController extends Controller
 
         $officialUrl = null;
         $officialUrlLabel = null;
+        $officialUrlHeading = null;
+        $officialActionType = null;
+        $officialActionMessage = null;
 
         if ($matchedOfficialContent !== null) {
-            $officialUrl = $matchedOfficialContent->source_url ?: route('user.official.show', $matchedOfficialContent);
-            $officialUrlLabel = $matchedOfficialContent->source_url ? 'Buka sumber resmi' : 'Buka detail konten resmi';
+            if (!$isAuthenticated && $matchedOfficialContent->source_type === 'url' && filled($matchedOfficialContent->source_url)) {
+                $officialUrl = $matchedOfficialContent->source_url;
+                $officialUrlLabel = 'Buka URL asli';
+                $officialUrlHeading = 'URL asli';
+                $officialActionType = 'external_url';
+                $officialActionMessage = 'Konten ini mirip dengan referensi yang berasal dari URL. Silakan cek langsung sumber aslinya.';
+            } elseif (!$isAuthenticated) {
+                $officialActionType = 'auth_required';
+                $officialActionMessage = 'Konten ini mirip dengan konten resmi web Hoax Analyzer. Silakan daftar atau login untuk melihat detail referensi resminya.';
+            } else {
+                $officialUrl = route('official.public.show', $matchedOfficialContent);
+                $officialUrlLabel = 'Buka detail konten resmi';
+                $officialUrlHeading = 'Halaman konten resmi';
+                $officialActionType = 'official_detail';
+            }
         }
 
         return back()
@@ -154,6 +177,9 @@ class DashboardController extends Controller
                 'official_title' => $matchedOfficialContent?->title,
                 'official_url' => $officialUrl,
                 'official_url_label' => $officialUrlLabel,
+                'official_url_heading' => $officialUrlHeading,
+                'official_action_type' => $officialActionType,
+                'official_action_message' => $officialActionMessage,
             ]);
     }
 

@@ -20,6 +20,9 @@ Route::post('/dashboard/upload', [DashboardController::class, 'store'])->name('d
 Route::get('/media/public/{path}', [PublicMediaController::class, 'show'])
     ->where('path', '.*')
     ->name('media.public');
+Route::get('/official-contents/{officialContent}', [UserOfficialContentController::class, 'show'])
+    ->middleware('auth')
+    ->name('official.public.show');
 
 // ADMIN
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -46,7 +49,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::view('/user/dashboard', 'user.dashboard')->name('user.dashboard');
     Route::get('/user/validation-results', [UserValidationController::class, 'index'])->name('user.validation-results');
     Route::get('/user/official-contents', [UserOfficialContentController::class, 'index'])->name('user.official.index');
-    Route::get('/user/official-contents/{officialContent}', [UserOfficialContentController::class, 'show'])->name('user.official.show');
 });
 
 // PROFILE (semua user login)

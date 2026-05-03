@@ -31,7 +31,10 @@ class AdminNewSubmissionNotification extends Notification
             'meta' => $submission->matchedOfficialContent?->title
                 ? 'Referensi terdekat: '.$submission->matchedOfficialContent->title
                 : 'Belum ada referensi resmi terdekat.',
-            'url' => route('notifications.open', ['notification' => '__ID__', 'redirect' => route('admin.submissions.show', $submission)]),
+            'url' => route('notifications.open', [
+                'notification' => '__ID__',
+                'redirect' => route('admin.submissions.show', $submission, false),
+            ], false),
             'tone' => 'amber',
             'icon' => 'notifications_active',
             'submission_id' => $submission->id,

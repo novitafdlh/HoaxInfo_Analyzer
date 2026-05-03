@@ -14,6 +14,9 @@
 
         <title>Sulteng Hoax Analyzer - {{ $title }}</title>
 
+        <link rel="icon" type="image/png" sizes="256x256" href="{{ asset('favicon.png') }}">
+        <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.png') }}">
+
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -242,6 +245,8 @@
             .portal-sidebar {
                 background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 52%, #1e3a8a 100%) !important;
                 color: #ffffff;
+                border-radius: 2rem;
+                overflow: hidden;
                 box-shadow: 0px 24px 48px rgba(59, 130, 246, 0.18);
             }
 
@@ -249,7 +254,7 @@
     </head>
     <body class="overflow-x-hidden bg-surface font-body text-on-surface antialiased selection:bg-primary-fixed-dim">
         <div class="flex min-h-screen">
-            <aside class="portal-sidebar sticky left-0 top-0 z-40 hidden h-screen w-72 shrink-0 md:flex">
+            <aside class="portal-sidebar sticky left-0 top-4 z-40 m-4 hidden h-[calc(100vh-2rem)] w-72 shrink-0 md:flex">
                 @include('layouts.portal.sidebar', ['mode' => $mode])
             </aside>
 

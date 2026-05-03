@@ -13,16 +13,23 @@ class OcrService
         }
 
         $tesseractPath = $this->tesseractPath();
-        $safeLanguage = $this->ocrLanguage();
+        $safeLanguage = $this->ocrLanguage($tesseractPath);
         $psmModes = $this->getPsmModes();
         $oemModes = $this->getOemModes();
         $preprocessProfiles = $this->getPreprocessProfiles();
         $bestText = null;
         $bestScore = -INF;
+        $candidateTexts = [];
+        $startedAt = microtime(true);
+        $maxTotalSeconds = $this->maxTotalSeconds();
 
         foreach ($preprocessProfiles as $profileOptions) {
             foreach ($oemModes as $oemMode) {
                 foreach ($psmModes as $psmMode) {
+                    if ((microtime(true) - $startedAt) >= $maxTotalSeconds) {
+                        return $this->mergeCandidateTexts($bestText, $candidateTexts);
+                    }
+
                     $candidateText = $this->runTesseract(
                         $this->buildCommand($tesseractPath, $absoluteImagePath, $safeLanguage, $oemMode, $psmMode, $profileOptions)
                     );
@@ -37,18 +44,24 @@ class OcrService
                         continue;
                     }
 
-                    $tsvOutput = $this->runTesseract(
-                        $this->buildCommand(
-                            $tesseractPath,
-                            $absoluteImagePath,
-                            $safeLanguage,
-                            $oemMode,
-                            $psmMode,
-                            $profileOptions,
-                            ['tsv']
-                        )
-                    );
-                    $confidence = $this->parseTsvConfidence($tsvOutput);
+                    $candidateTexts[] = $cleanedText;
+                    $confidence = 0.0;
+
+                    if ((microtime(true) - $startedAt) < $maxTotalSeconds) {
+                        $tsvOutput = $this->runTesseract(
+                            $this->buildCommand(
+                                $tesseractPath,
+                                $absoluteImagePath,
+                                $safeLanguage,
+                                $oemMode,
+                                $psmMode,
+                                $profileOptions,
+                                ['tsv']
+                            )
+                        );
+                        $confidence = $this->parseTsvConfidence($tsvOutput);
+                    }
+
                     $candidateScore = $this->scoreTextQuality($cleanedText, $confidence);
 
                     if ($candidateScore > $bestScore) {
@@ -59,7 +72,7 @@ class OcrService
             }
         }
 
-        return $bestText;
+        return $this->mergeCandidateTexts($bestText, $candidateTexts);
     }
 
     public function normalizedText(?string $text): string
@@ -124,6 +137,53 @@ class OcrService
         return round(($dotProduct / ($firstMagnitude * $secondMagnitude)) * 100, 2);
     }
 
+    public function topicSimilarityPercent(?string $firstText, ?string $secondText): float
+    {
+        $firstTokens = $this->importantTokens($firstText);
+        $secondTokens = $this->importantTokens($secondText);
+
+        if ($firstTokens === [] || $secondTokens === []) {
+            return 0.0;
+        }
+
+        $firstUnique = array_values(array_unique($firstTokens));
+        $secondUnique = array_values(array_unique($secondTokens));
+        $firstMatches = $this->countFuzzyTokenMatches($firstUnique, $secondUnique);
+        $secondMatches = $this->countFuzzyTokenMatches($secondUnique, $firstUnique);
+
+        $recall = $firstMatches / max(1, count($firstUnique));
+        $precision = $secondMatches / max(1, count($secondUnique));
+        $balancedScore = ($recall + $precision) / 2;
+
+        return round($balancedScore * 100, 2);
+    }
+
+    public function importantTokenCoveragePercent(?string $firstText, ?string $secondText): float
+    {
+        $firstTokens = array_values(array_unique($this->importantTokens($firstText)));
+        $secondTokens = array_values(array_unique($this->importantTokens($secondText)));
+        $smallerTokenCount = min(count($firstTokens), count($secondTokens));
+
+        if ($smallerTokenCount < 8) {
+            return 0.0;
+        }
+
+        $firstMatches = $this->countFuzzyTokenMatches($firstTokens, $secondTokens);
+        $secondMatches = $this->countFuzzyTokenMatches($secondTokens, $firstTokens);
+        $bestDirectionalCoverage = max(
+            $firstMatches / max(1, count($firstTokens)),
+            $secondMatches / max(1, count($secondTokens))
+        );
+
+        $coverage = $bestDirectionalCoverage * 100;
+
+        if ($smallerTokenCount < 14) {
+            $coverage *= 0.85;
+        }
+
+        return round(min(100.0, $coverage), 2);
+    }
+
     private function getPsmModes(): array
     {
         $rawModes = (string) env('OCR_PSM_LIST', '1,3,4,6,11,12');
@@ -163,22 +223,6 @@ class OcrService
                 'thresholding_method=2',
                 'thresholding_window_size=0.33',
                 'thresholding_kfactor=0.34',
-            ],
-            [
-                'tessedit_do_invert=1',
-                'thresholding_method=1',
-                'thresholding_window_size=0.25',
-                'thresholding_kfactor=0.40',
-            ],
-            [
-                'tessedit_do_invert=0',
-                'thresholding_method=0',
-            ],
-            [
-                'tessedit_do_invert=1',
-                'thresholding_method=2',
-                'thresholding_window_size=0.20',
-                'thresholding_kfactor=0.28',
             ],
         ];
     }
@@ -234,6 +278,128 @@ class OcrService
         }
 
         return $vector;
+    }
+
+    private function importantTokens(?string $text): array
+    {
+        $normalized = $this->normalizeTopicText($text);
+
+        if ($normalized === '') {
+            return [];
+        }
+
+        $stopWords = [
+            'yang' => true,
+            'dan' => true,
+            'atau' => true,
+            'dari' => true,
+            'untuk' => true,
+            'dengan' => true,
+            'dalam' => true,
+            'pada' => true,
+            'oleh' => true,
+            'sebagai' => true,
+            'sudah' => true,
+            'hanya' => true,
+            'akan' => true,
+            'tidak' => true,
+            'bukan' => true,
+            'ada' => true,
+            'ini' => true,
+            'itu' => true,
+            'para' => true,
+            'semua' => true,
+            'seluruh' => true,
+            'mulai' => true,
+            'hingga' => true,
+            'www' => true,
+            'com' => true,
+            'readnews' => true,
+            'news' => true,
+            'aktual' => true,
+            'enak' => true,
+            'dibaca' => true,
+        ];
+
+        $tokens = preg_split('/\s+/u', $normalized, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $filtered = [];
+
+        foreach ($tokens as $token) {
+            $length = mb_strlen($token, 'UTF-8');
+
+            if ($length < 4 || isset($stopWords[$token]) || ctype_digit($token)) {
+                continue;
+            }
+
+            if (!preg_match('/[aeiou]/', $token)) {
+                continue;
+            }
+
+            $filtered[] = $token;
+        }
+
+        return $filtered;
+    }
+
+    private function normalizeTopicText(?string $text): string
+    {
+        $normalized = $this->normalizedText($text);
+
+        $phrases = [
+            '/\bparigi\s+moutong\b/u' => 'parimo',
+            '/\bparigi\b/u' => 'parimo',
+            '/\bmoutong\b/u' => 'parimo',
+            '/\bpemda\b/u' => 'pemerintah',
+            '/\bpemkab\b/u' => 'pemerintah',
+            '/\bkorupsi\b/u' => 'antikorupsi',
+        ];
+
+        foreach ($phrases as $pattern => $replacement) {
+            $normalized = preg_replace($pattern, $replacement, $normalized) ?? $normalized;
+        }
+
+        return $normalized;
+    }
+
+    private function countFuzzyTokenMatches(array $sourceTokens, array $targetTokens): int
+    {
+        $matches = 0;
+
+        foreach ($sourceTokens as $sourceToken) {
+            foreach ($targetTokens as $targetToken) {
+                if ($this->tokensAreSimilar($sourceToken, $targetToken)) {
+                    $matches++;
+                    break;
+                }
+            }
+        }
+
+        return $matches;
+    }
+
+    private function tokensAreSimilar(string $firstToken, string $secondToken): bool
+    {
+        if ($firstToken === $secondToken) {
+            return true;
+        }
+
+        $firstLength = mb_strlen($firstToken, 'UTF-8');
+        $secondLength = mb_strlen($secondToken, 'UTF-8');
+
+        if (min($firstLength, $secondLength) >= 4 && (
+            str_contains($firstToken, $secondToken) || str_contains($secondToken, $firstToken)
+        )) {
+            return true;
+        }
+
+        if (min($firstLength, $secondLength) < 5) {
+            return false;
+        }
+
+        $distance = levenshtein($firstToken, $secondToken);
+        $maxLength = max($firstLength, $secondLength);
+
+        return (1 - ($distance / $maxLength)) >= 0.72;
     }
 
     private function scoreTextQuality(string $text, float $confidence = 0.0): float
@@ -297,7 +463,7 @@ class OcrService
 
     private function runTesseract(array $command): ?string
     {
-        $process = new Process($command);
+        $process = new Process($command, sys_get_temp_dir());
         $process->setTimeout($this->timeoutSeconds());
         $process->run();
 
@@ -343,20 +509,113 @@ class OcrService
         return array_sum($confidences) / count($confidences);
     }
 
+    private function mergeCandidateTexts(?string $bestText, array $candidateTexts): ?string
+    {
+        if ($bestText === null) {
+            return null;
+        }
+
+        $lines = [];
+        $seen = [];
+
+        foreach (array_merge([$bestText], $candidateTexts) as $candidateText) {
+            foreach (preg_split('/\r\n|\r|\n/u', (string) $candidateText) ?: [] as $line) {
+                $trimmedLine = trim($line);
+
+                if ($trimmedLine === '') {
+                    continue;
+                }
+
+                $lineKey = $this->normalizeLineForComparison($trimmedLine);
+
+                if ($lineKey === '' || isset($seen[$lineKey])) {
+                    continue;
+                }
+
+                $seen[$lineKey] = true;
+                $lines[] = $trimmedLine;
+            }
+        }
+
+        return $lines === [] ? $bestText : implode("\n", $lines);
+    }
+
+    private function normalizeLineForComparison(string $line): string
+    {
+        $normalized = mb_strtolower($line, 'UTF-8');
+        $normalized = preg_replace('/[^\p{L}\p{N}]+/u', '', $normalized) ?? '';
+
+        return trim($normalized);
+    }
+
     private function tesseractPath(): string
     {
         return (string) env('TESSERACT_PATH', 'tesseract');
     }
 
-    private function ocrLanguage(): string
+    private function ocrLanguage(string $tesseractPath): string
     {
         $ocrLanguage = (string) env('OCR_LANGUAGE', 'ind+eng');
+        $requestedLanguages = array_values(array_filter(explode('+', preg_replace('/[^A-Za-z0-9+_-]/', '', $ocrLanguage) ?: 'ind+eng')));
+        $availableLanguages = $this->availableTesseractLanguages($tesseractPath);
 
-        return preg_replace('/[^A-Za-z0-9+_-]/', '', $ocrLanguage) ?: 'ind+eng';
+        if ($availableLanguages !== []) {
+            $installedRequestedLanguages = array_values(array_filter(
+                $requestedLanguages,
+                static fn (string $language): bool => in_array($language, $availableLanguages, true)
+            ));
+
+            if ($installedRequestedLanguages !== []) {
+                return implode('+', $installedRequestedLanguages);
+            }
+
+            if (in_array('eng', $availableLanguages, true)) {
+                return 'eng';
+            }
+        }
+
+        return implode('+', $requestedLanguages) ?: 'eng';
+    }
+
+    private function availableTesseractLanguages(string $tesseractPath): array
+    {
+        static $cachedLanguages = [];
+
+        if (isset($cachedLanguages[$tesseractPath])) {
+            return $cachedLanguages[$tesseractPath];
+        }
+
+        $process = new Process([$tesseractPath, '--list-langs'], sys_get_temp_dir());
+        $process->setTimeout(3);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            return $cachedLanguages[$tesseractPath] = [];
+        }
+
+        $lines = preg_split('/\r\n|\r|\n/', trim($process->getOutput())) ?: [];
+        $languages = [];
+
+        foreach ($lines as $line) {
+            $language = trim($line);
+
+            if ($language === '' || str_starts_with($language, 'List of available languages')) {
+                continue;
+            }
+
+            $languages[] = $language;
+        }
+
+        return $cachedLanguages[$tesseractPath] = $languages;
     }
 
     private function timeoutSeconds(): float
     {
-        return max(5.0, (float) env('OCR_TIMEOUT_SECONDS', 15));
+        return max(3.0, (float) env('OCR_TIMEOUT_SECONDS', 15));
+    }
+
+    private function maxTotalSeconds(): float
+    {
+        return max($this->timeoutSeconds(), (float) env('OCR_MAX_TOTAL_SECONDS', 30));
     }
 }

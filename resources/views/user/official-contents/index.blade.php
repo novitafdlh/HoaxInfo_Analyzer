@@ -140,7 +140,7 @@
                                         'source_type_label' => $content->source_type === 'url' ? 'URL resmi' : 'Unggah manual',
                                         'source_url' => $content->source_url,
                                         'created_at_label' => $content->created_at?->format('d M Y, H:i'),
-                                        'detail_url' => route('user.official.show', $content),
+                                        'detail_url' => route('official.public.show', $content),
                                     ]) }}"
                                     class="group relative h-full text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >

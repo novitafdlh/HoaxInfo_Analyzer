@@ -3,16 +3,9 @@
     $similarityScore = $submission->similarity_score !== null ? (float) $submission->similarity_score : 0.0;
     $similarityPercent = max(0, min(100, round($similarityScore, 2)));
     $confidenceLabel = $submission->confidence_label ?: 'Belum tersedia';
-    $ocrLines = collect(preg_split("/\r\n|\n|\r/", (string) $submission->extracted_text))
-        ->map(fn ($line) => trim($line))
-        ->filter()
-        ->values();
-
-    $ocrItems = [
-        ['label' => 'OCR 1', 'value' => $ocrLines->get(0, '-')],
-        ['label' => 'OCR 2', 'value' => $ocrLines->get(1, '-')],
-        ['label' => 'OCR 3', 'value' => $ocrLines->get(2, '-')],
-    ];
+    $ocrText = filled($submission->extracted_text)
+        ? trim((string) $submission->extracted_text)
+        : 'Teks OCR belum tersedia untuk submission ini.';
 
     $confidenceBadgeClass = match (strtolower($confidenceLabel)) {
         'sangat tinggi', 'sangat_tinggi' => 'bg-emerald-100 text-emerald-800',
@@ -37,6 +30,13 @@
     };
 
     $matchedOfficialContent = $submission->matchedOfficialContent;
+    $matchedOfficialUrl = null;
+    $matchedOfficialUrlLabel = null;
+
+    if ($matchedOfficialContent) {
+        $matchedOfficialUrl = $matchedOfficialContent->source_url ?: route('official.public.show', $matchedOfficialContent);
+        $matchedOfficialUrlLabel = $matchedOfficialContent->source_url ? 'Buka URL asli' : 'Buka detail konten resmi';
+    }
 @endphp
 
 <x-admin-shell title="Detail Submission Admin">
@@ -135,7 +135,7 @@
 
                 <div class="mt-6 overflow-hidden rounded-[1.5rem] border border-slate-200 bg-slate-50/70">
                     @if ($submission->image_url)
-                        <img alt="Dokumen submission {{ $submissionCode }}" class="h-[360px] w-full object-contain" src="{{ $submission->image_url }}">
+                        <img alt="Dokumen submission {{ $submissionCode }}" class="mx-auto h-auto max-h-[680px] max-w-full object-contain" src="{{ $submission->image_url }}">
                     @else
                         <div class="flex h-[360px] items-center justify-center text-slate-400">
                             <span class="material-symbols-outlined text-[48px]">image_not_supported</span>
@@ -149,13 +149,8 @@
                     <p class="text-sm font-bold text-slate-600">OCR Extraction</p>
                     <h2 class="mt-1 text-xl font-black tracking-tight text-slate-950">Teks Terdeteksi</h2>
 
-                    <div class="mt-5 space-y-3 text-sm">
-                        @foreach ($ocrItems as $item)
-                            <div class="rounded-[1.25rem] bg-slate-50/70 p-4">
-                                <p class="text-xs font-black uppercase tracking-[0.16em] text-slate-500">{{ $item['label'] }}</p>
-                                <p class="mt-2 break-words text-sm font-semibold leading-relaxed text-slate-900">{{ $item['value'] }}</p>
-                            </div>
-                        @endforeach
+                    <div class="mt-5 max-h-[32rem] overflow-y-auto whitespace-pre-line rounded-[1.25rem] bg-slate-50/70 p-4 text-sm font-semibold leading-relaxed text-slate-900">
+                        {{ $ocrText }}
                     </div>
                 </div>
 
@@ -168,6 +163,20 @@
                         <p class="text-xs font-black uppercase tracking-[0.16em] text-slate-500">Konten Resmi Terkait</p>
                         <p class="mt-2 text-sm font-bold text-slate-900">{{ $matchedOfficialContent?->title ?: 'Belum ada referensi' }}</p>
                         <p class="mt-1 text-xs text-slate-500">{{ $matchedOfficialContent?->category ?: 'Belum ada kategori referensi.' }}</p>
+                        @if ($matchedOfficialUrl)
+                            <div class="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                                <p class="text-xs font-black uppercase tracking-[0.16em] text-slate-500">URL referensi</p>
+                                <p class="mt-2 break-all text-xs font-semibold text-slate-700">{{ $matchedOfficialUrl }}</p>
+                            </div>
+                            <a
+                                href="{{ $matchedOfficialUrl }}"
+                                @if ($matchedOfficialContent->source_url) target="_blank" rel="noopener noreferrer" @endif
+                                class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700"
+                            >
+                                <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                                {{ $matchedOfficialUrlLabel }}
+                            </a>
+                        @endif
                     </div>
                 </div>
             </section>
@@ -181,59 +190,61 @@
                 </div>
 
                 <div class="flex flex-wrap gap-3">
-                    <form
-                        method="POST"
-                        action="{{ route('admin.submissions.update-status', $submission) }}"
-                        data-review-confirm
-                        data-confirm-tone="emerald"
-                        data-confirm-title="Tetapkan sebagai terverifikasi?"
-                        data-confirm-message="Keputusan ini akan menandai submission sebagai konten yang sudah terverifikasi oleh admin."
-                        data-confirm-button="Ya, Tetapkan"
-                    >
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" name="final_status" value="terverifikasi">
-                        <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-emerald-100 transition hover:bg-emerald-700 sm:w-auto">
-                            <span class="material-symbols-outlined text-[18px]">check_circle</span>
-                            Tetapkan Terverifikasi
-                        </button>
-                    </form>
+                    @if ($submission->final_status === 'menunggu_validasi')
+                        <form
+                            method="POST"
+                            action="{{ route('admin.submissions.update-status', $submission) }}"
+                            data-review-confirm
+                            data-confirm-tone="emerald"
+                            data-confirm-title="Tetapkan sebagai terverifikasi?"
+                            data-confirm-message="Keputusan ini akan menandai submission sebagai konten yang sudah terverifikasi oleh admin."
+                            data-confirm-button="Ya, Tetapkan"
+                        >
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="final_status" value="terverifikasi">
+                            <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-emerald-100 transition hover:bg-emerald-700 sm:w-auto">
+                                <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                Tetapkan Terverifikasi
+                            </button>
+                        </form>
 
-                    <form
-                        method="POST"
-                        action="{{ route('admin.submissions.update-status', $submission) }}"
-                        data-review-confirm
-                        data-confirm-tone="rose"
-                        data-confirm-title="Tandai perlu tindak lanjut?"
-                        data-confirm-message="Submission ini akan masuk status perlu tindak lanjut agar dapat diverifikasi atau diperiksa kembali."
-                        data-confirm-button="Ya, Tandai"
-                    >
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" name="final_status" value="perlu_tindak_lanjut">
-                        <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-rose-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-rose-100 transition hover:bg-rose-700 sm:w-auto">
-                            <span class="material-symbols-outlined text-[18px]">flag</span>
-                            Perlu Tindak Lanjut
-                        </button>
-                    </form>
-
-                    <form
-                        method="POST"
-                        action="{{ route('admin.submissions.update-status', $submission) }}"
-                        data-review-confirm
-                        data-confirm-tone="slate"
-                        data-confirm-title="Kembalikan ke review?"
-                        data-confirm-message="Status submission akan dikembalikan ke menunggu validasi admin agar dapat direview ulang."
-                        data-confirm-button="Ya, Kembalikan"
-                    >
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" name="final_status" value="menunggu_validasi">
-                        <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-700 px-5 py-3 text-sm font-black text-white shadow-lg shadow-slate-200 transition hover:bg-slate-800 sm:w-auto">
-                            <span class="material-symbols-outlined text-[18px]">replay</span>
-                            Kembalikan ke Review
-                        </button>
-                    </form>
+                        <form
+                            method="POST"
+                            action="{{ route('admin.submissions.update-status', $submission) }}"
+                            data-review-confirm
+                            data-confirm-tone="rose"
+                            data-confirm-title="Tandai perlu tindak lanjut?"
+                            data-confirm-message="Submission ini akan masuk status perlu tindak lanjut agar dapat diverifikasi atau diperiksa kembali."
+                            data-confirm-button="Ya, Tandai"
+                        >
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="final_status" value="perlu_tindak_lanjut">
+                            <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-rose-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-rose-100 transition hover:bg-rose-700 sm:w-auto">
+                                <span class="material-symbols-outlined text-[18px]">flag</span>
+                                Perlu Tindak Lanjut
+                            </button>
+                        </form>
+                    @else
+                        <form
+                            method="POST"
+                            action="{{ route('admin.submissions.update-status', $submission) }}"
+                            data-review-confirm
+                            data-confirm-tone="slate"
+                            data-confirm-title="Kembalikan ke review?"
+                            data-confirm-message="Status submission akan dikembalikan ke menunggu validasi admin agar dapat direview ulang."
+                            data-confirm-button="Ya, Kembalikan"
+                        >
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="final_status" value="menunggu_validasi">
+                            <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-700 px-5 py-3 text-sm font-black text-white shadow-lg shadow-slate-200 transition hover:bg-slate-800 sm:w-auto">
+                                <span class="material-symbols-outlined text-[18px]">replay</span>
+                                Kembalikan ke Review
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </section>

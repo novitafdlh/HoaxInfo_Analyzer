@@ -15,6 +15,9 @@
 
         <title>Sulteng Hoax Analyzer - {{ $title }}</title>
 
+        <link rel="icon" type="image/png" sizes="256x256" href="{{ asset('favicon.png') }}">
+        <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.png') }}">
+
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

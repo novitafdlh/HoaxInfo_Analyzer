@@ -42,16 +42,15 @@ class ContentVerificationService
 
         $bestMatch = null;
         $bestScore = 0.0;
+        $bestMethod = 'ocr_cosine_similarity';
 
         foreach ($officialContents as $officialContent) {
-            $score = $this->ocrService->cosineSimilarityPercent(
-                $extractedText,
-                $officialContent->extracted_text
-            );
+            [$score, $method] = $this->scoreOfficialContent($extractedText, $officialContent);
 
             if ($score > $bestScore) {
                 $bestScore = $score;
                 $bestMatch = $officialContent;
+                $bestMethod = $method;
             }
         }
 
@@ -59,13 +58,48 @@ class ContentVerificationService
 
         return [
             'matched_official_content_id' => $bestMatch?->id,
-            'analysis_method' => 'ocr_cosine_similarity',
+            'analysis_method' => $bestMethod,
             'similarity_score' => round($bestScore, 2),
             'similarity_label' => $similarityLabel,
             'confidence_level' => $confidenceLevel,
             'confidence_label' => $confidenceLabel,
             'system_status' => $systemStatus,
         ];
+    }
+
+    private function scoreOfficialContent(?string $extractedText, OfficialContent $officialContent): array
+    {
+        $officialReferenceText = implode("\n", array_filter([
+            $officialContent->title,
+            $officialContent->category,
+            $officialContent->extracted_text,
+        ]));
+
+        $cosineScore = $this->ocrService->cosineSimilarityPercent(
+            $extractedText,
+            $officialReferenceText
+        );
+        $topicScore = $this->ocrService->topicSimilarityPercent(
+            $extractedText,
+            $officialReferenceText
+        );
+        $coverageScore = $this->ocrService->importantTokenCoveragePercent(
+            $extractedText,
+            $officialReferenceText
+        );
+
+        $scores = [
+            'ocr_cosine_similarity' => $cosineScore,
+            'ocr_topic_similarity' => $topicScore,
+            'ocr_important_token_coverage' => $coverageScore,
+        ];
+        arsort($scores);
+
+        foreach ($scores as $method => $score) {
+            return [$score, $method];
+        }
+
+        return [$cosineScore, 'ocr_cosine_similarity'];
     }
 
     private function mapScoreToDecision(float $score): array

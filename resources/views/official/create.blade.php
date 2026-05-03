@@ -145,17 +145,36 @@
 
                         <input id="image" name="image" type="file" accept="image/*" class="hidden" onchange="updateOfficialFileName(this)" />
                         <label for="image" class="group flex min-h-80 w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-4 border-dashed border-surface-container-highest bg-surface-container-low/30 p-12 text-center transition-colors hover:bg-surface-container-low">
-                            <div class="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-md transition-transform group-hover:scale-110">
-                                <span class="material-symbols-outlined text-4xl text-surface-tint">cloud_upload</span>
+                            <div id="official-upload-placeholder" class="flex flex-col items-center justify-center gap-4">
+                                <div class="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-md transition-transform group-hover:scale-110">
+                                    <span class="material-symbols-outlined text-4xl text-surface-tint">cloud_upload</span>
+                                </div>
+                                <div>
+                                    <p class="text-xl font-bold text-slate-950">Seret &amp; Lepas Gambar</p>
+                                    <p class="text-sm text-on-surface-variant">Mendukung format JPG, PNG, atau WEBP</p>
+                                </div>
+                                <span class="mt-2 rounded-full bg-blue-600 px-8 py-3 text-sm font-bold text-white shadow-md transition hover:bg-blue-700">
+                                    Pilih Berkas
+                                </span>
                             </div>
-                            <div>
-                                <p class="text-xl font-bold text-slate-950">Seret &amp; Lepas Gambar</p>
-                                <p class="text-sm text-on-surface-variant">Mendukung format JPG, PNG, atau WEBP</p>
+
+                            <div id="official-image-preview-container" class="hidden w-full max-w-2xl">
+                                <div class="relative overflow-hidden rounded-[2rem] border border-blue-100 bg-white p-3 shadow-[0px_20px_40px_rgba(37,99,235,0.12)]">
+                                    <img id="official-image-preview" class="h-[320px] w-full rounded-[1.5rem] bg-slate-50 object-contain" alt="Preview gambar resmi yang dipilih" />
+                                    <button
+                                        aria-label="Hapus gambar yang dipilih"
+                                        class="absolute right-7 top-7 flex h-11 w-11 items-center justify-center rounded-full bg-rose-600 text-white shadow-lg transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                                        type="button"
+                                        onclick="event.preventDefault(); event.stopPropagation(); clearOfficialSelectedImage()"
+                                    >
+                                        <span class="material-symbols-outlined text-[22px]">close</span>
+                                    </button>
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <p id="file-name-display" class="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-surface-tint"></p>
+                                    <p class="mt-2 text-sm text-on-surface-variant">Klik area gambar untuk mengganti file lain, atau tekan `X` untuk membatalkan pilihan.</p>
+                                </div>
                             </div>
-                            <span class="mt-2 rounded-full bg-blue-600 px-8 py-3 text-sm font-bold text-white shadow-md transition hover:bg-blue-700">
-                                Pilih Berkas
-                            </span>
-                            <p id="file-name-display" class="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-surface-tint"></p>
                         </label>
 
                         <div class="flex flex-col gap-4">
@@ -192,6 +211,8 @@
     </section>
 
     <script>
+        let officialUploadPreviewUrl = null;
+
         function toggleOfficialGuide() {
             const content = document.getElementById('official-guide-content');
             const icon = document.getElementById('official-guide-icon');
@@ -201,8 +222,54 @@
         }
 
         function updateOfficialFileName(input) {
+            const file = input.files && input.files.length ? input.files[0] : null;
             const display = document.getElementById('file-name-display');
-            display.innerText = input.files.length ? `File dipilih: ${input.files[0].name}` : '';
+            const placeholder = document.getElementById('official-upload-placeholder');
+            const previewContainer = document.getElementById('official-image-preview-container');
+            const imagePreview = document.getElementById('official-image-preview');
+
+            if (!file) {
+                resetOfficialSelectedImageState();
+                return;
+            }
+
+            if (officialUploadPreviewUrl) {
+                URL.revokeObjectURL(officialUploadPreviewUrl);
+            }
+
+            officialUploadPreviewUrl = URL.createObjectURL(file);
+            imagePreview.src = officialUploadPreviewUrl;
+            imagePreview.alt = `Preview ${file.name}`;
+            display.innerText = `File dipilih: ${file.name}`;
+
+            placeholder.classList.add('hidden');
+            previewContainer.classList.remove('hidden');
+        }
+
+        function clearOfficialSelectedImage() {
+            const input = document.getElementById('image');
+
+            input.value = '';
+            resetOfficialSelectedImageState();
+        }
+
+        function resetOfficialSelectedImageState() {
+            const display = document.getElementById('file-name-display');
+            const placeholder = document.getElementById('official-upload-placeholder');
+            const previewContainer = document.getElementById('official-image-preview-container');
+            const imagePreview = document.getElementById('official-image-preview');
+
+            if (officialUploadPreviewUrl) {
+                URL.revokeObjectURL(officialUploadPreviewUrl);
+                officialUploadPreviewUrl = null;
+            }
+
+            imagePreview.removeAttribute('src');
+            imagePreview.alt = 'Preview gambar resmi yang dipilih';
+            display.innerText = '';
+
+            previewContainer.classList.add('hidden');
+            placeholder.classList.remove('hidden');
         }
 
         const categorySelect = document.getElementById('category');

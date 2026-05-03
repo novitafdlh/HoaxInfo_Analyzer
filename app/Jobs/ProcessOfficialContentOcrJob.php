@@ -6,6 +6,7 @@ use App\Models\OfficialContent;
 use App\Services\OcrService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Storage;
 
 class ProcessOfficialContentOcrJob implements ShouldQueue
 {
@@ -23,7 +24,7 @@ class ProcessOfficialContentOcrJob implements ShouldQueue
             return;
         }
 
-        $absolutePath = storage_path('app/public/'.$officialContent->image_path);
+        $absolutePath = Storage::disk('public')->path($officialContent->image_path);
 
         if (!is_file($absolutePath)) {
             return;
@@ -32,7 +33,9 @@ class ProcessOfficialContentOcrJob implements ShouldQueue
         $extractedText = $ocrService->extractText($absolutePath);
 
         $officialContent->update([
-            'extracted_text' => $extractedText,
+            'extracted_text' => filled($extractedText)
+                ? $extractedText
+                : 'OCR tidak menemukan teks yang dapat dibaca pada gambar ini.',
         ]);
     }
 }

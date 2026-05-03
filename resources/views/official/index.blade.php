@@ -106,6 +106,7 @@
                                 'title' => $content->title,
                                 'category' => $content->category ?: 'Umum',
                                 'image_url' => $content->image_url,
+                                'image_hash' => $content->image_hash,
                                 'source_type_label' => $content->source_type === 'url' ? 'URL resmi' : 'Unggah manual',
                                 'source_url' => $content->source_url,
                                 'created_at_label' => $content->created_at?->format('d M Y, H:i'),
@@ -169,9 +170,21 @@
                                 <template x-if="activeContent?.source_url">
                                     <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50/80 p-4">
                                         <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Sumber URL</p>
-                                        <p class="mt-2 break-all text-sm text-slate-700" x-text="activeContent?.source_url"></p>
+                                        <a
+                                            :href="activeContent?.source_url"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="mt-2 inline-flex items-start gap-2 break-all text-sm font-semibold text-blue-700 transition hover:text-blue-900 hover:underline"
+                                        >
+                                            <span class="material-symbols-outlined mt-0.5 text-[16px]">open_in_new</span>
+                                            <span x-text="activeContent?.source_url"></span>
+                                        </a>
                                     </div>
                                 </template>
+                                <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50/80 p-4">
+                                    <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Hash Gambar</p>
+                                    <p class="mt-2 break-all font-mono text-xs leading-relaxed text-slate-800" x-text="activeContent?.image_hash || '-'"></p>
+                                </div>
                             </div>
                         </div>
 

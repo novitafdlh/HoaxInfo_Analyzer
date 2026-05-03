@@ -55,6 +55,8 @@ class Submission extends Model
         return match ($this->analysis_method) {
             'hash_sha256' => 'Pencocokan hash SHA256',
             'ocr_cosine_similarity' => 'OCR + cosine similarity',
+            'ocr_topic_similarity' => 'OCR + kemiripan topik',
+            'ocr_important_token_coverage' => 'OCR + cakupan kata kunci penting',
             'referensi_belum_tersedia' => 'Referensi resmi belum tersedia',
             default => 'Metode tidak diketahui',
         };

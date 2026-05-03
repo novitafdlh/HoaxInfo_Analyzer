@@ -195,10 +195,37 @@
                             <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Konten resmi paling mirip</p>
                             <p class="mt-2 text-base font-bold text-on-surface">{{ $validationPopup['official_title'] }}</p>
 
+                            @if (!empty($validationPopup['official_action_message']))
+                                <p class="mt-3 text-sm leading-relaxed text-on-surface-variant">
+                                    {{ $validationPopup['official_action_message'] }}
+                                </p>
+                            @endif
+
                             @if (!empty($validationPopup['official_url']))
                                 <div class="mt-4 rounded-xl border border-outline-variant/30 bg-surface-container-low px-4 py-3">
-                                    <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">URL Konten Resmi</p>
+                                    <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">{{ $validationPopup['official_url_heading'] ?? 'URL referensi' }}</p>
                                     <p class="mt-2 break-all text-sm text-on-surface">{{ $validationPopup['official_url'] }}</p>
+                                </div>
+                                <div class="mt-4 flex flex-wrap gap-3">
+                                    <a
+                                        href="{{ $validationPopup['official_url'] }}"
+                                        @if (($validationPopup['official_action_type'] ?? null) === 'external_url') target="_blank" rel="noopener noreferrer" @endif
+                                        class="inline-flex items-center gap-2 rounded-full bg-surface-tint px-5 py-3 text-sm font-extrabold text-on-primary shadow-lg hover:opacity-90 transition"
+                                    >
+                                        <span class="material-symbols-outlined text-base">open_in_new</span>
+                                        {{ $validationPopup['official_url_label'] }}
+                                    </a>
+                                </div>
+                            @elseif (($validationPopup['official_action_type'] ?? null) === 'auth_required')
+                                <div class="mt-4 flex flex-wrap gap-3">
+                                    <a href="{{ route('register') }}" class="inline-flex items-center gap-2 rounded-full bg-surface-tint px-5 py-3 text-sm font-extrabold text-on-primary shadow-lg hover:opacity-90 transition">
+                                        <span class="material-symbols-outlined text-base">person_add</span>
+                                        Daftar
+                                    </a>
+                                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 rounded-full border border-outline-variant/30 px-5 py-3 text-sm font-bold text-on-surface hover:bg-surface-container-high transition">
+                                        <span class="material-symbols-outlined text-base">login</span>
+                                        Login
+                                    </a>
                                 </div>
                             @endif
                         </div>

@@ -198,7 +198,7 @@
 
                                     @if (!empty($validationPopup['official_url']))
                                         <div class="mt-4 rounded-xl border border-outline-variant/30 bg-surface-container-low px-4 py-3">
-                                            <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">URL Konten Resmi</p>
+                                            <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Halaman Konten Resmi</p>
                                             <p class="mt-2 break-all text-sm text-on-surface">{{ $validationPopup['official_url'] }}</p>
                                         </div>
                                     @endif
@@ -207,7 +207,6 @@
                                         @if (!empty($validationPopup['official_url']))
                                             <a
                                                 href="{{ $validationPopup['official_url'] }}"
-                                                @if (str_starts_with($validationPopup['official_url'], 'http')) target="_blank" rel="noopener noreferrer" @endif
                                                 class="inline-flex items-center gap-2 rounded-full bg-surface-tint px-5 py-3 text-sm font-extrabold text-on-primary shadow-lg hover:opacity-90 transition"
                                             >
                                                 <span class="material-symbols-outlined text-base">open_in_new</span>

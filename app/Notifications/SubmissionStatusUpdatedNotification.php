@@ -30,7 +30,10 @@ class SubmissionStatusUpdatedNotification extends Notification
             'meta' => $submission->matchedOfficialContent?->title
                 ? 'Referensi: '.$submission->matchedOfficialContent->title
                 : $submission->systemStatusLabel(),
-            'url' => route('notifications.open', ['notification' => '__ID__', 'redirect' => route('user.validation-results')]),
+            'url' => route('notifications.open', [
+                'notification' => '__ID__',
+                'redirect' => route('user.validation-results', [], false),
+            ], false),
             'tone' => $submission->final_status === 'terverifikasi' ? 'emerald' : 'blue',
             'icon' => $submission->final_status === 'terverifikasi' ? 'verified' : 'fact_check',
             'submission_id' => $submission->id,

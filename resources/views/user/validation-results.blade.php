@@ -140,8 +140,7 @@
                                             @if ($submission->matchedOfficialContent)
                                                 <div class="text-xs text-slate-500 mt-1">Referensi: {{ $submission->matchedOfficialContent->title }}</div>
                                                 <a
-                                                    href="{{ $submission->matchedOfficialContent->source_url ?: route('user.official.show', $submission->matchedOfficialContent) }}"
-                                                    @if ($submission->matchedOfficialContent->source_url) target="_blank" rel="noopener noreferrer" @endif
+                                                    href="{{ route('official.public.show', $submission->matchedOfficialContent) }}"
                                                     class="mt-2 inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
                                                 >
                                                     Lihat konten resmi

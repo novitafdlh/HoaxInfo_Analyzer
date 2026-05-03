@@ -27,6 +27,10 @@ class VerifyEmailController extends Controller
 
     private function verifiedRedirectFor(EmailVerificationRequest $request): string
     {
-        return route('dashboard', absolute: false).'?verified=1';
+        $dashboardRoute = $request->user()?->role === 'admin'
+            ? route('admin.dashboard', absolute: false)
+            : route('user.dashboard', absolute: false);
+
+        return $dashboardRoute.'?verified=1';
     }
 }
