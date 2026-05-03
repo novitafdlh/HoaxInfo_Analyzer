@@ -96,26 +96,86 @@
                     </div>
 
                     <div>
-                        <x-input-label for="category" :value="__('Kategori Konten')" class="ml-1 font-bold text-slate-700" />
 
                         @php
                             $oldCategory = old('category', $categories->isNotEmpty() ? $categories->first() : '__new__');
                             $showNewCategory = $oldCategory === '__new__';
                         @endphp
 
-                        <div class="relative mt-3">
-                            <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">category</span>
-                            <select
-                                id="category"
-                                name="category"
-                                required
-                                class="block w-full appearance-none rounded-[1.25rem] border border-slate-200 bg-slate-50/60 py-3.5 pl-14 pr-12 text-sm text-slate-900 shadow-sm transition duration-150 focus:border-blue-500 focus:bg-white focus:ring-blue-500"
+                        <div class="relative mt-3" id="category-picker">
+                            <button
+                                type="button"
+                                id="category-picker-toggle"
+                                class="flex w-full items-center justify-between gap-4 rounded-[1.5rem] border border-slate-200 bg-white p-3 text-left shadow-sm transition hover:border-blue-200 hover:bg-blue-50"
+                                aria-expanded="false"
+                                aria-controls="category-picker-panel"
                             >
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category }}" @selected($oldCategory === $category)>{{ $category }}</option>
-                                @endforeach
-                                <option value="__new__" @selected($showNewCategory)>+ Tambah kategori baru</option>
-                            </select>
+                                <div class="flex min-w-0 items-center gap-3">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+                                        <span class="material-symbols-outlined text-[20px]">category</span>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-black text-slate-900">Pilih kategori referensi</p>
+                                        <p class="mt-0.5 truncate text-xs leading-relaxed text-slate-500">
+                                            Terpilih: <span id="selected-category-label">{{ $showNewCategory ? 'Tambah kategori baru' : $oldCategory }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="material-symbols-outlined shrink-0 text-[20px] text-slate-500" id="category-picker-icon">expand_more</span>
+                            </button>
+
+                            <div
+                                id="category-picker-panel"
+                                class="absolute right-0 top-[calc(100%+0.75rem)] z-30 hidden w-full rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-[0px_20px_40px_rgba(25,28,30,0.12)]"
+                            >
+                                <div class="mb-3 flex items-center gap-3 px-1">
+                                    
+                                    <div>
+                                        <p class="mt-0.5 text-xs leading-relaxed text-slate-500">Klik salah satu kategori untuk memilih.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex max-h-56 flex-wrap gap-2 overflow-y-auto">
+                                    @foreach ($categories as $category)
+                                        @php
+                                            $categoryId = 'category-option-'.\Illuminate\Support\Str::slug($category).'-'.$loop->index;
+                                        @endphp
+
+                                        <input
+                                            id="{{ $categoryId }}"
+                                            name="category"
+                                            type="radio"
+                                            value="{{ $category }}"
+                                            class="sr-only"
+                                            @checked($oldCategory === $category)
+                                            required
+                                        >
+                                        <label
+                                            for="{{ $categoryId }}"
+                                            class="{{ $oldCategory === $category ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'border border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700' }} inline-flex cursor-pointer items-center rounded-full px-4 py-2 text-xs font-bold transition"
+                                        >
+                                            {{ $category }}
+                                        </label>
+                                    @endforeach
+
+                                    <input
+                                        id="category-option-new"
+                                        name="category"
+                                        type="radio"
+                                        value="__new__"
+                                        class="sr-only"
+                                        @checked($showNewCategory)
+                                        required
+                                    >
+                                    <label
+                                        for="category-option-new"
+                                        class="{{ $showNewCategory ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'border border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700' }} inline-flex cursor-pointer items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition"
+                                    >
+                                        <span class="material-symbols-outlined text-[16px]">add</span>
+                                        Tambah kategori baru
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <div id="new-category-wrapper" class="{{ $showNewCategory ? '' : 'hidden' }} mt-3">
@@ -272,13 +332,30 @@
             placeholder.classList.remove('hidden');
         }
 
-        const categorySelect = document.getElementById('category');
+        const categoryOptions = document.querySelectorAll('input[name="category"]');
+        const categoryPicker = document.getElementById('category-picker');
+        const categoryPickerToggle = document.getElementById('category-picker-toggle');
+        const categoryPickerPanel = document.getElementById('category-picker-panel');
+        const categoryPickerIcon = document.getElementById('category-picker-icon');
+        const selectedCategoryLabel = document.getElementById('selected-category-label');
         const newCategoryWrapper = document.getElementById('new-category-wrapper');
         const newCategoryInput = document.getElementById('category_new');
+        const unselectedCategoryClasses = ['border', 'border-slate-200', 'bg-white', 'text-slate-700', 'hover:border-blue-200', 'hover:bg-blue-50', 'hover:text-blue-700'];
 
-        if (categorySelect && newCategoryWrapper && newCategoryInput) {
+        if (categoryOptions.length && newCategoryWrapper && newCategoryInput) {
+            const setCategoryPickerOpen = (isOpen) => {
+                if (! categoryPickerToggle || ! categoryPickerPanel || ! categoryPickerIcon) {
+                    return;
+                }
+
+                categoryPickerPanel.classList.toggle('hidden', ! isOpen);
+                categoryPickerToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                categoryPickerIcon.classList.toggle('rotate-180', isOpen);
+            };
+
             const syncNewCategoryField = () => {
-                const shouldShow = categorySelect.value === '__new__';
+                const selectedCategory = document.querySelector('input[name="category"]:checked');
+                const shouldShow = selectedCategory?.value === '__new__';
 
                 newCategoryWrapper.classList.toggle('hidden', ! shouldShow);
                 newCategoryInput.required = shouldShow;
@@ -286,9 +363,57 @@
                 if (! shouldShow) {
                     newCategoryInput.value = '';
                 }
+
+                if (selectedCategoryLabel && selectedCategory) {
+                    selectedCategoryLabel.innerText = shouldShow ? 'Tambah kategori baru' : selectedCategory.value;
+                }
+
+                categoryOptions.forEach((option) => {
+                    const label = document.querySelector(`label[for="${option.id}"]`);
+
+                    if (! label) {
+                        return;
+                    }
+
+                    label.classList.toggle('bg-blue-600', option.checked);
+                    label.classList.toggle('text-white', option.checked);
+                    label.classList.toggle('shadow-lg', option.checked);
+                    label.classList.toggle('shadow-blue-100', option.checked);
+
+                    unselectedCategoryClasses.forEach((className) => {
+                        label.classList.toggle(className, ! option.checked);
+                    });
+                });
             };
 
-            categorySelect.addEventListener('change', syncNewCategoryField);
+            categoryOptions.forEach((option) => {
+                option.addEventListener('change', () => {
+                    syncNewCategoryField();
+                    setCategoryPickerOpen(false);
+                });
+            });
+
+            categoryPickerToggle?.addEventListener('click', (event) => {
+                event.stopPropagation();
+                setCategoryPickerOpen(categoryPickerPanel?.classList.contains('hidden'));
+            });
+
+            categoryPickerPanel?.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
+
+            document.addEventListener('click', (event) => {
+                if (! categoryPicker?.contains(event.target)) {
+                    setCategoryPickerOpen(false);
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    setCategoryPickerOpen(false);
+                }
+            });
+
             syncNewCategoryField();
         }
     </script>
