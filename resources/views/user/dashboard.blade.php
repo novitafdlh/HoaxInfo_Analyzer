@@ -70,7 +70,7 @@
                             <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                                 <div>
                                     <h2 class="text-2xl font-bold tracking-tight mb-2">Mulai Validasi Baru</h2>
-                                    <p class="text-on-surface-variant">Unggah berkas atau masukkan tautan konten untuk dianalisis oleh Guardian AI.</p>
+                                    <p class="text-on-surface-variant">Unggah berkas atau masukkan tautan konten untuk dianalisis.</p>
                                 </div>
                             </div>
 

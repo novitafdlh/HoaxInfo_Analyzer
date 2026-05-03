@@ -62,7 +62,7 @@
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div>
                         <h2 class="text-2xl font-bold tracking-tight mb-2">Mulai Validasi Baru</h2>
-                        <p class="text-on-surface-variant">Unggah berkas atau masukkan tautan konten untuk dianalisis oleh Guardian AI.</p>
+                        <p class="text-on-surface-variant">Unggah berkas atau masukkan tautan konten untuk dianalisis.</p>
                     </div>
                     <div class="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800 shadow-sm">
                         <p class="text-xs font-bold uppercase tracking-[0.24em] text-amber-700">Token Gratis Harian</p>
