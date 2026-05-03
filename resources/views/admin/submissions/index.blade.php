@@ -12,7 +12,7 @@
             <div class="flex justify-between items-end">
                 <div>
                     <h1 class="text-3xl font-bold tracking-tight text-on-surface">Submission Masyarakat</h1>
-                    <p class="mt-2 text-lg text-on-surface-variant">Tinjau laporan masyarakat, bandingkan dengan referensi resmi, dan tetapkan status validasi akhir.</p>
+                    <p class="mt-2 text-x text-on-surface-variant">Tinjau laporan masyarakat, bandingkan dengan referensi resmi, dan tetapkan status validasi akhir.</p>
                 </div>
                 <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
                     <span class="material-symbols-outlined text-[18px] text-blue-600">monitoring</span>

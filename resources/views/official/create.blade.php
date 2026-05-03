@@ -4,7 +4,7 @@
             <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div>
                     <h1 class="text-3xl font-bold tracking-tight text-on-surface">Tambah Konten Resmi</h1>
-                    <p class="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+                    <p class="mt-2 max-w-full text-x leading-relaxed text-slate-600 sm:text-base">
                         Tambahkan referensi visual resmi baru ke basis data agar sistem memiliki acuan yang lebih kuat saat memverifikasi.
                     </p>
                 </div>

@@ -5,11 +5,11 @@
     content-class="space-y-0"
 >
     <x-slot name="pageHeader">
-        <section class="mb-6 space-y-4">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <section class="space-y-4">
+            <div class="flex justify-between items-end">
                 <div>
-                    <h1 class="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Pengaturan Profil</h1>
-                    <p class="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+                    <h1 class="text-3xl font-bold tracking-tight text-on-surface">Pengaturan Profil</h1>
+                    <p class="text-x text-on-surface-variant mt-2">
                         Kelola informasi akun, keamanan, dan status verifikasi email Anda dari satu tempat.
                     </p>
                 </div>
